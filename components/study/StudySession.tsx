@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useTTS, useSTT } from "@/lib/speech";
 import { storage } from "@/lib/storage";
 import { getFeedback } from "@/lib/hchat";
-import type { AiFeedback, QuestionType, Level } from "@/types";
+import type { AiFeedback, QuestionType } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import FeedbackPanel from "./FeedbackPanel";
+import { HoverText } from "./WordHover";
 
 interface Props {
   type: QuestionType;
@@ -45,12 +46,13 @@ export default function StudySession({
   const [editedAnswer, setEditedAnswer] = useState("");
   const [feedback, setFeedback] = useState<AiFeedback | null>(null);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
   const [playCount, setPlayCount] = useState(0);
 
   useEffect(() => {
-    setEditedAnswer((transcript + " " + interimTranscript).trim());
-  }, [transcript, interimTranscript]);
+    if (listening) {
+      setEditedAnswer((transcript + " " + interimTranscript).trim());
+    }
+  }, [transcript, interimTranscript, listening]);
 
   const playQuestion = () => {
     const text = type === 4 && passageText ? passageText : question;
@@ -90,19 +92,11 @@ export default function StudySession({
     });
   };
 
-  const toggleBookmark = () => {
-    setBookmarked(!bookmarked);
-    const records = storage.getRecords();
-    const last = records.filter((r) => r.questionId === questionId).pop();
-    if (last) storage.updateRecord(last.id, { bookmarked: !bookmarked });
-  };
-
   const restart = () => {
     setStep("intro");
     setEditedAnswer("");
     setFeedback(null);
     setPlayCount(0);
-    setBookmarked(false);
     resetSTT();
     stopTTS();
   };
@@ -112,25 +106,23 @@ export default function StudySession({
       {visualContent && <Card>{visualContent}</Card>}
 
       <Card>
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1">
-            <div className="text-xs font-semibold text-teczen-red mb-1">
-              {type === 4 ? "PASSAGE" : "QUESTION"}
-            </div>
-            <p className="text-lg font-semibold text-teczen-gray-900 leading-relaxed">
-              {type === 4 && passageText ? passageText : question}
-            </p>
-            {followUps.length > 0 && step !== "intro" && (
-              <div className="mt-3 pt-3 border-t border-teczen-gray-100">
-                <div className="text-xs font-semibold text-teczen-gray-500 mb-1">FOLLOW-UP</div>
-                <ul className="text-sm text-teczen-gray-700 space-y-1">
-                  {followUps.map((q, i) => (
-                    <li key={i}>• {q}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+        <div className="mb-3">
+          <div className="text-xs font-semibold text-teczen-red mb-2">
+            {type === 4 ? "PASSAGE (영어 단어 위에 마우스 → 한글)" : "QUESTION (영어 단어 위에 마우스 → 한글)"}
           </div>
+          <HoverText text={type === 4 && passageText ? passageText : question} />
+          {followUps.length > 0 && step !== "intro" && (
+            <div className="mt-3 pt-3 border-t border-teczen-gray-100">
+              <div className="text-xs font-semibold text-teczen-gray-500 mb-1">FOLLOW-UP</div>
+              <div className="text-sm text-teczen-gray-700 space-y-1">
+                {followUps.map((q, i) => (
+                  <div key={i}>
+                    <HoverText text={`• ${q}`} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2 items-center">
@@ -154,21 +146,19 @@ export default function StudySession({
       {step !== "intro" && (
         <Card>
           <div className="flex items-center justify-between mb-3">
-            <div className="text-xs font-semibold text-teczen-red">YOUR ANSWER</div>
-            <div className="flex gap-2">
-              <Button
-                onClick={listening ? stopSTT : startSTT}
-                variant={listening ? "danger" : "primary"}
-                size="sm"
-              >
-                {listening ? "● 녹음 정지" : "🎤 음성 답변"}
-              </Button>
-            </div>
+            <div className="text-xs font-semibold text-teczen-red">YOUR ANSWER (실시간 인식)</div>
+            <Button
+              onClick={listening ? stopSTT : startSTT}
+              variant={listening ? "danger" : "primary"}
+              size="sm"
+            >
+              {listening ? "● 녹음 중지" : "🎤 음성 답변 시작"}
+            </Button>
           </div>
 
           {sttError && (
             <div className="mb-3 text-xs text-teczen-red bg-teczen-red/5 p-2 rounded">
-              {sttError} - 텍스트로 직접 입력하셔도 됩니다.
+              {sttError}
             </div>
           )}
 
@@ -178,23 +168,32 @@ export default function StudySession({
             placeholder={
               listening
                 ? "듣고 있어요... 영어로 말해주세요."
-                : "음성 답변을 시작하거나 직접 입력하세요."
+                : "🎤 버튼을 누르고 영어로 답변하거나, 직접 입력하세요."
             }
-            className="w-full min-h-[140px] border border-teczen-gray-300 rounded-xl p-4 text-sm leading-relaxed focus:outline-none focus:border-teczen-navy resize-y"
+            className={`w-full min-h-[160px] border-2 rounded-xl p-4 text-base leading-relaxed focus:outline-none resize-y transition-colors ${
+              listening ? "border-teczen-red bg-teczen-red/5" : "border-teczen-gray-300 focus:border-teczen-navy"
+            }`}
           />
-          {interimTranscript && (
-            <div className="text-xs text-teczen-gray-500 mt-1 italic">
+          {listening && interimTranscript && (
+            <div className="text-sm text-teczen-navy mt-2 italic">
+              <span className="inline-block w-2 h-2 bg-teczen-red rounded-full mr-1 animate-pulse" />
               인식 중: {interimTranscript}
+            </div>
+          )}
+          {editedAnswer && (
+            <div className="text-xs text-teczen-gray-500 mt-1">
+              {editedAnswer.trim().split(/\s+/).filter(Boolean).length} 단어 ·{" "}
+              {editedAnswer.split(/[.!?]+/).filter((s) => s.trim()).length} 문장
             </div>
           )}
 
           {step === "answer" && (
             <div className="flex gap-2 mt-3">
               <Button onClick={submitAnswer} disabled={!editedAnswer.trim()}>
-                AI 피드백 받기 →
+                AI 채점 받기 →
               </Button>
-              <Button onClick={resetSTT} variant="ghost" size="sm">
-                지우기
+              <Button onClick={() => { resetSTT(); setEditedAnswer(""); }} variant="ghost" size="sm">
+                전체 지우기
               </Button>
             </div>
           )}
@@ -207,8 +206,6 @@ export default function StudySession({
           feedback={feedback}
           userAnswer={editedAnswer}
           sampleAnswer={sampleAnswer}
-          bookmarked={bookmarked}
-          onToggleBookmark={toggleBookmark}
           onRestart={restart}
         />
       )}

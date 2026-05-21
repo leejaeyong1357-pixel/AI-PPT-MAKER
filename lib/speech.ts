@@ -12,26 +12,57 @@ declare global {
 export function useTTS() {
   const [speaking, setSpeaking] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [hasEnglishVoice, setHasEnglishVoice] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const update = () => setVoices(window.speechSynthesis.getVoices());
+    const update = () => {
+      const v = window.speechSynthesis.getVoices();
+      setVoices(v);
+      setHasEnglishVoice(v.some((voice) => voice.lang.toLowerCase().startsWith("en")));
+    };
     update();
     window.speechSynthesis.onvoiceschanged = update;
   }, []);
 
-  const speak = (text: string, opts: { rate?: number; voice?: string } = {}) => {
+  const pickEnglishVoice = (): SpeechSynthesisVoice | undefined => {
+    const englishOnly = voices.filter((v) => v.lang.toLowerCase().startsWith("en"));
+    if (englishOnly.length === 0) return undefined;
+
+    const priorities = [
+      (v: SpeechSynthesisVoice) =>
+        v.lang === "en-US" && /google/i.test(v.name) && /us/i.test(v.name),
+      (v: SpeechSynthesisVoice) => v.lang === "en-US" && /google/i.test(v.name),
+      (v: SpeechSynthesisVoice) => v.lang === "en-US" && /natural/i.test(v.name),
+      (v: SpeechSynthesisVoice) => v.lang === "en-US" && !/korean/i.test(v.name),
+      (v: SpeechSynthesisVoice) => v.lang.startsWith("en-") && !/korean/i.test(v.name),
+      (v: SpeechSynthesisVoice) => v.lang.startsWith("en"),
+    ];
+
+    for (const p of priorities) {
+      const match = englishOnly.find(p);
+      if (match) return match;
+    }
+    return englishOnly[0];
+  };
+
+  const speak = (text: string, opts: { rate?: number } = {}) => {
     if (typeof window === "undefined") return;
     window.speechSynthesis.cancel();
+
+    const voice = pickEnglishVoice();
+    if (!voice) {
+      alert(
+        "이 컴퓨터에는 영어 음성이 설치되어 있지 않습니다.\n\nWindows: 설정 → 시간 및 언어 → 음성 → 음성 추가 → 'English (United States)' 다운로드\n\nChrome 브라우저 권장.",
+      );
+      return;
+    }
+
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
+    u.lang = voice.lang;
+    u.voice = voice;
     u.rate = opts.rate ?? 0.95;
-    const enVoice =
-      voices.find((v) => v.name === opts.voice) ||
-      voices.find((v) => v.lang.startsWith("en") && v.name.toLowerCase().includes("google")) ||
-      voices.find((v) => v.lang.startsWith("en-US")) ||
-      voices.find((v) => v.lang.startsWith("en"));
-    if (enVoice) u.voice = enVoice;
+    u.pitch = 1;
     u.onstart = () => setSpeaking(true);
     u.onend = () => setSpeaking(false);
     u.onerror = () => setSpeaking(false);
@@ -44,7 +75,7 @@ export function useTTS() {
     setSpeaking(false);
   };
 
-  return { speak, stop, speaking, voices };
+  return { speak, stop, speaking, voices, hasEnglishVoice };
 }
 
 export function useSTT() {
@@ -53,6 +84,7 @@ export function useSTT() {
   const [interimTranscript, setInterimTranscript] = useState("");
   const [error, setError] = useState<string>("");
   const recognitionRef = useRef<any>(null);
+  const restartingRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -65,31 +97,49 @@ export function useSTT() {
     r.lang = "en-US";
     r.continuous = true;
     r.interimResults = true;
+    r.maxAlternatives = 1;
 
     r.onresult = (e: any) => {
-      let final = "";
-      let interim = "";
+      let finalText = "";
+      let interimText = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
-        const result = e.results[i];
-        if (result.isFinal) {
-          final += result[0].transcript + " ";
+        const res = e.results[i];
+        if (res.isFinal) {
+          finalText += res[0].transcript + " ";
         } else {
-          interim += result[0].transcript;
+          interimText += res[0].transcript;
         }
       }
-      if (final) setTranscript((prev) => prev + final);
-      setInterimTranscript(interim);
+      if (finalText) setTranscript((prev) => prev + finalText);
+      setInterimTranscript(interimText);
     };
 
     r.onerror = (e: any) => {
-      setError(e.error || "음성 인식 오류");
+      if (e.error === "no-speech" || e.error === "aborted") {
+        return;
+      }
+      setError(
+        e.error === "not-allowed"
+          ? "마이크 권한이 차단되었습니다. 주소창 자물쇠 → 마이크 허용"
+          : `음성 인식 오류: ${e.error}`,
+      );
       setListening(false);
     };
 
-    r.onend = () => setListening(false);
+    r.onend = () => {
+      if (restartingRef.current) {
+        try {
+          r.start();
+        } catch {}
+      } else {
+        setListening(false);
+      }
+    };
+
     recognitionRef.current = r;
 
     return () => {
+      restartingRef.current = false;
       try {
         r.stop();
       } catch {}
@@ -100,6 +150,7 @@ export function useSTT() {
     setError("");
     setTranscript("");
     setInterimTranscript("");
+    restartingRef.current = true;
     try {
       recognitionRef.current?.start();
       setListening(true);
@@ -109,6 +160,7 @@ export function useSTT() {
   };
 
   const stop = () => {
+    restartingRef.current = false;
     try {
       recognitionRef.current?.stop();
     } catch {}

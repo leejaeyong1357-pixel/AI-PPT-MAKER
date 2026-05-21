@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { storage } from "@/lib/storage";
 import { LEVEL_RANGES, levelDescription } from "@/lib/scoring";
+import { testConnection } from "@/lib/hchat";
 import type { Level } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -16,6 +18,8 @@ export default function SetupPage() {
   const [hchatApiKey, setHchatApiKey] = useState("");
   const [step, setStep] = useState(1);
   const [loaded, setLoaded] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
 
   useEffect(() => {
     const s = storage.getSettings();
@@ -25,6 +29,17 @@ export default function SetupPage() {
     if (s.hchatApiKey) setHchatApiKey(s.hchatApiKey);
     setLoaded(true);
   }, []);
+
+  const runTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    const result = await testConnection({
+      endpoint: hchatEndpoint,
+      apiKey: hchatApiKey,
+    });
+    setTestResult(result);
+    setTesting(false);
+  };
 
   const save = () => {
     storage.saveSettings({
@@ -43,10 +58,14 @@ export default function SetupPage() {
     <main className="min-h-screen flex items-center justify-center p-6 bg-teczen-gray-50">
       <div className="max-w-xl w-full">
         <div className="text-center mb-6">
-          <div className="font-black text-teczen-navy text-2xl tracking-tight mb-1">
-            TECZEN
-            <span className="inline-block w-1.5 h-1.5 bg-teczen-red ml-0.5 align-top mt-1" />
-          </div>
+          <Image
+            src="/teczen-logo.webp"
+            alt="TECZEN"
+            width={160}
+            height={38}
+            priority
+            className="h-9 w-auto mx-auto mb-2"
+          />
           <h1 className="text-2xl font-bold text-teczen-gray-900">SPA Trainer 초기 설정</h1>
           <p className="text-sm text-teczen-gray-600 mt-1">단계 {step} / 3</p>
         </div>
@@ -122,9 +141,9 @@ export default function SetupPage() {
             <div>
               <h2 className="text-lg font-bold mb-1 text-teczen-gray-900">HChat API 연결 (선택)</h2>
               <p className="text-sm text-teczen-gray-600 mb-4">
-                현대차그룹 HChat API 키를 입력하면 실제 AI 피드백을 받습니다.
+                HChat API 키를 입력하면 실제 AI 채점·번역을 받습니다.
                 <br />
-                비워두면 기본 가이드라인 기반 모의 피드백이 제공됩니다.
+                비워두면 내장 사전 + 가이드라인 기반 mock 피드백이 제공됩니다.
               </p>
               <div className="space-y-3">
                 <div>
@@ -134,7 +153,10 @@ export default function SetupPage() {
                   <input
                     type="text"
                     value={hchatEndpoint}
-                    onChange={(e) => setHchatEndpoint(e.target.value)}
+                    onChange={(e) => {
+                      setHchatEndpoint(e.target.value);
+                      setTestResult(null);
+                    }}
                     placeholder="https://hchat.example.com/v1/chat/completions"
                     className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
                   />
@@ -146,11 +168,40 @@ export default function SetupPage() {
                   <input
                     type="password"
                     value={hchatApiKey}
-                    onChange={(e) => setHchatApiKey(e.target.value)}
+                    onChange={(e) => {
+                      setHchatApiKey(e.target.value);
+                      setTestResult(null);
+                    }}
                     placeholder="sk-..."
                     className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
                   />
                 </div>
+
+                <Button
+                  onClick={runTest}
+                  variant="outline"
+                  size="sm"
+                  disabled={testing || !hchatEndpoint || !hchatApiKey}
+                  fullWidth
+                >
+                  {testing ? "테스트 중..." : "🔌 연결 테스트"}
+                </Button>
+
+                {testResult && (
+                  <div
+                    className={`p-3 rounded-xl text-sm ${
+                      testResult.ok
+                        ? "bg-green-50 text-green-800 border border-green-200"
+                        : "bg-red-50 text-red-800 border border-red-200"
+                    }`}
+                  >
+                    <div className="font-semibold mb-1">
+                      {testResult.ok ? "✓ 연결 성공" : "✗ 연결 실패"}
+                    </div>
+                    <div>{testResult.message}</div>
+                  </div>
+                )}
+
                 <p className="text-xs text-teczen-gray-500">
                   ※ API 키는 브라우저 로컬스토리지에만 저장되며 외부로 전송되지 않습니다.
                 </p>

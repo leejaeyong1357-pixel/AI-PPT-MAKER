@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import type { QuestionType, Difficulty } from "@/types";
+import type { QuestionType } from "@/types";
 import { storage } from "@/lib/storage";
-import { recommendedDifficulty } from "@/lib/scoring";
 import StudySession from "@/components/study/StudySession";
 import ChartRenderer from "@/components/charts/ChartRenderer";
 import Header from "@/components/layout/Header";
@@ -23,11 +22,42 @@ const TYPE_INFO: Record<number, { name: string; desc: string }> = {
   4: { name: "Passage Summary", desc: "들은 지문을 60초 내로 요약하기" },
 };
 
+function interleaveType3(items: any[]): any[] {
+  const photos = items.filter((i) => i.subtype === "photo");
+  const charts = items.filter((i) => i.subtype !== "photo");
+
+  const chartTypes = Array.from(new Set(charts.map((c) => c.subtype)));
+  const chartsByType: Record<string, any[]> = {};
+  chartTypes.forEach((t) => {
+    chartsByType[t] = charts.filter((c) => c.subtype === t);
+  });
+
+  const variedCharts: any[] = [];
+  let added = true;
+  while (added) {
+    added = false;
+    for (const t of chartTypes) {
+      const next = chartsByType[t].shift();
+      if (next) {
+        variedCharts.push(next);
+        added = true;
+      }
+    }
+  }
+
+  const result: any[] = [];
+  const maxLen = Math.max(variedCharts.length, photos.length);
+  for (let i = 0; i < maxLen; i++) {
+    if (variedCharts[i]) result.push(variedCharts[i]);
+    if (photos[i]) result.push(photos[i]);
+  }
+  return result;
+}
+
 export default function StudyPage() {
   const params = useParams<{ type: string }>();
   const type = Number(params?.type) as QuestionType;
   const router = useRouter();
-  const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
   const [currentIdx, setCurrentIdx] = useState(0);
   const [mounted, setMounted] = useState(false);
 
@@ -36,22 +66,19 @@ export default function StudyPage() {
       router.push("/setup");
       return;
     }
-    const settings = storage.getSettings();
-    setDifficulty(recommendedDifficulty(settings.targetLevel));
     setMounted(true);
   }, [router]);
 
   if (!mounted || ![1, 2, 3, 4].includes(type)) return null;
 
-  const allItems = (() => {
+  const items = (() => {
     if (type === 1) return type1.questions;
     if (type === 2) return type2.questions;
-    if (type === 3) return type3.items;
+    if (type === 3) return interleaveType3(type3.items);
     return type4.passages;
   })();
 
-  const filtered = difficulty === "all" ? allItems : allItems.filter((q: any) => q.difficulty === difficulty);
-  const current = filtered[currentIdx % filtered.length];
+  const current: any = items[currentIdx % items.length];
 
   if (!current) return null;
 
@@ -72,35 +99,10 @@ export default function StudyPage() {
           <div className="text-right">
             <div className="text-xs text-teczen-gray-500">진행</div>
             <div className="text-lg font-bold text-teczen-navy">
-              {(currentIdx % filtered.length) + 1} / {filtered.length}
+              {(currentIdx % items.length) + 1} / {items.length}
             </div>
           </div>
         </div>
-
-        <Card className="mb-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-teczen-gray-600">난이도:</span>
-            {(["all", "easy", "medium", "hard"] as const).map((d) => (
-              <button
-                key={d}
-                onClick={() => {
-                  setDifficulty(d);
-                  setCurrentIdx(0);
-                }}
-                className={`px-3 py-1 text-xs rounded-lg font-semibold ${
-                  difficulty === d
-                    ? "bg-teczen-navy text-white"
-                    : "bg-teczen-gray-100 text-teczen-gray-700 hover:bg-teczen-gray-200"
-                }`}
-              >
-                {d === "all" ? "전체" : d === "easy" ? "쉬움" : d === "medium" ? "보통" : "어려움"}
-              </button>
-            ))}
-            <span className="ml-auto text-xs text-teczen-gray-500">
-              현재: <span className="font-semibold text-teczen-gray-800">{current.difficulty}</span> · {current.category}
-            </span>
-          </div>
-        </Card>
 
         <StudySessionForType type={type} item={current} key={current.id} />
 
@@ -133,7 +135,7 @@ function StudySessionForType({ type, item }: { type: QuestionType; item: any }) 
               <div className="mb-3">
                 <span className="text-xs font-semibold text-teczen-red">PHOTO</span>
                 <p className="text-xs text-teczen-gray-600 mt-1">
-                  사진 묘사: {item.image_description}
+                  {item.image_description}
                 </p>
               </div>
               {item.image_url && (

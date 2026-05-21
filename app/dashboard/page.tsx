@@ -118,18 +118,18 @@ export default function DashboardPage() {
             <Card className="hover:border-teczen-navy cursor-pointer transition-colors">
               <h2 className="font-bold text-teczen-gray-900 mb-2">📝 모의고사</h2>
               <p className="text-sm text-teczen-gray-600 mb-3">
-                실제 시험과 동일한 13분 형식. 50개 세트 준비됨.
+                실제 시험과 동일한 13분 형식. 점수대별 50회.
               </p>
               <div className="text-xs text-teczen-navy font-semibold">시작하기 →</div>
             </Card>
           </Link>
-          <Link href="/chart-demo">
+          <Link href="/vocab">
             <Card className="hover:border-teczen-navy cursor-pointer transition-colors">
-              <h2 className="font-bold text-teczen-gray-900 mb-2">📊 차트 데모</h2>
+              <h2 className="font-bold text-teczen-gray-900 mb-2">📚 단어장</h2>
               <p className="text-sm text-teczen-gray-600 mb-3">
-                유형3에 사용되는 차트 8종 렌더링 미리보기.
+                AI 피드백에서 모은 표현 모음 + TTS 재생.
               </p>
-              <div className="text-xs text-teczen-navy font-semibold">살펴보기 →</div>
+              <div className="text-xs text-teczen-navy font-semibold">보러가기 →</div>
             </Card>
           </Link>
         </div>

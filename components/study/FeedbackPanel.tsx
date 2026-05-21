@@ -11,8 +11,6 @@ interface Props {
   feedback: AiFeedback | null;
   userAnswer: string;
   sampleAnswer: string;
-  bookmarked: boolean;
-  onToggleBookmark: () => void;
   onRestart: () => void;
 }
 
@@ -21,8 +19,6 @@ export default function FeedbackPanel({
   feedback,
   userAnswer,
   sampleAnswer,
-  bookmarked,
-  onToggleBookmark,
   onRestart,
 }: Props) {
   if (loading) {
@@ -31,7 +27,7 @@ export default function FeedbackPanel({
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="inline-block w-10 h-10 border-4 border-teczen-navy border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-teczen-gray-700">AI가 답변을 분석하고 있어요...</p>
+            <p className="text-teczen-gray-700">AI가 답변을 엄격하게 채점하고 있어요...</p>
           </div>
         </div>
       </Card>
@@ -41,7 +37,7 @@ export default function FeedbackPanel({
   if (!feedback) return null;
 
   const addToVocab = (phrase: string) => {
-    const word = phrase.split(/[—:,]/)[0].trim().slice(0, 50);
+    const word = phrase.split(/[—:,(]/)[0].trim().slice(0, 60);
     storage.addVocab({
       word,
       meaning: phrase,
@@ -59,7 +55,7 @@ export default function FeedbackPanel({
           <div>
             <div className="text-xs font-semibold text-teczen-red mb-1">예상 점수</div>
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-black text-teczen-navy">
+              <span className="text-5xl font-black text-teczen-navy">
                 {feedback.scoreEstimate}
               </span>
               <span className="text-teczen-gray-600">/ 96</span>
@@ -68,14 +64,9 @@ export default function FeedbackPanel({
               </span>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={onToggleBookmark} variant={bookmarked ? "danger" : "outline"} size="sm">
-              {bookmarked ? "★ 저장됨" : "☆ 오답노트"}
-            </Button>
-            <Button onClick={onRestart} variant="secondary" size="sm">
-              다시 풀기
-            </Button>
-          </div>
+          <Button onClick={onRestart} variant="secondary" size="sm">
+            다시 풀기
+          </Button>
         </div>
 
         <div className="w-full bg-teczen-gray-100 rounded-full h-2 overflow-hidden">
