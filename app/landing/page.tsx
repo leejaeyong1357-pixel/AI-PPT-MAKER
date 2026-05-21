@@ -90,8 +90,11 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <div className="text-sm font-bold text-teczen-red mb-3">FEATURES</div>
             <h2 className="hero-headline text-4xl md:text-5xl text-teczen-ink">
-              왜 SPEAKZEN인가
+              SPEAKZEN의 기능
             </h2>
+            <p className="text-teczen-gray-600 mt-3">
+              학습부터 채점까지, 한 화면에서 끝내세요.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
