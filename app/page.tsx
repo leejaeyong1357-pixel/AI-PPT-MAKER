@@ -2,31 +2,37 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { storage } from "@/lib/storage";
 
 export default function HomePage() {
   const router = useRouter();
   useEffect(() => {
-    if (storage.isSetupComplete()) {
-      router.replace("/dashboard");
+    const session = storage.getSession();
+    if (!session) {
+      router.replace("/landing");
+      return;
+    }
+    if (session.isAdmin) {
+      router.replace("/admin");
+      return;
+    }
+    const s = storage.getSettings();
+    if (!s.setupCompleted) {
+      if (!s.onboardingSeen && !s.onboardingSkipForever) {
+        router.replace("/onboarding");
+      } else {
+        router.replace("/setup");
+      }
     } else {
-      router.replace("/setup");
+      router.replace("/dashboard");
     }
   }, [router]);
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center bg-white">
       <div className="text-center">
-        <Image
-          src="/teczen-logo.webp"
-          alt="TECZEN"
-          width={200}
-          height={48}
-          priority
-          className="h-12 w-auto mx-auto mb-3"
-        />
-        <div className="text-teczen-gray-600">로딩 중...</div>
+        <div className="font-brand text-4xl text-teczen-navy mb-2">SPEAKZEN</div>
+        <div className="text-sm text-teczen-gray-500">by TECZEN</div>
       </div>
     </main>
   );

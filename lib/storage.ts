@@ -5,6 +5,7 @@ import type {
   StudyRecord,
   VocabEntry,
   MockExamResult,
+  UserSession,
 } from "@/types";
 
 const KEYS = {
@@ -12,6 +13,7 @@ const KEYS = {
   records: "spa.records",
   vocab: "spa.vocab",
   mockResults: "spa.mockResults",
+  session: "spa.session",
 };
 
 function safeGet<T>(key: string, fallback: T): T {
@@ -30,6 +32,23 @@ function safeSet(key: string, value: unknown) {
 }
 
 export const storage = {
+  getSession(): UserSession | null {
+    return safeGet<UserSession | null>(KEYS.session, null);
+  },
+
+  saveSession(session: UserSession) {
+    safeSet(KEYS.session, session);
+  },
+
+  clearSession() {
+    if (typeof window === "undefined") return;
+    localStorage.removeItem(KEYS.session);
+  },
+
+  isLoggedIn(): boolean {
+    return this.getSession() !== null;
+  },
+
   getSettings(): UserSettings {
     return safeGet<UserSettings>(KEYS.settings, {
       examDate: "",
@@ -65,10 +84,6 @@ export const storage = {
       records[idx] = { ...records[idx], ...updates };
       safeSet(KEYS.records, records);
     }
-  },
-
-  getBookmarked(): StudyRecord[] {
-    return this.getRecords().filter((r) => r.bookmarked);
   },
 
   getVocab(): VocabEntry[] {

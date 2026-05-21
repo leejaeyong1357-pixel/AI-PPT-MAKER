@@ -4,6 +4,16 @@ export type QuestionType = 1 | 2 | 3 | 4;
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+export interface UserSession {
+  name: string;
+  employeeId: string;
+  rrnFront: string;
+  team?: string;
+  position?: string;
+  loggedInAt: number;
+  isAdmin?: boolean;
+}
+
 export interface UserSettings {
   examDate: string;
   targetLevel: Level;
@@ -11,6 +21,8 @@ export interface UserSettings {
   hchatApiKey: string;
   hchatEndpoint: string;
   setupCompleted: boolean;
+  onboardingSeen?: boolean;
+  onboardingSkipForever?: boolean;
 }
 
 export interface StudyRecord {
@@ -54,6 +66,23 @@ export interface MockExamResult {
   type4: { questionId: string; answer: string; feedback?: AiFeedback };
   totalScore: number;
   estimatedLevel: Level;
+}
+
+export interface LearnerProfile {
+  name: string;
+  employeeId: string;
+  team: string;
+  position: string;
+  targetLevel: Level;
+  examDate: string;
+  startedAt: number;
+  lastActiveAt: number;
+  totalStudyMinutes: number;
+  totalProblems: number;
+  averageScore: number;
+  recentScore: number;
+  estimatedLevel: Level;
+  mockExamCount: number;
 }
 
 export interface Type1Question {

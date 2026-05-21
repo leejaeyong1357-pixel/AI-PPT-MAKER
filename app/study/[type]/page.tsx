@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import type { QuestionType } from "@/types";
 import { storage } from "@/lib/storage";
+import { filterByTargetLevel } from "@/lib/levelFilter";
 import StudySession from "@/components/study/StudySession";
 import ChartRenderer from "@/components/charts/ChartRenderer";
 import Header from "@/components/layout/Header";
@@ -71,11 +72,12 @@ export default function StudyPage() {
 
   if (!mounted || ![1, 2, 3, 4].includes(type)) return null;
 
+  const target = storage.getSettings().targetLevel;
   const items = (() => {
-    if (type === 1) return type1.questions;
-    if (type === 2) return type2.questions;
-    if (type === 3) return interleaveType3(type3.items);
-    return type4.passages;
+    if (type === 1) return filterByTargetLevel(type1.questions as any, target);
+    if (type === 2) return filterByTargetLevel(type2.questions as any, target);
+    if (type === 3) return interleaveType3(filterByTargetLevel(type3.items as any, target));
+    return filterByTargetLevel(type4.passages as any, target);
   })();
 
   const current: any = items[currentIdx % items.length];
