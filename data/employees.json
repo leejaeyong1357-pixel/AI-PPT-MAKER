@@ -1,31 +1,1733 @@
 {
-  "_comment": "테크젠 임직원 명단. data/spa학습자_로우데이터.xlsx 를 scripts/importExcel.js 로 변환 후 자동 갱신.",
-  "_columns": ["No", "부서", "직위", "사원번호", "성명", "직급", "주민등록번호 앞자리"],
+  "_comment": "Auto-generated from 학습자명단.xlsx at 2026-05-22T01:05:21.874Z",
+  "_columns": [
+    "No",
+    "부서",
+    "직위",
+    "사원번호",
+    "성명",
+    "직급",
+    "주민등록번호 앞자리"
+  ],
   "employees": [
-    { "no": 1, "team": "대표이사", "position": "대표이사", "employeeId": "82200001", "name": "이정훈", "grade": "상무A", "rrnFront": "691109" },
-    { "no": 2, "team": "재경팀", "position": "팀장", "employeeId": "82210618", "name": "성영진", "grade": "M5", "rrnFront": "731207" },
-    { "no": 3, "team": "재경팀", "position": "책임매니저", "employeeId": "82211379", "name": "예해수", "grade": "M4", "rrnFront": "861117" },
-    { "no": 4, "team": "재경팀", "position": "매니저", "employeeId": "82210709", "name": "장건우", "grade": "M4", "rrnFront": "841105" },
-    { "no": 5, "team": "재경팀", "position": "매니저", "employeeId": "82211611", "name": "전예빈", "grade": "M5", "rrnFront": "010519" },
-    { "no": 6, "team": "재경팀", "position": "매니저", "employeeId": "82211493", "name": "김민지", "grade": "M2", "rrnFront": "000811" },
-    { "no": 7, "team": "재경팀", "position": "매니저", "employeeId": "82211616", "name": "김혜원", "grade": "M5", "rrnFront": "001214" },
-    { "no": 8, "team": "사업기획팀", "position": "팀장", "employeeId": "82210350", "name": "김중완", "grade": "M5", "rrnFront": "730412" },
-    { "no": 9, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82210136", "name": "김용욱", "grade": "M4", "rrnFront": "770213" },
-    { "no": 10, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82211401", "name": "김민도", "grade": "M4", "rrnFront": "760909" },
-    { "no": 11, "team": "사업기획팀", "position": "매니저", "employeeId": "82211494", "name": "장지윤", "grade": "M2", "rrnFront": "970511" },
-    { "no": 12, "team": "사업기획팀", "position": "매니저", "employeeId": "82210917", "name": "김황수", "grade": "M5", "rrnFront": "680420" },
-    { "no": 13, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82210949", "name": "이정훈", "grade": "M3", "rrnFront": "790111" },
-    { "no": 14, "team": "사업기획팀", "position": "매니저", "employeeId": "82211556", "name": "이연영", "grade": "M1", "rrnFront": "990814" },
-    { "no": 15, "team": "사업기획팀", "position": "매니저", "employeeId": "82210345", "name": "김재현", "grade": "M4", "rrnFront": "840213" },
-    { "no": 16, "team": "영업지원팀", "position": "사무", "employeeId": "82211238", "name": "최영석", "grade": "상무A", "rrnFront": "680220" },
-    { "no": 17, "team": "영업지원팀", "position": "매니저", "employeeId": "82210465", "name": "박용준", "grade": "M5", "rrnFront": "780505" },
-    { "no": 18, "team": "영업지원팀", "position": "책임매니저", "employeeId": "82210744", "name": "김흥주", "grade": "M4", "rrnFront": "811217" },
-    { "no": 19, "team": "영업지원팀", "position": "책임매니저", "employeeId": "82210525", "name": "김자휘", "grade": "M4", "rrnFront": "760206" },
-    { "no": 20, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210525", "name": "강대형", "grade": "M4", "rrnFront": "790720" },
-    { "no": 21, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210975", "name": "이도영", "grade": "M5", "rrnFront": "770212" },
-    { "no": 22, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82211045", "name": "이용훈", "grade": "M5", "rrnFront": "801220" },
-    { "no": 23, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210988", "name": "이용출", "grade": "M3", "rrnFront": "770117" },
-    { "no": 24, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82211614", "name": "이용술", "grade": "M3", "rrnFront": "850824" },
-    { "no": 25, "team": "미래성장팀", "position": "매니저", "employeeId": "82211493", "name": "이용석", "grade": "M2", "rrnFront": "870501" }
+    {
+      "no": 1,
+      "team": "대표이사",
+      "position": "대표이사",
+      "employeeId": "82200001",
+      "name": "이정훈",
+      "grade": "대표이사",
+      "rrnFront": "691109"
+    },
+    {
+      "no": 2,
+      "team": "재경팀",
+      "position": "팀장",
+      "employeeId": "82210618",
+      "name": "성영진",
+      "grade": "M5",
+      "rrnFront": "731207"
+    },
+    {
+      "no": 3,
+      "team": "재경팀",
+      "position": "책임매니저",
+      "employeeId": "82211379",
+      "name": "예해수",
+      "grade": "M4",
+      "rrnFront": "861117"
+    },
+    {
+      "no": 4,
+      "team": "재경팀",
+      "position": "책임매니저",
+      "employeeId": "82211090",
+      "name": "정건우",
+      "grade": "M5",
+      "rrnFront": "841105"
+    },
+    {
+      "no": 5,
+      "team": "재경팀",
+      "position": "매니저",
+      "employeeId": "82211445",
+      "name": "오다은",
+      "grade": "M1",
+      "rrnFront": "010519"
+    },
+    {
+      "no": 6,
+      "team": "재경팀",
+      "position": "매니저",
+      "employeeId": "82211617",
+      "name": "천예빈",
+      "grade": "M2",
+      "rrnFront": "000811"
+    },
+    {
+      "no": 7,
+      "team": "재경팀",
+      "position": "매니저",
+      "employeeId": "82211493",
+      "name": "김동은",
+      "grade": "M2",
+      "rrnFront": "011214"
+    },
+    {
+      "no": 8,
+      "team": "재경팀",
+      "position": "매니저",
+      "employeeId": "82211616",
+      "name": "김혜원",
+      "grade": "M2",
+      "rrnFront": "001214"
+    },
+    {
+      "no": 9,
+      "team": "사업기획팀",
+      "position": "팀장",
+      "employeeId": "82210350",
+      "name": "김충환",
+      "grade": "M5",
+      "rrnFront": "730412"
+    },
+    {
+      "no": 10,
+      "team": "사업기획팀",
+      "position": "책임매니저",
+      "employeeId": "82210136",
+      "name": "김동욱",
+      "grade": "M4",
+      "rrnFront": "770213"
+    },
+    {
+      "no": 11,
+      "team": "사업기획팀",
+      "position": "책임매니저",
+      "employeeId": "82210330",
+      "name": "김진모",
+      "grade": "M4",
+      "rrnFront": "760909"
+    },
+    {
+      "no": 12,
+      "team": "사업기획팀",
+      "position": "매니저",
+      "employeeId": "82211494",
+      "name": "정지운",
+      "grade": "M2",
+      "rrnFront": "970511"
+    },
+    {
+      "no": 13,
+      "team": "사업기획팀",
+      "position": "책임매니저",
+      "employeeId": "82210347",
+      "name": "김철우",
+      "grade": "M5",
+      "rrnFront": "680420"
+    },
+    {
+      "no": 14,
+      "team": "사업기획팀",
+      "position": "책임매니저",
+      "employeeId": "82210949",
+      "name": "이정훈",
+      "grade": "M5",
+      "rrnFront": "790111"
+    },
+    {
+      "no": 15,
+      "team": "사업기획팀",
+      "position": "매니저",
+      "employeeId": "82211602",
+      "name": "이다영",
+      "grade": "M1",
+      "rrnFront": "990814"
+    },
+    {
+      "no": 16,
+      "team": "사업기획팀",
+      "position": "책임매니저",
+      "employeeId": "82210345",
+      "name": "김창현",
+      "grade": "M4",
+      "rrnFront": "840213"
+    },
+    {
+      "no": 17,
+      "team": "경영지원실",
+      "position": "상무",
+      "employeeId": "82211238",
+      "name": "최경식",
+      "grade": "상무",
+      "rrnFront": "680220"
+    },
+    {
+      "no": 18,
+      "team": "미래성장팀",
+      "position": "팀장",
+      "employeeId": "82210465",
+      "name": "박동중",
+      "grade": "M5",
+      "rrnFront": "780505"
+    },
+    {
+      "no": 20,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210141",
+      "name": "김동진",
+      "grade": "M4",
+      "rrnFront": "811217"
+    },
+    {
+      "no": 21,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210152",
+      "name": "김묘환",
+      "grade": "M5",
+      "rrnFront": "760206"
+    },
+    {
+      "no": 22,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210225",
+      "name": "김승권",
+      "grade": "M4",
+      "rrnFront": "790720"
+    },
+    {
+      "no": 23,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210362",
+      "name": "김태철",
+      "grade": "M5",
+      "rrnFront": "770221"
+    },
+    {
+      "no": 24,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210458",
+      "name": "박규태",
+      "grade": "M4",
+      "rrnFront": "801220"
+    },
+    {
+      "no": 25,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210857",
+      "name": "이상욱",
+      "grade": "M4",
+      "rrnFront": "770117"
+    },
+    {
+      "no": 26,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210988",
+      "name": "이충교",
+      "grade": "M4",
+      "rrnFront": "750824"
+    },
+    {
+      "no": 27,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211614",
+      "name": "홍승우",
+      "grade": "M3",
+      "rrnFront": "870501"
+    },
+    {
+      "no": 28,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211489",
+      "name": "이재용",
+      "grade": "M2",
+      "rrnFront": "990903"
+    },
+    {
+      "no": 29,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211490",
+      "name": "정영건",
+      "grade": "M2",
+      "rrnFront": "980204"
+    },
+    {
+      "no": 30,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211488",
+      "name": "장윤재",
+      "grade": "M3",
+      "rrnFront": "861215"
+    },
+    {
+      "no": 31,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211380",
+      "name": "임우찬",
+      "grade": "M3",
+      "rrnFront": "921211"
+    },
+    {
+      "no": 32,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211049",
+      "name": "장송이",
+      "grade": "M2",
+      "rrnFront": "941017"
+    },
+    {
+      "no": 33,
+      "team": "미래성장팀",
+      "position": "매니저",
+      "employeeId": "82211253",
+      "name": "최선화",
+      "grade": "M1",
+      "rrnFront": "940726"
+    },
+    {
+      "no": 34,
+      "team": "미래성장팀",
+      "position": "책임매니저",
+      "employeeId": "82210120",
+      "name": "김대일",
+      "grade": "M5",
+      "rrnFront": "800327"
+    },
+    {
+      "no": 35,
+      "team": "비즈니스솔루션팀",
+      "position": "팀장",
+      "employeeId": "82211076",
+      "name": "전세준",
+      "grade": "M5",
+      "rrnFront": "760726"
+    },
+    {
+      "no": 37,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82210318",
+      "name": "김주형",
+      "grade": "M4",
+      "rrnFront": "810905"
+    },
+    {
+      "no": 38,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82210499",
+      "name": "박연우",
+      "grade": "M4",
+      "rrnFront": "661010"
+    },
+    {
+      "no": 39,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82210629",
+      "name": "손기인",
+      "grade": "M5",
+      "rrnFront": "750507"
+    },
+    {
+      "no": 40,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82210718",
+      "name": "여상일",
+      "grade": "M4",
+      "rrnFront": "801216"
+    },
+    {
+      "no": 41,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82210959",
+      "name": "이주형",
+      "grade": "M5",
+      "rrnFront": "800703"
+    },
+    {
+      "no": 42,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82211009",
+      "name": "이효원",
+      "grade": "M4",
+      "rrnFront": "770526"
+    },
+    {
+      "no": 44,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211615",
+      "name": "김혜리",
+      "grade": "M2",
+      "rrnFront": "020130"
+    },
+    {
+      "no": 45,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211580",
+      "name": "양아현",
+      "grade": "M1",
+      "rrnFront": "970201"
+    },
+    {
+      "no": 46,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211553",
+      "name": "고빛나",
+      "grade": "M1",
+      "rrnFront": "920118"
+    },
+    {
+      "no": 47,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211492",
+      "name": "김소진",
+      "grade": "M2",
+      "rrnFront": "990228"
+    },
+    {
+      "no": 48,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211482",
+      "name": "이동훈",
+      "grade": "M2",
+      "rrnFront": "761208"
+    },
+    {
+      "no": 50,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211472",
+      "name": "류태곤",
+      "grade": "M3",
+      "rrnFront": "880127"
+    },
+    {
+      "no": 51,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211473",
+      "name": "박운하",
+      "grade": "M2",
+      "rrnFront": "930504"
+    },
+    {
+      "no": 52,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211474",
+      "name": "소종진",
+      "grade": "M3",
+      "rrnFront": "881104"
+    },
+    {
+      "no": 53,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210030",
+      "name": "강태훈",
+      "grade": "M2",
+      "rrnFront": "961210"
+    },
+    {
+      "no": 54,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210122",
+      "name": "김대호",
+      "grade": "M2",
+      "rrnFront": "920926"
+    },
+    {
+      "no": 55,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210167",
+      "name": "김민호",
+      "grade": "M3",
+      "rrnFront": "861129"
+    },
+    {
+      "no": 56,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210363",
+      "name": "김태협",
+      "grade": "M2",
+      "rrnFront": "981122"
+    },
+    {
+      "no": 57,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210473",
+      "name": "박병준",
+      "grade": "M3",
+      "rrnFront": "880608"
+    },
+    {
+      "no": 58,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210486",
+      "name": "박성호",
+      "grade": "M2",
+      "rrnFront": "861025"
+    },
+    {
+      "no": 59,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210564",
+      "name": "배규환",
+      "grade": "M3",
+      "rrnFront": "880517"
+    },
+    {
+      "no": 60,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210611",
+      "name": "서준현",
+      "grade": "M2",
+      "rrnFront": "960202"
+    },
+    {
+      "no": 61,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210691",
+      "name": "안재현",
+      "grade": "M2",
+      "rrnFront": "960217"
+    },
+    {
+      "no": 62,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210722",
+      "name": "여휘수",
+      "grade": "M2",
+      "rrnFront": "931230"
+    },
+    {
+      "no": 63,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82210928",
+      "name": "이장희",
+      "grade": "M2",
+      "rrnFront": "820119"
+    },
+    {
+      "no": 64,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211017",
+      "name": "임보라",
+      "grade": "M1",
+      "rrnFront": "930810"
+    },
+    {
+      "no": 65,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211258",
+      "name": "최승연",
+      "grade": "M2",
+      "rrnFront": "920906"
+    },
+    {
+      "no": 66,
+      "team": "비즈니스솔루션팀",
+      "position": "매니저",
+      "employeeId": "82211291",
+      "name": "최현주",
+      "grade": "M1",
+      "rrnFront": "960709"
+    },
+    {
+      "no": 73,
+      "team": "비즈니스솔루션팀",
+      "position": "책임매니저",
+      "employeeId": "82211420",
+      "name": "김창우",
+      "grade": "M5",
+      "rrnFront": "690215"
+    },
+    {
+      "no": 74,
+      "team": "PT생산실",
+      "position": "실장",
+      "employeeId": "82210893",
+      "name": "이실만",
+      "grade": "M5",
+      "rrnFront": "731118"
+    },
+    {
+      "no": 75,
+      "team": "PT생산1팀",
+      "position": "팀장",
+      "employeeId": "82210031",
+      "name": "강태흠",
+      "grade": "M5",
+      "rrnFront": "750719"
+    },
+    {
+      "no": 76,
+      "team": "PT생산1팀",
+      "position": "매니저",
+      "employeeId": "82211023",
+      "name": "임세진",
+      "grade": "M3",
+      "rrnFront": "830306"
+    },
+    {
+      "no": 77,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210380",
+      "name": "김현진",
+      "grade": "M5",
+      "rrnFront": "731013"
+    },
+    {
+      "no": 78,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210482",
+      "name": "박성언",
+      "grade": "M5",
+      "rrnFront": "710320"
+    },
+    {
+      "no": 79,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210530",
+      "name": "박종훈",
+      "grade": "M5",
+      "rrnFront": "711215"
+    },
+    {
+      "no": 80,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210824",
+      "name": "이경양",
+      "grade": "M5",
+      "rrnFront": "821016"
+    },
+    {
+      "no": 81,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210889",
+      "name": "이승태",
+      "grade": "M5",
+      "rrnFront": "781015"
+    },
+    {
+      "no": 82,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210906",
+      "name": "이용원",
+      "grade": "M5",
+      "rrnFront": "710327"
+    },
+    {
+      "no": 83,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210947",
+      "name": "이정재",
+      "grade": "M5",
+      "rrnFront": "711124"
+    },
+    {
+      "no": 84,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210972",
+      "name": "이진우",
+      "grade": "M4",
+      "rrnFront": "711029"
+    },
+    {
+      "no": 85,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82211053",
+      "name": "장우혁",
+      "grade": "M5",
+      "rrnFront": "790723"
+    },
+    {
+      "no": 86,
+      "team": "PT생산1팀",
+      "position": "매니저",
+      "employeeId": "82211601",
+      "name": "정은진",
+      "grade": "M1",
+      "rrnFront": "000206"
+    },
+    {
+      "no": 87,
+      "team": "PT생산1팀",
+      "position": "매니저",
+      "employeeId": "82210492",
+      "name": "박수빈",
+      "grade": "M2",
+      "rrnFront": "910403"
+    },
+    {
+      "no": 88,
+      "team": "PT생산1팀",
+      "position": "매니저",
+      "employeeId": "82210738",
+      "name": "오지훈",
+      "grade": "M2",
+      "rrnFront": "890303"
+    },
+    {
+      "no": 89,
+      "team": "PT생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210116",
+      "name": "김대룡",
+      "grade": "M5",
+      "rrnFront": "760705"
+    },
+    {
+      "no": 262,
+      "team": "PT생산1팀_서산파견",
+      "position": "책임매니저",
+      "employeeId": "82210385",
+      "name": "김호민",
+      "grade": "M4",
+      "rrnFront": "670315"
+    },
+    {
+      "no": 275,
+      "team": "PT생산2팀",
+      "position": "팀장",
+      "employeeId": "82210025",
+      "name": "강정훈",
+      "grade": "M5",
+      "rrnFront": "770814"
+    },
+    {
+      "no": 276,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210231",
+      "name": "김양훈",
+      "grade": "M4",
+      "rrnFront": "870228"
+    },
+    {
+      "no": 277,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210359",
+      "name": "김태욱",
+      "grade": "M4",
+      "rrnFront": "791224"
+    },
+    {
+      "no": 278,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210425",
+      "name": "류흥연",
+      "grade": "M5",
+      "rrnFront": "690101"
+    },
+    {
+      "no": 279,
+      "team": "PT생산2팀",
+      "position": "매니저",
+      "employeeId": "82210701",
+      "name": "양선미",
+      "grade": "M1",
+      "rrnFront": "840618"
+    },
+    {
+      "no": 280,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210862",
+      "name": "이상홍",
+      "grade": "M5",
+      "rrnFront": "740325"
+    },
+    {
+      "no": 281,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82211245",
+      "name": "최동식",
+      "grade": "M4",
+      "rrnFront": "810723"
+    },
+    {
+      "no": 282,
+      "team": "PT생산2팀",
+      "position": "매니저",
+      "employeeId": "82210624",
+      "name": "성진욱",
+      "grade": "M3",
+      "rrnFront": "850515"
+    },
+    {
+      "no": 283,
+      "team": "PT생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210469",
+      "name": "박민규",
+      "grade": "M4",
+      "rrnFront": "791210"
+    },
+    {
+      "no": 639,
+      "team": "PT생산관리팀",
+      "position": "팀장",
+      "employeeId": "82210073",
+      "name": "권성근",
+      "grade": "M5",
+      "rrnFront": "760207"
+    },
+    {
+      "no": 640,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210093",
+      "name": "김건화",
+      "grade": "M5",
+      "rrnFront": "710312"
+    },
+    {
+      "no": 641,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210396",
+      "name": "나경택",
+      "grade": "M5",
+      "rrnFront": "740320"
+    },
+    {
+      "no": 642,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210567",
+      "name": "배민호",
+      "grade": "M4",
+      "rrnFront": "820115"
+    },
+    {
+      "no": 643,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210792",
+      "name": "윤석현",
+      "grade": "M5",
+      "rrnFront": "690601"
+    },
+    {
+      "no": 644,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210804",
+      "name": "윤인철",
+      "grade": "M5",
+      "rrnFront": "690123"
+    },
+    {
+      "no": 645,
+      "team": "PT생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210813",
+      "name": "윤혁진",
+      "grade": "M2",
+      "rrnFront": "920420"
+    },
+    {
+      "no": 646,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82211234",
+      "name": "천욱",
+      "grade": "M4",
+      "rrnFront": "721117"
+    },
+    {
+      "no": 647,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82211304",
+      "name": "하순호",
+      "grade": "M4",
+      "rrnFront": "800915"
+    },
+    {
+      "no": 648,
+      "team": "PT생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210248",
+      "name": "김영환",
+      "grade": "M3",
+      "rrnFront": "881019"
+    },
+    {
+      "no": 649,
+      "team": "PT생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210292",
+      "name": "김정용",
+      "grade": "M3",
+      "rrnFront": "840509"
+    },
+    {
+      "no": 650,
+      "team": "PT생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210372",
+      "name": "김한수",
+      "grade": "M2",
+      "rrnFront": "911229"
+    },
+    {
+      "no": 651,
+      "team": "PT생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210600",
+      "name": "서백만",
+      "grade": "M1",
+      "rrnFront": "911114"
+    },
+    {
+      "no": 652,
+      "team": "PT생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82211028",
+      "name": "임윤철",
+      "grade": "M4",
+      "rrnFront": "790817"
+    },
+    {
+      "no": 653,
+      "team": "엔진생산1팀",
+      "position": "팀장",
+      "employeeId": "82210379",
+      "name": "김현석",
+      "grade": "M5",
+      "rrnFront": "800301"
+    },
+    {
+      "no": 654,
+      "team": "엔진생산1팀",
+      "position": "매니저",
+      "employeeId": "82210940",
+      "name": "이재호",
+      "grade": "M3",
+      "rrnFront": "841024"
+    },
+    {
+      "no": 655,
+      "team": "엔진생산1팀",
+      "position": "매니저",
+      "employeeId": "82210278",
+      "name": "김인섭",
+      "grade": "M3",
+      "rrnFront": "830822"
+    },
+    {
+      "no": 656,
+      "team": "엔진생산1팀",
+      "position": "책임매니저",
+      "employeeId": "82210424",
+      "name": "류환곤",
+      "grade": "M5",
+      "rrnFront": "690920"
+    },
+    {
+      "no": 784,
+      "team": "엔진생산2팀",
+      "position": "팀장",
+      "employeeId": "82210810",
+      "name": "윤진구",
+      "grade": "M5",
+      "rrnFront": "700124"
+    },
+    {
+      "no": 785,
+      "team": "엔진생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210113",
+      "name": "김남현",
+      "grade": "M5",
+      "rrnFront": "830120"
+    },
+    {
+      "no": 786,
+      "team": "엔진생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210413",
+      "name": "노승선",
+      "grade": "M5",
+      "rrnFront": "780627"
+    },
+    {
+      "no": 787,
+      "team": "엔진생산2팀",
+      "position": "책임매니저",
+      "employeeId": "82210923",
+      "name": "이용재",
+      "grade": "M5",
+      "rrnFront": "830808"
+    },
+    {
+      "no": 789,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82210997",
+      "name": "이현우",
+      "grade": "M3",
+      "rrnFront": "920107"
+    },
+    {
+      "no": 790,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82211504",
+      "name": "박근호",
+      "grade": "M2",
+      "rrnFront": "980703"
+    },
+    {
+      "no": 791,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82210329",
+      "name": "김진겸",
+      "grade": "M2",
+      "rrnFront": "990119"
+    },
+    {
+      "no": 792,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82210481",
+      "name": "박석훈",
+      "grade": "M2",
+      "rrnFront": "930713"
+    },
+    {
+      "no": 793,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82210795",
+      "name": "윤성현",
+      "grade": "M2",
+      "rrnFront": "950417"
+    },
+    {
+      "no": 794,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82210963",
+      "name": "이준상",
+      "grade": "M3",
+      "rrnFront": "940519"
+    },
+    {
+      "no": 795,
+      "team": "엔진생산2팀",
+      "position": "매니저",
+      "employeeId": "82211497",
+      "name": "안준모",
+      "grade": "M2",
+      "rrnFront": "961126"
+    },
+    {
+      "no": 994,
+      "team": "엔진생산3팀",
+      "position": "팀장",
+      "employeeId": "82210560",
+      "name": "박홍룡",
+      "grade": "M5",
+      "rrnFront": "720320"
+    },
+    {
+      "no": 995,
+      "team": "엔진생산3팀",
+      "position": "책임매니저",
+      "employeeId": "82210104",
+      "name": "김금석",
+      "grade": "M5",
+      "rrnFront": "771223"
+    },
+    {
+      "no": 996,
+      "team": "엔진생산3팀",
+      "position": "매니저",
+      "employeeId": "82210361",
+      "name": "김태진",
+      "grade": "M2",
+      "rrnFront": "901019"
+    },
+    {
+      "no": 997,
+      "team": "엔진생산3팀",
+      "position": "매니저",
+      "employeeId": "82251001",
+      "name": "이한솔",
+      "grade": "M1",
+      "rrnFront": "950728"
+    },
+    {
+      "no": 998,
+      "team": "엔진생산3팀",
+      "position": "책임매니저",
+      "employeeId": "82210789",
+      "name": "윤기원",
+      "grade": "M4",
+      "rrnFront": "811027"
+    },
+    {
+      "no": 1171,
+      "team": "엔진생산관리팀",
+      "position": "팀장",
+      "employeeId": "82210138",
+      "name": "김동은",
+      "grade": "M5",
+      "rrnFront": "750807"
+    },
+    {
+      "no": 1172,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211074",
+      "name": "전성균",
+      "grade": "M3",
+      "rrnFront": "880110"
+    },
+    {
+      "no": 1173,
+      "team": "엔진생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210445",
+      "name": "민동규",
+      "grade": "M5",
+      "rrnFront": "740709"
+    },
+    {
+      "no": 1174,
+      "team": "엔진생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210462",
+      "name": "박노준",
+      "grade": "M4",
+      "rrnFront": "820804"
+    },
+    {
+      "no": 1175,
+      "team": "엔진생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210554",
+      "name": "박태호",
+      "grade": "M5",
+      "rrnFront": "780130"
+    },
+    {
+      "no": 1176,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82251000",
+      "name": "이새롬",
+      "grade": "M1",
+      "rrnFront": "961112"
+    },
+    {
+      "no": 1177,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211496",
+      "name": "강명준",
+      "grade": "M2",
+      "rrnFront": "990224"
+    },
+    {
+      "no": 1178,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211501",
+      "name": "박수형",
+      "grade": "M2",
+      "rrnFront": "990506"
+    },
+    {
+      "no": 1179,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211502",
+      "name": "윤채영",
+      "grade": "M2",
+      "rrnFront": "970825"
+    },
+    {
+      "no": 1180,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211503",
+      "name": "김수민",
+      "grade": "M2",
+      "rrnFront": "991229"
+    },
+    {
+      "no": 1181,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211470",
+      "name": "김기민",
+      "grade": "M3",
+      "rrnFront": "920205"
+    },
+    {
+      "no": 1182,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210057",
+      "name": "공희원",
+      "grade": "M1",
+      "rrnFront": "890907"
+    },
+    {
+      "no": 1183,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210130",
+      "name": "김동민",
+      "grade": "M3",
+      "rrnFront": "901125"
+    },
+    {
+      "no": 1184,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210374",
+      "name": "김혁수",
+      "grade": "M2",
+      "rrnFront": "920903"
+    },
+    {
+      "no": 1185,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210448",
+      "name": "민정만",
+      "grade": "M3",
+      "rrnFront": "880709"
+    },
+    {
+      "no": 1186,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82210659",
+      "name": "신국현",
+      "grade": "M3",
+      "rrnFront": "890319"
+    },
+    {
+      "no": 1187,
+      "team": "엔진생산관리팀",
+      "position": "매니저",
+      "employeeId": "82211007",
+      "name": "이황복",
+      "grade": "M1",
+      "rrnFront": "910413"
+    },
+    {
+      "no": 1188,
+      "team": "엔진생산관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210038",
+      "name": "고경태",
+      "grade": "M5",
+      "rrnFront": "741124"
+    },
+    {
+      "no": 1220,
+      "team": "엔진생산실",
+      "position": "실장",
+      "employeeId": "82210077",
+      "name": "권영갑",
+      "grade": "M5",
+      "rrnFront": "720803"
+    },
+    {
+      "no": 1236,
+      "team": "엔진보전팀",
+      "position": "책임매니저",
+      "employeeId": "82210370",
+      "name": "김학남",
+      "grade": "M4",
+      "rrnFront": "830508"
+    },
+    {
+      "no": 1237,
+      "team": "엔진보전팀",
+      "position": "책임매니저",
+      "employeeId": "82211201",
+      "name": "조진웅",
+      "grade": "M5",
+      "rrnFront": "800731"
+    },
+    {
+      "no": 1238,
+      "team": "엔진보전팀",
+      "position": "책임매니저",
+      "employeeId": "82211278",
+      "name": "최종욱",
+      "grade": "M5",
+      "rrnFront": "690727"
+    },
+    {
+      "no": 1239,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82211495",
+      "name": "양민우",
+      "grade": "M2",
+      "rrnFront": "000904"
+    },
+    {
+      "no": 1240,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82210881",
+      "name": "이승도",
+      "grade": "M3",
+      "rrnFront": "920219"
+    },
+    {
+      "no": 1241,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82210084",
+      "name": "권혁주",
+      "grade": "M3",
+      "rrnFront": "911213"
+    },
+    {
+      "no": 1242,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82210545",
+      "name": "박찬일",
+      "grade": "M2",
+      "rrnFront": "971021"
+    },
+    {
+      "no": 1243,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82210675",
+      "name": "신현우",
+      "grade": "M2",
+      "rrnFront": "910728"
+    },
+    {
+      "no": 1244,
+      "team": "엔진보전팀",
+      "position": "매니저",
+      "employeeId": "82211477",
+      "name": "김헌희",
+      "grade": "M2",
+      "rrnFront": "980814"
+    },
+    {
+      "no": 1245,
+      "team": "품질관리실",
+      "position": "실장",
+      "employeeId": "82210075",
+      "name": "권승재",
+      "grade": "M5",
+      "rrnFront": "710629"
+    },
+    {
+      "no": 1246,
+      "team": "PT품질관리팀",
+      "position": "팀장",
+      "employeeId": "82210399",
+      "name": "나승길",
+      "grade": "M5",
+      "rrnFront": "721029"
+    },
+    {
+      "no": 1247,
+      "team": "PT품질관리팀",
+      "position": "매니저",
+      "employeeId": "82210626",
+      "name": "손경철",
+      "grade": "M3",
+      "rrnFront": "791105"
+    },
+    {
+      "no": 1248,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210013",
+      "name": "강민호",
+      "grade": "M4",
+      "rrnFront": "761226"
+    },
+    {
+      "no": 1249,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210110",
+      "name": "김기현",
+      "grade": "M5",
+      "rrnFront": "690629"
+    },
+    {
+      "no": 1250,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210145",
+      "name": "김동환",
+      "grade": "M4",
+      "rrnFront": "760919"
+    },
+    {
+      "no": 1251,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210408",
+      "name": "남형석",
+      "grade": "M4",
+      "rrnFront": "790123"
+    },
+    {
+      "no": 1252,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210479",
+      "name": "박상현",
+      "grade": "M4",
+      "rrnFront": "801111"
+    },
+    {
+      "no": 1253,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210496",
+      "name": "박승환",
+      "grade": "M5",
+      "rrnFront": "730717"
+    },
+    {
+      "no": 1254,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210516",
+      "name": "박재현",
+      "grade": "M4",
+      "rrnFront": "821019"
+    },
+    {
+      "no": 1255,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210528",
+      "name": "박종승",
+      "grade": "M5",
+      "rrnFront": "680610"
+    },
+    {
+      "no": 1256,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210801",
+      "name": "윤영주",
+      "grade": "M5",
+      "rrnFront": "730118"
+    },
+    {
+      "no": 1257,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82210956",
+      "name": "이종호",
+      "grade": "M4",
+      "rrnFront": "781101"
+    },
+    {
+      "no": 1258,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82211011",
+      "name": "이훈필",
+      "grade": "M5",
+      "rrnFront": "780629"
+    },
+    {
+      "no": 1259,
+      "team": "PT품질관리팀",
+      "position": "매니저",
+      "employeeId": "82211603",
+      "name": "유현주",
+      "grade": "M1",
+      "rrnFront": "970318"
+    },
+    {
+      "no": 1260,
+      "team": "PT품질관리팀",
+      "position": "매니저",
+      "employeeId": "82210033",
+      "name": "강현수",
+      "grade": "M3",
+      "rrnFront": "790919"
+    },
+    {
+      "no": 1261,
+      "team": "PT품질관리팀",
+      "position": "매니저",
+      "employeeId": "82210195",
+      "name": "김선우",
+      "grade": "M3",
+      "rrnFront": "830921"
+    },
+    {
+      "no": 1262,
+      "team": "PT품질관리팀",
+      "position": "책임매니저",
+      "employeeId": "82211421",
+      "name": "김동우",
+      "grade": "M5",
+      "rrnFront": "720912"
+    },
+    {
+      "no": 1306,
+      "team": "엔진품질관리1팀",
+      "position": "팀장",
+      "employeeId": "82210882",
+      "name": "이승민",
+      "grade": "M5",
+      "rrnFront": "760831"
+    },
+    {
+      "no": 1307,
+      "team": "엔진품질관리1팀",
+      "position": "책임매니저",
+      "employeeId": "82210023",
+      "name": "강재현",
+      "grade": "M5",
+      "rrnFront": "820801"
+    },
+    {
+      "no": 1308,
+      "team": "엔진품질관리1팀",
+      "position": "책임매니저",
+      "employeeId": "82210733",
+      "name": "오승현",
+      "grade": "M4",
+      "rrnFront": "880528"
+    },
+    {
+      "no": 1309,
+      "team": "엔진품질관리1팀",
+      "position": "책임매니저",
+      "employeeId": "82211112",
+      "name": "정수관",
+      "grade": "M5",
+      "rrnFront": "730625"
+    },
+    {
+      "no": 1310,
+      "team": "엔진품질관리1팀",
+      "position": "책임매니저",
+      "employeeId": "82211294",
+      "name": "최홍철",
+      "grade": "M5",
+      "rrnFront": "781223"
+    },
+    {
+      "no": 1311,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82211261",
+      "name": "최영기",
+      "grade": "M3",
+      "rrnFront": "810510"
+    },
+    {
+      "no": 1312,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82211498",
+      "name": "이동영",
+      "grade": "M2",
+      "rrnFront": "960413"
+    },
+    {
+      "no": 1313,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82211471",
+      "name": "김태원",
+      "grade": "M2",
+      "rrnFront": "961212"
+    },
+    {
+      "no": 1314,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82210745",
+      "name": "우경호",
+      "grade": "M2",
+      "rrnFront": "900423"
+    },
+    {
+      "no": 1315,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82210939",
+      "name": "이재호",
+      "grade": "M3",
+      "rrnFront": "820802"
+    },
+    {
+      "no": 1316,
+      "team": "엔진품질관리1팀",
+      "position": "매니저",
+      "employeeId": "82211618",
+      "name": "오세정",
+      "grade": "M2",
+      "rrnFront": "961104"
+    },
+    {
+      "no": 1343,
+      "team": "엔진품질관리2팀",
+      "position": "팀장",
+      "employeeId": "82210625",
+      "name": "소병두",
+      "grade": "M5",
+      "rrnFront": "741017"
+    },
+    {
+      "no": 1344,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82210710",
+      "name": "엄경현",
+      "grade": "M4",
+      "rrnFront": "760202"
+    },
+    {
+      "no": 1345,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82210799",
+      "name": "윤안수",
+      "grade": "M4",
+      "rrnFront": "900629"
+    },
+    {
+      "no": 1346,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82210809",
+      "name": "윤지민",
+      "grade": "M5",
+      "rrnFront": "660619"
+    },
+    {
+      "no": 1347,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82211114",
+      "name": "정순양",
+      "grade": "M5",
+      "rrnFront": "791029"
+    },
+    {
+      "no": 1348,
+      "team": "엔진품질관리2팀",
+      "position": "매니저",
+      "employeeId": "82210913",
+      "name": "이웅석",
+      "grade": "M2",
+      "rrnFront": "880329"
+    },
+    {
+      "no": 1349,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82211193",
+      "name": "조우숭",
+      "grade": "M5",
+      "rrnFront": "770813"
+    },
+    {
+      "no": 1350,
+      "team": "엔진품질관리2팀",
+      "position": "매니저",
+      "employeeId": "82211499",
+      "name": "이형선",
+      "grade": "M2",
+      "rrnFront": "950721"
+    },
+    {
+      "no": 1351,
+      "team": "엔진품질관리2팀",
+      "position": "매니저",
+      "employeeId": "82211500",
+      "name": "이규태",
+      "grade": "M2",
+      "rrnFront": "001001"
+    },
+    {
+      "no": 1352,
+      "team": "엔진품질관리2팀",
+      "position": "매니저",
+      "employeeId": "82210557",
+      "name": "박현철",
+      "grade": "M2",
+      "rrnFront": "840430"
+    },
+    {
+      "no": 1353,
+      "team": "엔진품질관리2팀",
+      "position": "책임매니저",
+      "employeeId": "82211182",
+      "name": "조양택",
+      "grade": "M5",
+      "rrnFront": "851015"
+    }
   ]
 }
