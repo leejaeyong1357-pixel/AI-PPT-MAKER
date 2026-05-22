@@ -11,7 +11,6 @@ interface FeedbackRequest {
 }
 
 interface HchatConfig {
-  endpoint: string;
   apiKey: string;
   model?: string;
 }
@@ -80,7 +79,6 @@ async function callProxy(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        endpoint: config.endpoint,
         apiKey: config.apiKey,
         model: config.model,
         messages,
@@ -101,7 +99,7 @@ export async function getFeedback(
   req: FeedbackRequest,
   config: HchatConfig,
 ): Promise<AiFeedback> {
-  if (!config.endpoint || !config.apiKey) {
+  if (!config.apiKey) {
     return strictMockFeedback(req);
   }
 
@@ -194,8 +192,8 @@ function strictMockFeedback(req: FeedbackRequest): AiFeedback {
 export async function testConnection(
   config: HchatConfig,
 ): Promise<{ ok: boolean; message: string; details?: string }> {
-  if (!config.endpoint || !config.apiKey) {
-    return { ok: false, message: "Endpoint URL 또는 API 키가 비어있습니다" };
+  if (!config.apiKey) {
+    return { ok: false, message: "API 키를 입력해주세요" };
   }
   const result = await callProxy(
     config,
@@ -224,8 +222,8 @@ export async function translateWord(
     if (cache[word.toLowerCase()]) return cache[word.toLowerCase()];
   }
 
-  if (!config.endpoint || !config.apiKey) {
-    return "(HChat API 설정 필요)";
+  if (!config.apiKey) {
+    return "(API 키 설정 필요)";
   }
 
   const result = await callProxy(
@@ -252,6 +250,6 @@ export async function translateWord(
   return meaning;
 }
 
-export function isHChatConfigured(endpoint: string, apiKey: string): boolean {
-  return !!(endpoint && apiKey);
+export function isHChatConfigured(apiKey: string): boolean {
+  return !!apiKey;
 }

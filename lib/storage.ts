@@ -8,15 +8,26 @@ import type {
   UserSession,
 } from "@/types";
 
-const KEYS = {
-  settings: "spa.settings",
-  records: "spa.records",
-  vocab: "spa.vocab",
-  mockResults: "spa.mockResults",
-  session: "spa.session",
-};
+const SESSION_KEY = "spa.session";
 
-function safeGet<T>(key: string, fallback: T): T {
+function getCurrentEmployeeId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    return s.employeeId || null;
+  } catch {
+    return null;
+  }
+}
+
+function scopedKey(base: string): string {
+  const uid = getCurrentEmployeeId();
+  return uid ? `${base}.${uid}` : base;
+}
+
+function safeGetLocal<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(key);
@@ -26,23 +37,30 @@ function safeGet<T>(key: string, fallback: T): T {
   }
 }
 
-function safeSet(key: string, value: unknown) {
+function safeSetLocal(key: string, value: unknown) {
   if (typeof window === "undefined") return;
   localStorage.setItem(key, JSON.stringify(value));
 }
 
 export const storage = {
   getSession(): UserSession | null {
-    return safeGet<UserSession | null>(KEYS.session, null);
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      return raw ? (JSON.parse(raw) as UserSession) : null;
+    } catch {
+      return null;
+    }
   },
 
   saveSession(session: UserSession) {
-    safeSet(KEYS.session, session);
+    if (typeof window === "undefined") return;
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   },
 
   clearSession() {
     if (typeof window === "undefined") return;
-    localStorage.removeItem(KEYS.session);
+    sessionStorage.removeItem(SESSION_KEY);
   },
 
   isLoggedIn(): boolean {
@@ -50,17 +68,18 @@ export const storage = {
   },
 
   getSettings(): UserSettings {
-    return safeGet<UserSettings>(KEYS.settings, {
+    return safeGetLocal<UserSettings>(scopedKey("spa.settings"), {
       examDate: "",
       targetLevel: 6,
       hchatApiKey: "",
       hchatEndpoint: "",
+      hchatModel: "claude-sonnet-4-6",
       setupCompleted: false,
     });
   },
 
   saveSettings(settings: UserSettings) {
-    safeSet(KEYS.settings, settings);
+    safeSetLocal(scopedKey("spa.settings"), settings);
   },
 
   isSetupComplete(): boolean {
@@ -68,13 +87,13 @@ export const storage = {
   },
 
   getRecords(): StudyRecord[] {
-    return safeGet<StudyRecord[]>(KEYS.records, []);
+    return safeGetLocal<StudyRecord[]>(scopedKey("spa.records"), []);
   },
 
   addRecord(record: StudyRecord) {
     const records = this.getRecords();
     records.push(record);
-    safeSet(KEYS.records, records);
+    safeSetLocal(scopedKey("spa.records"), records);
   },
 
   updateRecord(id: string, updates: Partial<StudyRecord>) {
@@ -82,19 +101,19 @@ export const storage = {
     const idx = records.findIndex((r) => r.id === id);
     if (idx !== -1) {
       records[idx] = { ...records[idx], ...updates };
-      safeSet(KEYS.records, records);
+      safeSetLocal(scopedKey("spa.records"), records);
     }
   },
 
   getVocab(): VocabEntry[] {
-    return safeGet<VocabEntry[]>(KEYS.vocab, []);
+    return safeGetLocal<VocabEntry[]>(scopedKey("spa.vocab"), []);
   },
 
   addVocab(entry: VocabEntry) {
     const vocab = this.getVocab();
     if (!vocab.some((v) => v.word.toLowerCase() === entry.word.toLowerCase())) {
       vocab.push(entry);
-      safeSet(KEYS.vocab, vocab);
+      safeSetLocal(scopedKey("spa.vocab"), vocab);
     }
   },
 
@@ -102,20 +121,24 @@ export const storage = {
     const vocab = this.getVocab().filter(
       (v) => v.word.toLowerCase() !== word.toLowerCase(),
     );
-    safeSet(KEYS.vocab, vocab);
+    safeSetLocal(scopedKey("spa.vocab"), vocab);
   },
 
   getMockResults(): MockExamResult[] {
-    return safeGet<MockExamResult[]>(KEYS.mockResults, []);
+    return safeGetLocal<MockExamResult[]>(scopedKey("spa.mockResults"), []);
   },
 
   addMockResult(result: MockExamResult) {
     const results = this.getMockResults();
     results.push(result);
-    safeSet(KEYS.mockResults, results);
+    safeSetLocal(scopedKey("spa.mockResults"), results);
   },
 
-  clearAll() {
-    Object.values(KEYS).forEach((k) => localStorage.removeItem(k));
+  clearMyData() {
+    const uid = getCurrentEmployeeId();
+    if (!uid) return;
+    ["spa.settings", "spa.records", "spa.vocab", "spa.mockResults"].forEach(
+      (k) => localStorage.removeItem(`${k}.${uid}`),
+    );
   },
 };

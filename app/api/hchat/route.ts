@@ -1,26 +1,12 @@
 import { NextResponse } from "next/server";
+import { endpointForModel } from "@/lib/constants";
 
 interface ProxyRequest {
-  endpoint: string;
   apiKey: string;
   model?: string;
   messages: { role: string; content: string }[];
   maxTokens?: number;
   temperature?: number;
-}
-
-function detectProvider(endpoint: string): "anthropic" | "openai" {
-  if (/claude|anthropic|\/v3\/claude/i.test(endpoint)) return "anthropic";
-  return "openai";
-}
-
-function buildUrl(endpoint: string, provider: "anthropic" | "openai") {
-  if (provider === "anthropic") {
-    if (/\/messages\/?$/.test(endpoint)) return endpoint;
-    return endpoint.replace(/\/$/, "") + "/messages";
-  }
-  if (/\/chat\/completions\/?$/.test(endpoint)) return endpoint;
-  return endpoint.replace(/\/$/, "") + "/chat/completions";
 }
 
 export async function POST(req: Request) {
@@ -31,14 +17,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid JSON body" });
   }
 
-  const { endpoint, apiKey, model, messages, maxTokens = 1500, temperature = 0.3 } = body;
+  const { apiKey, model, messages, maxTokens = 1500, temperature = 0.3 } = body;
 
-  if (!endpoint || !apiKey) {
-    return NextResponse.json({ ok: false, error: "endpoint, apiKey 필수" });
+  if (!apiKey) {
+    return NextResponse.json({ ok: false, error: "apiKey가 필요합니다" });
   }
 
-  const provider = detectProvider(endpoint);
-  const url = buildUrl(endpoint, provider);
+  const selectedModel = model || "claude-sonnet-4-6";
+  const endpoint = endpointForModel(selectedModel);
+  const provider: "anthropic" | "openai" = selectedModel.startsWith("claude") ? "anthropic" : "openai";
+
+  const url =
+    provider === "anthropic"
+      ? endpoint.replace(/\/$/, "") + "/messages"
+      : endpoint.replace(/\/$/, "") + "/chat/completions";
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -94,7 +86,6 @@ export async function POST(req: Request) {
         ok: false,
         status: response.status,
         provider,
-        url,
         error: typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg),
       });
     }
@@ -114,7 +105,7 @@ export async function POST(req: Request) {
   } catch (e: any) {
     return NextResponse.json({
       ok: false,
-      error: `Network error: ${e.message || "unknown"} (URL: ${url})`,
+      error: `Network error: ${e.message || "unknown"}`,
     });
   }
 }

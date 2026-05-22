@@ -14,9 +14,6 @@ export default function SetupPage() {
   const router = useRouter();
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
-  const [hchatEndpoint, setHchatEndpoint] = useState(
-    "https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude",
-  );
   const [hchatApiKey, setHchatApiKey] = useState("");
   const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
   const [step, setStep] = useState(1);
@@ -28,7 +25,6 @@ export default function SetupPage() {
     const s = storage.getSettings();
     if (s.examDate) setExamDate(s.examDate);
     if (s.targetLevel) setTargetLevel(s.targetLevel);
-    if (s.hchatEndpoint) setHchatEndpoint(s.hchatEndpoint);
     if (s.hchatApiKey) setHchatApiKey(s.hchatApiKey);
     if (s.hchatModel) setHchatModel(s.hchatModel);
     setLoaded(true);
@@ -38,7 +34,6 @@ export default function SetupPage() {
     setTesting(true);
     setTestResult(null);
     const result = await testConnection({
-      endpoint: hchatEndpoint,
       apiKey: hchatApiKey,
       model: hchatModel,
     });
@@ -50,7 +45,7 @@ export default function SetupPage() {
     storage.saveSettings({
       examDate,
       targetLevel,
-      hchatEndpoint,
+      hchatEndpoint: "",
       hchatApiKey,
       hchatModel,
       setupCompleted: true,
@@ -145,31 +140,13 @@ export default function SetupPage() {
 
           {step === 3 && (
             <div>
-              <h2 className="text-lg font-bold mb-1 text-teczen-gray-900">HChat API 연결 (선택)</h2>
+              <h2 className="text-lg font-bold mb-1 text-teczen-gray-900">HChat API 연결</h2>
               <p className="text-sm text-teczen-gray-600 mb-4">
-                사내 HChat 개인 API Key를 입력하면 실제 AI 채점·번역이 활성화됩니다.
+                사내 HChat Platform에서 발급받은 <b>개인 API Key</b>만 입력하세요.
                 <br />
-                비워두면 내장 사전 + 가이드라인 기반 mock 피드백이 제공됩니다.
+                서버 주소는 사내 HChat 표준으로 미리 설정되어 있습니다.
               </p>
               <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
-                    HChat Base URL
-                  </label>
-                  <input
-                    type="text"
-                    value={hchatEndpoint}
-                    onChange={(e) => {
-                      setHchatEndpoint(e.target.value);
-                      setTestResult(null);
-                    }}
-                    placeholder="https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude"
-                    className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
-                  />
-                  <p className="text-xs text-teczen-gray-500 mt-1">
-                    Claude: <code>...v3/claude</code> · OpenAI/Azure: <code>...v3</code>
-                  </p>
-                </div>
                 <div>
                   <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
                     모델
@@ -210,7 +187,7 @@ export default function SetupPage() {
                   onClick={runTest}
                   variant="outline"
                   size="sm"
-                  disabled={testing || !hchatEndpoint || !hchatApiKey}
+                  disabled={testing || !hchatApiKey}
                   fullWidth
                 >
                   {testing ? "테스트 중..." : "🔌 연결 테스트"}

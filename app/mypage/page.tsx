@@ -19,7 +19,6 @@ export default function MyPage() {
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
-  const [hchatEndpoint, setHchatEndpoint] = useState("");
   const [hchatApiKey, setHchatApiKey] = useState("");
   const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
 
@@ -45,7 +44,6 @@ export default function MyPage() {
     setSettings(cfg);
     setExamDate(cfg.examDate);
     setTargetLevel(cfg.targetLevel);
-    setHchatEndpoint(cfg.hchatEndpoint);
     setHchatApiKey(cfg.hchatApiKey);
     if (cfg.hchatModel) setHchatModel(cfg.hchatModel);
   }, [router]);
@@ -57,7 +55,6 @@ export default function MyPage() {
       ...settings,
       examDate,
       targetLevel,
-      hchatEndpoint,
       hchatApiKey,
       hchatModel,
     });
@@ -162,16 +159,6 @@ export default function MyPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">HChat Base URL</label>
-              <input
-                type="text"
-                value={hchatEndpoint}
-                onChange={(e) => setHchatEndpoint(e.target.value)}
-                placeholder="https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude"
-                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
-              />
-            </div>
-            <div>
               <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">모델</label>
               <select
                 value={hchatModel}
@@ -268,9 +255,7 @@ export default function MyPage() {
             <button
               onClick={() => {
                 if (confirm("학습 기록과 단어장을 모두 삭제합니다. 진행하시겠습니까?")) {
-                  localStorage.removeItem("spa.records");
-                  localStorage.removeItem("spa.vocab");
-                  localStorage.removeItem("spa.mockResults");
+                  storage.clearMyData();
                   localStorage.removeItem("spa.wordCache");
                   alert("초기화되었습니다.");
                   router.push("/dashboard");
