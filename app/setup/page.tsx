@@ -15,7 +15,7 @@ export default function SetupPage() {
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatApiKey, setHchatApiKey] = useState("");
-  const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
+  const hchatModel = "claude-sonnet-4-6";
   const [step, setStep] = useState(1);
   const [loaded, setLoaded] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -26,7 +26,6 @@ export default function SetupPage() {
     if (s.examDate) setExamDate(s.examDate);
     if (s.targetLevel) setTargetLevel(s.targetLevel);
     if (s.hchatApiKey) setHchatApiKey(s.hchatApiKey);
-    if (s.hchatModel) setHchatModel(s.hchatModel);
     setLoaded(true);
   }, []);
 
@@ -147,23 +146,6 @@ export default function SetupPage() {
                 서버 주소는 사내 HChat 표준으로 미리 설정되어 있습니다.
               </p>
               <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
-                    모델
-                  </label>
-                  <select
-                    value={hchatModel}
-                    onChange={(e) => {
-                      setHchatModel(e.target.value);
-                      setTestResult(null);
-                    }}
-                    className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teczen-navy"
-                  >
-                    <option value="claude-sonnet-4-6">claude-sonnet-4-6 (권장)</option>
-                    <option value="claude-haiku-4-5">claude-haiku-4-5 (빠름)</option>
-                    <option value="gpt-4.1">gpt-4.1 (Azure)</option>
-                  </select>
-                </div>
                 <div>
                   <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
                     개인 API Key

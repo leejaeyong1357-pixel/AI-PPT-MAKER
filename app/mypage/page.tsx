@@ -20,7 +20,7 @@ export default function MyPage() {
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatApiKey, setHchatApiKey] = useState("");
-  const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
+  const hchatModel = "claude-sonnet-4-6";
 
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
@@ -45,7 +45,6 @@ export default function MyPage() {
     setExamDate(cfg.examDate);
     setTargetLevel(cfg.targetLevel);
     setHchatApiKey(cfg.hchatApiKey);
-    if (cfg.hchatModel) setHchatModel(cfg.hchatModel);
   }, [router]);
 
   if (!session || !settings) return null;
@@ -158,18 +157,6 @@ export default function MyPage() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">모델</label>
-              <select
-                value={hchatModel}
-                onChange={(e) => setHchatModel(e.target.value)}
-                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teczen-navy"
-              >
-                <option value="claude-sonnet-4-6">claude-sonnet-4-6 (권장)</option>
-                <option value="claude-haiku-4-5">claude-haiku-4-5 (빠름)</option>
-                <option value="gpt-4.1">gpt-4.1 (Azure)</option>
-              </select>
-            </div>
             <div>
               <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">개인 API Key</label>
               <input
