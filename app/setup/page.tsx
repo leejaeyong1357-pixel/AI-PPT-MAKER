@@ -49,7 +49,7 @@ export default function SetupPage() {
       hchatModel,
       setupCompleted: true,
     });
-    router.push("/dashboard");
+    router.push("/loading-setup");
   };
 
   if (!loaded) return null;

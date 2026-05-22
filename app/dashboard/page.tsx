@@ -5,14 +5,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { getDaysUntil, scoreToLevel } from "@/lib/scoring";
+import { filterByTargetLevel } from "@/lib/levelFilter";
 import type { UserSettings, StudyRecord, MockExamResult, UserSession } from "@/types";
 import Header from "@/components/layout/Header";
+import type1 from "@/data/type1_business_casual.json";
+import type2 from "@/data/type2_opinion.json";
+import type3 from "@/data/type3_visual.json";
+import type4 from "@/data/type4_summary.json";
 
 const TYPE_INFO = [
-  { type: 1, name: "Business Casual", desc: "일상 Q&A" },
-  { type: 2, name: "Opinion", desc: "의견 표현" },
-  { type: 3, name: "Visual", desc: "그래프·사진 묘사" },
-  { type: 4, name: "Summary", desc: "지문 요약" },
+  { type: 1, name: "Business Casual", desc: "일상 Q&A", total: type1.questions.length, getFiltered: (lv: any) => filterByTargetLevel(type1.questions as any, lv).length },
+  { type: 2, name: "Opinion", desc: "의견 표현", total: type2.questions.length, getFiltered: (lv: any) => filterByTargetLevel(type2.questions as any, lv).length },
+  { type: 3, name: "Visual", desc: "그래프·사진 묘사", total: type3.items.length, getFiltered: (lv: any) => filterByTargetLevel(type3.items as any, lv).length },
+  { type: 4, name: "Summary", desc: "지문 요약", total: type4.passages.length, getFiltered: (lv: any) => filterByTargetLevel(type4.passages as any, lv).length },
 ];
 
 export default function DashboardPage() {
@@ -119,6 +124,7 @@ export default function DashboardPage() {
                 {TYPE_INFO.map((t) => {
                   const rs = records.filter((r) => r.type === t.type);
                   const a = rs.length > 0 ? Math.round(rs.reduce((s, x) => s + (x.score || 0), 0) / rs.length) : 0;
+                  const myLevelCount = t.getFiltered(settings.targetLevel);
                   return (
                     <Link
                       key={t.type}
@@ -128,8 +134,16 @@ export default function DashboardPage() {
                       <div className="text-xs font-bold text-teczen-red mb-1">유형 {t.type}</div>
                       <div className="font-bold text-teczen-ink text-sm mb-1">{t.name}</div>
                       <div className="text-xs text-teczen-gray-500 mb-2">{t.desc}</div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-teczen-gray-500">전체</span>
+                        <span className="text-xs font-bold text-teczen-ink">{t.total}문제</span>
+                      </div>
+                      <div className="flex items-center justify-between mb-2 pb-2 border-b border-teczen-gray-200">
+                        <span className="text-xs text-teczen-gray-500">내 등급</span>
+                        <span className="text-xs font-bold text-teczen-blue">{myLevelCount}문제</span>
+                      </div>
                       <div className="text-xs text-teczen-gray-700">
-                        <b className="text-teczen-blue">{rs.length}</b>문제 · 평균 <b>{a || "—"}</b>점
+                        완료 <b className="text-teczen-blue">{rs.length}</b> · 평균 <b>{a || "—"}</b>점
                       </div>
                     </Link>
                   );
