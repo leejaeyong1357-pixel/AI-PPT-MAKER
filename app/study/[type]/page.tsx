@@ -136,17 +136,34 @@ function StudySessionForType({ type, item }: { type: QuestionType; item: any }) 
             <div>
               <div className="mb-3">
                 <span className="text-xs font-semibold text-teczen-red">PHOTO</span>
-                <p className="text-xs text-teczen-gray-600 mt-1">
-                  {item.image_description}
-                </p>
               </div>
-              {item.image_url && (
+              {item.image_url ? (
                 <img
                   src={item.image_url}
                   alt={item.image_description}
-                  className="w-full max-h-96 object-cover rounded-xl"
+                  className="w-full max-h-96 object-cover rounded-xl bg-teczen-gray-100"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    target.style.display = "none";
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = "flex";
+                  }}
                 />
-              )}
+              ) : null}
+              <div
+                style={{ display: "none" }}
+                className="w-full h-64 bg-gradient-to-br from-teczen-navy/10 to-teczen-gray-100 rounded-xl items-center justify-center text-center p-6"
+              >
+                <div>
+                  <div className="text-3xl mb-2">🖼️</div>
+                  <div className="text-sm text-teczen-gray-700 max-w-md">
+                    {item.image_description}
+                  </div>
+                  <div className="text-xs text-teczen-gray-400 mt-2">
+                    (이미지 로드 실패 — 설명 기반으로 답변 연습)
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <ChartRenderer item={item} />
