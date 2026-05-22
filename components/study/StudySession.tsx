@@ -75,7 +75,7 @@ export default function StudySession({
         sampleAnswer,
         targetLevel: settings.targetLevel,
       },
-      { endpoint: settings.hchatEndpoint, apiKey: settings.hchatApiKey },
+      { endpoint: settings.hchatEndpoint, apiKey: settings.hchatApiKey, model: settings.hchatModel },
     );
     setFeedback(result);
     setLoadingFeedback(false);

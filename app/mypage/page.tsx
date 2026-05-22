@@ -21,6 +21,7 @@ export default function MyPage() {
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatEndpoint, setHchatEndpoint] = useState("");
   const [hchatApiKey, setHchatApiKey] = useState("");
+  const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
 
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
@@ -46,6 +47,7 @@ export default function MyPage() {
     setTargetLevel(cfg.targetLevel);
     setHchatEndpoint(cfg.hchatEndpoint);
     setHchatApiKey(cfg.hchatApiKey);
+    if (cfg.hchatModel) setHchatModel(cfg.hchatModel);
   }, [router]);
 
   if (!session || !settings) return null;
@@ -57,6 +59,7 @@ export default function MyPage() {
       targetLevel,
       hchatEndpoint,
       hchatApiKey,
+      hchatModel,
     });
     setSaveMsg("✓ 저장되었습니다");
     setTimeout(() => setSaveMsg(""), 2000);
@@ -159,22 +162,34 @@ export default function MyPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">HChat Endpoint URL</label>
+              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">HChat Base URL</label>
               <input
                 type="text"
                 value={hchatEndpoint}
                 onChange={(e) => setHchatEndpoint(e.target.value)}
-                placeholder="https://hchat.example.com/v1/chat/completions"
+                placeholder="https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude"
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">HChat API Key</label>
+              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">모델</label>
+              <select
+                value={hchatModel}
+                onChange={(e) => setHchatModel(e.target.value)}
+                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teczen-navy"
+              >
+                <option value="claude-sonnet-4-6">claude-sonnet-4-6 (권장)</option>
+                <option value="claude-haiku-4-5">claude-haiku-4-5 (빠름)</option>
+                <option value="gpt-4.1">gpt-4.1 (Azure)</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">개인 API Key</label>
               <input
                 type="password"
                 value={hchatApiKey}
                 onChange={(e) => setHchatApiKey(e.target.value)}
-                placeholder="sk-..."
+                placeholder="afd5cdc7f6..."
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
               />
             </div>

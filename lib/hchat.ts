@@ -10,6 +10,12 @@ interface FeedbackRequest {
   context?: string;
 }
 
+interface HchatConfig {
+  endpoint: string;
+  apiKey: string;
+  model?: string;
+}
+
 const FEEDBACK_PROMPT = (req: FeedbackRequest) => `You are a STRICT English speaking exam evaluator for the Korean SPA (Speaking Proficiency Assessment) test used by Hyundai Motor Group.
 
 The SPA exam uses a 96-point scale across 8 levels:
@@ -29,28 +35,21 @@ STRICT SCORING RUBRIC - Be harsh:
 - 7+ sentences (80-150 words) with examples and varied vocabulary: Lv 5-6 (50-74 pts)
 - Sophisticated structures, idioms, business vocabulary, clear organization: Lv 7-8
 
-DEDUCT POINTS for:
-- Grammar errors (-2 each)
-- Off-topic content (-10)
-- Repetition without development (-5)
-- Missing follow-up details (-3)
-- Korean-style English literal translation (-3)
-
-EVALUATION CRITERIA:
+EVALUATION CRITERIA (발음 / 어휘 / 문법 / 발화량 / 일관성):
 1. 발화량 (Length/Fluency): Word count, complete sentences
 2. 어휘 (Vocabulary): Variety, business appropriateness, accuracy
 3. 문법 (Grammar): Subject-verb agreement, tense, articles, prepositions
 4. 일관성 (Coherence): Logical flow, examples, conclusion
 5. 정확성 (Accuracy): Directly addresses the question
 
-Question Type: ${req.type} (${
+Question Type ${req.type} (${
   req.type === 1
-    ? "Business Casual - personal/daily Q&A"
+    ? "Business Casual"
     : req.type === 2
-    ? "Opinion - argumentative with reasoning"
+    ? "Opinion"
     : req.type === 3
-    ? "Visual Description - chart/photo analysis"
-    : "Passage Summary - 60-second summary of heard text"
+    ? "Visual Description"
+    : "Passage Summary"
 })
 Question: ${req.question}
 ${req.context ? `Context: ${req.context}\n` : ""}
@@ -59,60 +58,76 @@ User's Target Level: Lv ${req.targetLevel}
 
 Return ONLY valid JSON in this exact structure:
 {
-  "grammarIssues": ["specific errors with corrections, e.g. 'I goes' → 'I go'"],
-  "vocabularySuggestions": ["better word choices with Korean meaning, e.g. 'Try demonstrate (보여주다) instead of show'"],
+  "grammarIssues": ["specific errors with corrections"],
+  "vocabularySuggestions": ["better word choices with Korean meaning"],
   "betterExpressions": ["natural phrasings with Korean translation"],
-  "modelAnswer": "An improved version of the user's answer matching their TARGET level (not the current level)",
+  "modelAnswer": "improved version at TARGET level",
   "estimatedLevel": <number 1-8>,
   "scoreEstimate": <number 0-96>,
-  "strengths": ["specific things they did well"],
+  "strengths": ["specific things done well"],
   "improvements": ["specific actionable improvements"]
 }
 
-Be strict and honest. A one-sentence response should NOT score 50+. Score MUST match the rubric above.`;
+Be strict and honest. Score MUST match the rubric above.`;
+
+async function callProxy(
+  config: HchatConfig,
+  messages: { role: string; content: string }[],
+  maxTokens = 1500,
+): Promise<{ ok: boolean; content?: string; error?: string }> {
+  try {
+    const res = await fetch("/api/hchat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        endpoint: config.endpoint,
+        apiKey: config.apiKey,
+        model: config.model,
+        messages,
+        maxTokens,
+      }),
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      return { ok: false, error: data.error || `HTTP ${data.status || "?"}` };
+    }
+    return { ok: true, content: data.content };
+  } catch (e: any) {
+    return { ok: false, error: e.message || "fetch failed" };
+  }
+}
 
 export async function getFeedback(
   req: FeedbackRequest,
-  config: { endpoint: string; apiKey: string },
+  config: HchatConfig,
 ): Promise<AiFeedback> {
   if (!config.endpoint || !config.apiKey) {
     return strictMockFeedback(req);
   }
 
-  try {
-    const response = await fetch(config.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
+  const result = await callProxy(
+    config,
+    [
+      {
+        role: "system",
+        content:
+          "You are a strict SPA exam evaluator. Output only valid JSON. Be harsh in scoring - one sentence answers score under 25 points.",
       },
-      body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a strict SPA exam evaluator. Output only valid JSON. Be harsh in scoring - one sentence answers score under 25 points.",
-          },
-          { role: "user", content: FEEDBACK_PROMPT(req) },
-        ],
-        temperature: 0.2,
-        max_tokens: 1500,
-      }),
-    });
+      { role: "user", content: FEEDBACK_PROMPT(req) },
+    ],
+    1500,
+  );
 
-    if (!response.ok) throw new Error(`HChat API error: ${response.status}`);
+  if (!result.ok || !result.content) {
+    console.error("HChat call failed:", result.error);
+    const mock = strictMockFeedback(req);
+    mock.improvements.unshift(`⚠ AI 채점 실패 — ${result.error || "응답 없음"}`);
+    return mock;
+  }
 
-    const data = await response.json();
-    const content =
-      data.choices?.[0]?.message?.content ||
-      data.message?.content ||
-      data.content ||
-      data.response ||
-      "";
-
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Invalid response format");
-
+  try {
+    const jsonMatch = result.content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("응답에 JSON 없음");
     const parsed = JSON.parse(jsonMatch[0]);
     return {
       grammarIssues: parsed.grammarIssues || [],
@@ -124,8 +139,8 @@ export async function getFeedback(
       strengths: parsed.strengths || [],
       improvements: parsed.improvements || [],
     };
-  } catch (err) {
-    console.error("HChat call failed, returning mock:", err);
+  } catch (e) {
+    console.error("Parse fail:", e);
     return strictMockFeedback(req);
   }
 }
@@ -150,82 +165,59 @@ function strictMockFeedback(req: FeedbackRequest): AiFeedback {
 
   const errors: string[] = [];
   if (wc < 30) errors.push("답변이 너무 짧음 — 최소 5문장, 60~80단어 이상 권장");
-  if (sentences < 3) errors.push("문장 수가 부족 — 최소 3~5문장 필요");
-
-  const lowerAns = req.userAnswer.toLowerCase();
-  if (!/(however|but|because|since|so|therefore|for example|first|second|finally|in my view|i think)/.test(lowerAns)) {
-    errors.push("논리 연결어 부재 (However / Because / For example 등) — 구조화 필요");
-  }
+  if (sentences < 3) errors.push("문장 수 부족 — 최소 3~5문장");
 
   return {
-    grammarIssues: [
-      "(Mock - HChat API 미연결) 문법 자동 검사를 위해 API 설정 필요",
-      ...(errors.length > 0 ? [errors[0]] : []),
-    ],
+    grammarIssues: ["(Mock - HChat API 미연결) 문법 자동 검사를 위해 API 설정 필요"],
     vocabularySuggestions: [
-      `(Mock) 단어 수: ${wc}개 — ${wc < 50 ? "비즈니스 어휘 추가 필요 (demonstrate, consider, regarding 등)" : "다양한 어휘 사용 권장"}`,
-      "(Mock) Korean-style English 피하기 — 'I think that...' 대신 'In my view...'",
+      `(Mock) 단어 수: ${wc}개 — ${wc < 50 ? "비즈니스 어휘 추가 필요" : "다양한 어휘 권장"}`,
     ],
     betterExpressions: [
-      "(Mock) 도입: 'From my experience,...' / 'I would say that...'",
-      "(Mock) 근거: 'For instance,...' / 'A good example is...'",
-      "(Mock) 마무리: 'Overall,...' / 'For these reasons,...'",
+      "(Mock) 도입: 'From my experience,...' / 'In my view,...'",
+      "(Mock) 근거: 'For instance,...' / 'For example,...'",
     ],
     modelAnswer: req.sampleAnswer
-      ? `(목표 등급 Lv ${req.targetLevel} 기준 모범답안)\n\n${req.sampleAnswer}`
-      : "(HChat API 연결 시 목표 등급 맞춤 모범답안 생성됨)",
+      ? `(목표 등급 Lv ${req.targetLevel} 기준)\n\n${req.sampleAnswer}`
+      : "(HChat API 연결 시 목표 등급 맞춤 모범답안 생성)",
     estimatedLevel: scoreToLevel(score),
     scoreEstimate: score,
     strengths: [
       wc >= 50 ? `발화량 충분 (${wc}단어)` : `시도함 (${wc}단어)`,
-      sentences >= 3 ? `${sentences}개 문장 구성` : "발화 기록됨",
     ],
     improvements: errors.length > 0 ? errors : [
       "더 구체적인 예시와 근거 추가",
-      "고급 비즈니스 어휘 도입 (consequently, furthermore, regarding 등)",
-      "마무리 문장으로 답변 정리",
+      "고급 비즈니스 어휘 도입",
     ],
   };
 }
 
-export async function testConnection(config: {
-  endpoint: string;
-  apiKey: string;
-}): Promise<{ ok: boolean; message: string }> {
+export async function testConnection(
+  config: HchatConfig,
+): Promise<{ ok: boolean; message: string; details?: string }> {
   if (!config.endpoint || !config.apiKey) {
     return { ok: false, message: "Endpoint URL 또는 API 키가 비어있습니다" };
   }
-  try {
-    const response = await fetch(config.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        messages: [{ role: "user", content: "Reply with just 'OK'" }],
-        max_tokens: 10,
-      }),
-    });
-    if (!response.ok) {
-      return {
-        ok: false,
-        message: `HTTP ${response.status} — ${response.statusText || "응답 실패"}`,
-      };
-    }
-    await response.json();
-    return { ok: true, message: "연결 성공! AI 피드백이 활성화됩니다." };
-  } catch (e: any) {
+  const result = await callProxy(
+    config,
+    [{ role: "user", content: "Reply with just OK" }],
+    30,
+  );
+  if (!result.ok) {
     return {
       ok: false,
-      message: `네트워크 오류: ${e.message || "endpoint URL 확인"}`,
+      message: result.error || "연결 실패",
+      details: result.error,
     };
   }
+  return {
+    ok: true,
+    message: `연결 성공 — 응답: "${(result.content || "").slice(0, 50)}"`,
+  };
 }
 
 export async function translateWord(
   word: string,
-  config: { endpoint: string; apiKey: string },
+  config: HchatConfig,
 ): Promise<string> {
   if (typeof window !== "undefined") {
     const cache = JSON.parse(localStorage.getItem("spa.wordCache") || "{}");
@@ -236,45 +228,28 @@ export async function translateWord(
     return "(HChat API 설정 필요)";
   }
 
-  try {
-    const response = await fetch(config.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
+  const result = await callProxy(
+    config,
+    [
+      {
+        role: "system",
+        content:
+          "You are a Korean-English dictionary. Output only the most common Korean meaning of the given English word in 5 characters or fewer. No explanation, no punctuation.",
       },
-      body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a Korean-English dictionary. Output only the most common Korean meaning of the given English word in 5 characters or fewer. No explanation.",
-          },
-          { role: "user", content: word },
-        ],
-        max_tokens: 30,
-        temperature: 0,
-      }),
-    });
-    const data = await response.json();
-    const meaning = (
-      data.choices?.[0]?.message?.content ||
-      data.message?.content ||
-      data.content ||
-      ""
-    )
-      .trim()
-      .replace(/^["']|["']$/g, "");
+      { role: "user", content: word },
+    ],
+    30,
+  );
 
-    if (typeof window !== "undefined") {
-      const cache = JSON.parse(localStorage.getItem("spa.wordCache") || "{}");
-      cache[word.toLowerCase()] = meaning;
-      localStorage.setItem("spa.wordCache", JSON.stringify(cache));
-    }
-    return meaning;
-  } catch {
-    return "—";
+  if (!result.ok || !result.content) return "—";
+
+  const meaning = result.content.trim().replace(/^["']|["']$/g, "");
+  if (typeof window !== "undefined") {
+    const cache = JSON.parse(localStorage.getItem("spa.wordCache") || "{}");
+    cache[word.toLowerCase()] = meaning;
+    localStorage.setItem("spa.wordCache", JSON.stringify(cache));
   }
+  return meaning;
 }
 
 export function isHChatConfigured(endpoint: string, apiKey: string): boolean {

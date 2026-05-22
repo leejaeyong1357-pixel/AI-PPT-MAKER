@@ -20,6 +20,7 @@ export interface UserSettings {
   currentLevel?: Level;
   hchatApiKey: string;
   hchatEndpoint: string;
+  hchatModel?: string;
   setupCompleted: boolean;
   onboardingSeen?: boolean;
   onboardingSkipForever?: boolean;

@@ -93,7 +93,7 @@ export default function MockExamPage() {
           sampleAnswer: sample,
           targetLevel: settings.targetLevel,
         },
-        { endpoint: settings.hchatEndpoint, apiKey: settings.hchatApiKey },
+        { endpoint: settings.hchatEndpoint, apiKey: settings.hchatApiKey, model: settings.hchatModel },
       ).then((fb) => {
         setFeedbacks((prev) => ({ ...prev, [currentType]: fb }));
       });

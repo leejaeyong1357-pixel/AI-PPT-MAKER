@@ -14,8 +14,11 @@ export default function SetupPage() {
   const router = useRouter();
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
-  const [hchatEndpoint, setHchatEndpoint] = useState("");
+  const [hchatEndpoint, setHchatEndpoint] = useState(
+    "https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude",
+  );
   const [hchatApiKey, setHchatApiKey] = useState("");
+  const [hchatModel, setHchatModel] = useState("claude-sonnet-4-6");
   const [step, setStep] = useState(1);
   const [loaded, setLoaded] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -27,6 +30,7 @@ export default function SetupPage() {
     if (s.targetLevel) setTargetLevel(s.targetLevel);
     if (s.hchatEndpoint) setHchatEndpoint(s.hchatEndpoint);
     if (s.hchatApiKey) setHchatApiKey(s.hchatApiKey);
+    if (s.hchatModel) setHchatModel(s.hchatModel);
     setLoaded(true);
   }, []);
 
@@ -36,6 +40,7 @@ export default function SetupPage() {
     const result = await testConnection({
       endpoint: hchatEndpoint,
       apiKey: hchatApiKey,
+      model: hchatModel,
     });
     setTestResult(result);
     setTesting(false);
@@ -47,6 +52,7 @@ export default function SetupPage() {
       targetLevel,
       hchatEndpoint,
       hchatApiKey,
+      hchatModel,
       setupCompleted: true,
     });
     router.push("/dashboard");
@@ -141,14 +147,14 @@ export default function SetupPage() {
             <div>
               <h2 className="text-lg font-bold mb-1 text-teczen-gray-900">HChat API 연결 (선택)</h2>
               <p className="text-sm text-teczen-gray-600 mb-4">
-                HChat API 키를 입력하면 실제 AI 채점·번역을 받습니다.
+                사내 HChat 개인 API Key를 입력하면 실제 AI 채점·번역이 활성화됩니다.
                 <br />
                 비워두면 내장 사전 + 가이드라인 기반 mock 피드백이 제공됩니다.
               </p>
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
-                    HChat API Endpoint URL
+                    HChat Base URL
                   </label>
                   <input
                     type="text"
@@ -157,13 +163,33 @@ export default function SetupPage() {
                       setHchatEndpoint(e.target.value);
                       setTestResult(null);
                     }}
-                    placeholder="https://hchat.example.com/v1/chat/completions"
+                    placeholder="https://internal-apigw-kr.hmg-corp.io/hchat-in/api/v3/claude"
                     className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
                   />
+                  <p className="text-xs text-teczen-gray-500 mt-1">
+                    Claude: <code>...v3/claude</code> · OpenAI/Azure: <code>...v3</code>
+                  </p>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
-                    API Key
+                    모델
+                  </label>
+                  <select
+                    value={hchatModel}
+                    onChange={(e) => {
+                      setHchatModel(e.target.value);
+                      setTestResult(null);
+                    }}
+                    className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teczen-navy"
+                  >
+                    <option value="claude-sonnet-4-6">claude-sonnet-4-6 (권장)</option>
+                    <option value="claude-haiku-4-5">claude-haiku-4-5 (빠름)</option>
+                    <option value="gpt-4.1">gpt-4.1 (Azure)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">
+                    개인 API Key
                   </label>
                   <input
                     type="password"
@@ -172,9 +198,12 @@ export default function SetupPage() {
                       setHchatApiKey(e.target.value);
                       setTestResult(null);
                     }}
-                    placeholder="sk-..."
+                    placeholder="afd5cdc7f6..."
                     className="w-full border border-teczen-gray-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
                   />
+                  <p className="text-xs text-teczen-gray-500 mt-1">
+                    HChat Platform → 개인 API 키 조회에서 발급
+                  </p>
                 </div>
 
                 <Button

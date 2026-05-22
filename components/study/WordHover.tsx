@@ -41,6 +41,7 @@ export function HoverText({ text }: { text: string }) {
     const meaning = await translateWord(word, {
       endpoint: settings.hchatEndpoint,
       apiKey: settings.hchatApiKey,
+      model: settings.hchatModel,
     });
     setHover({ word, meaning, loading: false });
   };
