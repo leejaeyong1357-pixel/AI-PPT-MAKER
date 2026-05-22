@@ -160,11 +160,6 @@ export default function FeedbackPanel({
           {feedback.modelAnswer}
         </p>
       </Card>
-
-      <Card>
-        <h3 className="font-bold text-teczen-gray-900 mb-2">📖 참고 모범 답안 (데이터 기본)</h3>
-        <p className="text-sm text-teczen-gray-600 leading-relaxed">{sampleAnswer}</p>
-      </Card>
     </div>
   );
 }

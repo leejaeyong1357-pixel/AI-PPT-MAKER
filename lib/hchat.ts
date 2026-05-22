@@ -55,19 +55,21 @@ ${req.context ? `Context: ${req.context}\n` : ""}
 User's Answer (${req.userAnswer.split(/\s+/).filter(Boolean).length} words): ${req.userAnswer}
 User's Target Level: Lv ${req.targetLevel}
 
+IMPORTANT: All feedback text (strengths, improvements, grammarIssues, vocabularySuggestions, betterExpressions) MUST be written in KOREAN (한국어). Only the modelAnswer (sample answer) should be in English.
+
 Return ONLY valid JSON in this exact structure:
 {
-  "grammarIssues": ["specific errors with corrections"],
-  "vocabularySuggestions": ["better word choices with Korean meaning"],
-  "betterExpressions": ["natural phrasings with Korean translation"],
-  "modelAnswer": "improved version at TARGET level",
-  "estimatedLevel": <number 1-8>,
-  "scoreEstimate": <number 0-96>,
-  "strengths": ["specific things done well"],
-  "improvements": ["specific actionable improvements"]
+  "grammarIssues": ["문법 오류 + 교정 (한국어로)"],
+  "vocabularySuggestions": ["더 나은 표현 제안 (한국어 설명 + 영어 단어)"],
+  "betterExpressions": ["자연스러운 표현 (한국어 설명 + 영어 예시)"],
+  "modelAnswer": "영어로 작성된 목표 등급 수준의 모범답안",
+  "estimatedLevel": <1~8 숫자>,
+  "scoreEstimate": <0~96 숫자>,
+  "strengths": ["잘한 점 (한국어로)"],
+  "improvements": ["구체적인 개선점 (한국어로)"]
 }
 
-Be strict and honest. Score MUST match the rubric above.`;
+Be strict and honest. Score MUST match the rubric above. ALL FEEDBACK IN KOREAN except modelAnswer.`;
 
 async function callProxy(
   config: HchatConfig,
@@ -248,6 +250,33 @@ export async function translateWord(
     localStorage.setItem("spa.wordCache", JSON.stringify(cache));
   }
   return meaning;
+}
+
+export async function translateText(
+  text: string,
+  config: HchatConfig,
+): Promise<string> {
+  if (!config.apiKey) {
+    return "(API 키 설정 필요 — 마이페이지에서 등록)";
+  }
+
+  const result = await callProxy(
+    config,
+    [
+      {
+        role: "system",
+        content:
+          "You are a professional Korean translator. Translate the given English text to natural Korean. Output only the Korean translation, no explanations or quotation marks.",
+      },
+      { role: "user", content: text },
+    ],
+    500,
+  );
+
+  if (!result.ok || !result.content) {
+    return `(번역 실패: ${result.error || "응답 없음"})`;
+  }
+  return result.content.trim().replace(/^["']|["']$/g, "");
 }
 
 export function isHChatConfigured(apiKey: string): boolean {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTTS, useSTT } from "@/lib/speech";
 import { storage } from "@/lib/storage";
-import { getFeedback } from "@/lib/hchat";
+import { getFeedback, translateText } from "@/lib/hchat";
 import type { AiFeedback, QuestionType } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -47,6 +47,9 @@ export default function StudySession({
   const [feedback, setFeedback] = useState<AiFeedback | null>(null);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
   const [playCount, setPlayCount] = useState(0);
+  const [showKorean, setShowKorean] = useState(false);
+  const [translation, setTranslation] = useState<string>("");
+  const [translating, setTranslating] = useState(false);
 
   useEffect(() => {
     if (listening) {
@@ -58,6 +61,24 @@ export default function StudySession({
     const text = type === 4 && passageText ? passageText : question;
     speak(text, { rate: type === 4 ? 0.9 : 0.95 });
     setPlayCount((c) => c + 1);
+  };
+
+  const toggleKorean = async () => {
+    if (showKorean) {
+      setShowKorean(false);
+      return;
+    }
+    if (translation) {
+      setShowKorean(true);
+      return;
+    }
+    setTranslating(true);
+    const settings = storage.getSettings();
+    const text = type === 4 && passageText ? passageText : question;
+    const ko = await translateText(text, { apiKey: settings.hchatApiKey, model: settings.hchatModel });
+    setTranslation(ko);
+    setShowKorean(true);
+    setTranslating(false);
   };
 
   const submitAnswer = async () => {
@@ -108,9 +129,17 @@ export default function StudySession({
       <Card>
         <div className="mb-3">
           <div className="text-xs font-semibold text-teczen-red mb-2">
-            {type === 4 ? "PASSAGE (영어 단어 위에 마우스 → 한글)" : "QUESTION (영어 단어 위에 마우스 → 한글)"}
+            {type === 4 ? "PASSAGE (단어 위에 마우스 → 뜻)" : "QUESTION (단어 위에 마우스 → 뜻)"}
           </div>
           <HoverText text={type === 4 && passageText ? passageText : question} />
+
+          {showKorean && (
+            <div className="mt-3 p-3 bg-blue-50 border-l-4 border-teczen-blue rounded-r-lg">
+              <div className="text-xs font-bold text-teczen-blue mb-1">한글 번역</div>
+              <p className="text-sm text-teczen-gray-800 leading-relaxed">{translation}</p>
+            </div>
+          )}
+
           {followUps.length > 0 && step !== "intro" && (
             <div className="mt-3 pt-3 border-t border-teczen-gray-100">
               <div className="text-xs font-semibold text-teczen-gray-500 mb-1">FOLLOW-UP</div>
@@ -135,8 +164,12 @@ export default function StudySession({
             {speaking ? "■ 정지" : type === 4 ? `▶ 듣기 (${playCount}/${passageRepeats})` : "▶ 문제 듣기"}
           </Button>
 
+          <Button onClick={toggleKorean} variant="outline" size="sm" disabled={translating}>
+            {translating ? "번역 중..." : showKorean ? "🇰🇷 한글 숨기기" : "🇰🇷 문제 한글로 보기"}
+          </Button>
+
           {step === "intro" && (
-            <Button onClick={() => setStep("answer")} variant="outline" size="sm">
+            <Button onClick={() => setStep("answer")} variant="primary" size="sm">
               답변 시작 →
             </Button>
           )}

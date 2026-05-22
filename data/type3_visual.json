@@ -2180,206 +2180,230 @@
     {
       "id": "t3_photo_001",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "office",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&fit=crop",
-      "image_description": "사무실에서 동료들이 회의하는 모습. 사람들이 책상 주위에 앉아 노트북과 서류를 보고 있음.",
-      "question": "Describe what the people are doing in this photo.",
+      "image_url": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&fit=crop",
+      "image_description": "사무실 회의실. 5명의 동료가 긴 테이블 주위에 앉아 회의 중. 한 명이 서서 발표하고 있고 나머지는 노트북·서류를 보며 듣고 있음.",
+      "image_description_ko": "사무실 회의 장면 — 5명 회의 중, 한 명 발표",
+      "question": "Describe the people and what they are doing in this picture.",
+      "question_ko": "사진 속 사람들과 그들이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
         "meeting",
+        "presenting",
         "colleagues",
-        "discussion",
-        "laptop",
-        "office"
+        "conference room",
+        "discussion"
       ],
-      "sample_answer": "In the photo, I can see a group of colleagues having a meeting in a modern office. They are sitting around a table with laptops and documents. One person seems to be presenting while others are listening attentively. The atmosphere looks professional and collaborative."
+      "sample_answer": "In this picture, I can see a business meeting taking place in a modern conference room. There are about five colleagues sitting around a long table. One person is standing and giving a presentation while the others are listening attentively. Some are taking notes on their laptops, and others have documents in front of them. The atmosphere looks professional and collaborative."
     },
     {
       "id": "t3_photo_002",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "cafe",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&fit=crop",
-      "image_description": "카페 내부. 사람들이 테이블에 앉아 커피를 마시거나 노트북으로 작업하고 있음.",
-      "question": "Describe this cafe scene.",
+      "image_url": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&fit=crop",
+      "image_description": "카페 내부. 두 사람이 창가 테이블에 마주 앉아 커피잔을 들고 대화 중. 뒤에는 다른 손님들이 보이고 바리스타가 음료를 만들고 있음.",
+      "image_description_ko": "카페에서 두 사람이 대화하는 장면",
+      "question": "Describe what is happening in this cafe.",
+      "question_ko": "이 카페에서 무슨 일이 일어나고 있는지 묘사하세요.",
       "key_vocabulary": [
         "cafe",
-        "customers",
+        "conversation",
         "coffee",
-        "laptop",
-        "atmosphere"
+        "customers",
+        "barista"
       ],
-      "sample_answer": "This photo shows the inside of a cozy cafe. Several customers are sitting at tables, some chatting with friends while others are working on their laptops. The lighting is warm and the atmosphere looks relaxed and comfortable."
+      "sample_answer": "The photo shows the inside of a cozy cafe. Two people are sitting at a window table, holding their coffee cups and having a conversation. In the background, other customers can be seen, and a barista is preparing drinks behind the counter. The lighting is warm, and the atmosphere appears relaxed and friendly."
     },
     {
       "id": "t3_photo_003",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "restaurant",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&fit=crop",
-      "image_description": "식당에서 사람들이 식사하는 모습.",
-      "question": "Describe what is happening in this restaurant.",
+      "image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&fit=crop",
+      "image_description": "분주한 식당. 손님들이 테이블에서 식사하며 대화 중. 종업원이 음식을 나르고 있음.",
+      "image_description_ko": "식당에서 손님들 식사·종업원 서빙",
+      "question": "Describe what people are doing in this restaurant.",
+      "question_ko": "이 식당에서 사람들이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
         "restaurant",
         "dining",
-        "customers",
         "waiter",
-        "meal"
+        "customers",
+        "serving"
       ],
-      "sample_answer": "This is a busy restaurant scene. People are sitting at tables enjoying their meals. Some customers are talking with their companions while waiters move between tables serving food. The restaurant appears to be quite popular based on how full it is."
+      "sample_answer": "This is a busy restaurant scene. Customers are sitting at tables enjoying their meals and chatting with their companions. A waiter is moving between tables, carrying plates of food. The restaurant looks popular and well-decorated, with warm lighting that creates a pleasant dining atmosphere."
     },
     {
       "id": "t3_photo_004",
       "subtype": "photo",
       "category": "transportation",
       "difficulty": "medium",
-      "image_url": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=800&fit=crop",
-      "image_description": "지하철 승강장에서 사람들이 열차를 기다리는 모습.",
-      "question": "Describe this subway station scene.",
+      "image_url": "https://images.unsplash.com/photo-1517299321609-52687d1bc55a?w=900&fit=crop",
+      "image_description": "지하철 승강장. 출근 시간으로 보이는 많은 사람들이 열차를 기다리고 있음. 양복 차림 직장인들이 폰을 보거나 줄 서서 기다리는 중.",
+      "image_description_ko": "출근시간 지하철 승강장에서 사람들이 기다림",
+      "question": "Describe what you see at this subway station.",
+      "question_ko": "이 지하철역에서 무엇이 보이는지 묘사하세요.",
       "key_vocabulary": [
         "subway",
         "platform",
         "commuters",
-        "waiting",
-        "rush hour"
+        "rush hour",
+        "waiting"
       ],
-      "sample_answer": "The photo shows a subway station platform with many commuters waiting for the train. People are standing in lines, some checking their phones while others reading. It appears to be rush hour based on the number of people."
+      "sample_answer": "The photo captures a busy subway station during rush hour. There are many commuters standing on the platform waiting for the train. Most of them are dressed in business attire, and some are checking their phones while others are reading. The crowd appears patient but eager for the train to arrive."
     },
     {
       "id": "t3_photo_005",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "shopping",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&fit=crop",
-      "image_description": "마트나 슈퍼마켓에서 쇼핑하는 사람들의 모습.",
-      "question": "Describe what people are doing in this shopping scene.",
+      "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&fit=crop",
+      "image_description": "마트 청과 코너. 손님들이 카트를 밀며 채소·과일을 고르고 있음. 한 가족이 함께 쇼핑 중.",
+      "image_description_ko": "마트에서 사람들이 장보는 모습",
+      "question": "Describe what people are doing in this supermarket.",
+      "question_ko": "마트에서 사람들이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
-        "shopping",
         "supermarket",
+        "shopping",
         "groceries",
         "cart",
-        "shelves"
+        "produce"
       ],
-      "sample_answer": "In this picture, I can see customers shopping at a supermarket. People are pushing carts down the aisles, picking items from the shelves. Some are checking labels carefully while others are talking with their family members."
+      "sample_answer": "In this picture, I can see customers shopping at a supermarket. People are pushing carts down the aisles, examining vegetables and fruits in the produce section. A family is shopping together, with parents discussing what to buy while their child picks out an apple. The shelves are well-stocked with colorful items."
     },
     {
       "id": "t3_photo_006",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "park",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&fit=crop",
-      "image_description": "공원에서 사람들이 산책하거나 운동하는 모습.",
-      "question": "Describe what people are doing in this park.",
+      "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=900&fit=crop",
+      "image_description": "도시 공원. 사람들이 산책하거나 벤치에서 책을 읽고, 강아지와 산책하는 모습. 한 아이가 자전거를 타고 있음.",
+      "image_description_ko": "공원에서 사람들이 산책·휴식하는 장면",
+      "question": "Describe the people and activities in this park.",
+      "question_ko": "공원의 사람들과 활동을 묘사하세요.",
       "key_vocabulary": [
         "park",
         "walking",
-        "exercise",
-        "outdoor",
-        "leisure"
+        "jogging",
+        "bench",
+        "outdoor activity"
       ],
-      "sample_answer": "The photo captures a peaceful scene in a park. Some people are jogging along the path while others are walking their dogs or sitting on benches. Families with children are enjoying the sunny weather and green surroundings."
+      "sample_answer": "The photo shows a busy city park on a sunny day. Some people are jogging along the path while others are walking their dogs. A few visitors are sitting on benches reading books. In the middle of the scene, a child is riding a bicycle. The park looks peaceful and inviting with plenty of green trees."
     },
     {
       "id": "t3_photo_007",
       "subtype": "photo",
-      "category": "business",
+      "category": "office",
       "difficulty": "medium",
-      "image_url": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&fit=crop",
-      "image_description": "사무실에서 비즈니스 미팅이 진행되는 모습.",
-      "question": "Describe what is happening in this business meeting.",
+      "image_url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=900&fit=crop",
+      "image_description": "스타트업 사무실. 다양한 인종의 팀원들이 화이트보드 앞에서 토론 중. 포스트잇이 가득 붙어있음.",
+      "image_description_ko": "사무실에서 팀이 화이트보드 앞에서 토론하는 모습",
+      "question": "Describe what the team is doing in this office.",
+      "question_ko": "사무실에서 팀이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
-        "meeting",
-        "presentation",
         "team",
+        "brainstorming",
+        "whiteboard",
         "discussion",
-        "office"
+        "ideas"
       ],
-      "sample_answer": "This shows a business meeting in a modern conference room. A team of professionals is gathered around a long table, with one person standing and presenting. The others are listening, taking notes, and some are looking at materials on the table."
+      "sample_answer": "This picture shows a team brainstorming session in a modern office. About four colleagues are gathered around a whiteboard covered with sticky notes and diagrams. They appear to be discussing a project actively, with one person pointing at the board while others contribute ideas. The atmosphere looks energetic and creative."
     },
     {
       "id": "t3_photo_008",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "office",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=800&fit=crop",
-      "image_description": "사무실에서 한 사람이 노트북으로 일하는 모습.",
-      "question": "Describe what this person is doing.",
+      "image_url": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=900&fit=crop",
+      "image_description": "사무실에서 한 직장인 여성이 노트북으로 일하며 동료와 이야기를 나누고 있음.",
+      "image_description_ko": "사무실에서 두 동료가 노트북 보며 이야기",
+      "question": "Describe what these two people are doing.",
+      "question_ko": "이 두 사람이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
         "working",
+        "discussion",
         "laptop",
-        "office",
-        "concentrating",
-        "desk"
+        "colleagues",
+        "office"
       ],
-      "sample_answer": "In the photo, a person is sitting at a desk working on a laptop. They look focused and concentrated on their screen. The desk appears to be in a clean office environment with some documents nearby."
+      "sample_answer": "In the photo, I can see two colleagues working together at a desk in an office. One person is sitting in front of a laptop, and the other is standing next to her, pointing at the screen and explaining something. They look focused and engaged in their discussion."
     },
     {
       "id": "t3_photo_009",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "classroom",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&fit=crop",
-      "image_description": "학생들이 강의실에서 수업을 듣거나 토론하는 모습.",
+      "image_url": "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&fit=crop",
+      "image_description": "강의실에서 선생님이 화이트보드 앞에 서서 가르치고, 학생들은 책상에 앉아 노트북·노트로 수업을 듣고 있음.",
+      "image_description_ko": "강의실에서 선생님이 가르치고 학생들이 수업 듣는 장면",
       "question": "Describe this classroom scene.",
+      "question_ko": "이 강의실 장면을 묘사하세요.",
       "key_vocabulary": [
         "classroom",
+        "teacher",
         "students",
-        "studying",
         "lecture",
         "learning"
       ],
-      "sample_answer": "The photo shows a classroom with students engaged in learning. Some students are taking notes while others are participating in discussion. There is a teacher at the front of the room facilitating the activity."
+      "sample_answer": "The photo shows a classroom with a teacher standing in front of a whiteboard. Several students are sitting at desks, taking notes and listening attentively. Some students have laptops open while others are writing in notebooks. The teacher appears to be explaining something while pointing at the board."
     },
     {
       "id": "t3_photo_010",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "family",
       "difficulty": "easy",
-      "image_url": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&fit=crop",
-      "image_description": "거실에서 가족이 함께 시간을 보내는 모습.",
-      "question": "Describe what the people are doing at home.",
+      "image_url": "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900&fit=crop",
+      "image_description": "거실에서 가족이 함께 시간을 보냄. 부모와 아이들이 소파에 앉아 웃고 있음.",
+      "image_description_ko": "거실에서 가족이 함께 웃으며 시간 보냄",
+      "question": "Describe what the family is doing in this picture.",
+      "question_ko": "이 사진에서 가족이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
         "family",
         "living room",
         "together",
-        "relaxing",
-        "home"
+        "happy",
+        "spending time"
       ],
-      "sample_answer": "This picture shows a family spending time together in their living room. They appear comfortable and relaxed. Some are sitting on the sofa while others are nearby. The room looks warm and well-decorated."
+      "sample_answer": "This picture shows a happy family spending time together in their living room. Parents and children are sitting on a comfortable sofa, smiling and laughing. They look like they are enjoying each other's company. The room appears warm and well-decorated, creating a cozy home atmosphere."
     },
     {
       "id": "t3_photo_011",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "fitness",
       "difficulty": "medium",
-      "image_url": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop",
-      "image_description": "헬스장에서 사람들이 운동하는 모습.",
-      "question": "Describe what people are doing in this gym.",
+      "image_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&fit=crop",
+      "image_description": "헬스장. 사람들이 러닝머신에서 뛰거나 웨이트를 들며 운동 중.",
+      "image_description_ko": "헬스장에서 사람들이 운동하는 장면",
+      "question": "Describe what people are doing at this gym.",
+      "question_ko": "헬스장에서 사람들이 무엇을 하고 있는지 묘사하세요.",
       "key_vocabulary": [
         "gym",
         "exercise",
-        "workout",
-        "fitness",
-        "equipment"
+        "treadmill",
+        "weights",
+        "workout"
       ],
-      "sample_answer": "The photo shows people exercising at a gym. Some are lifting weights while others are using cardio machines like treadmills. Everyone appears focused on their workout. The gym looks modern and well-equipped."
+      "sample_answer": "The photo shows a busy gym with several people working out. Some are running on treadmills, while others are lifting weights. Everyone looks focused on their exercise routine. The gym is well-equipped with modern fitness machines and has a bright, energetic atmosphere."
     },
     {
       "id": "t3_photo_012",
       "subtype": "photo",
-      "category": "daily_life",
+      "category": "airport",
       "difficulty": "medium",
-      "image_url": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&fit=crop",
-      "image_description": "도서관에서 사람들이 책을 읽거나 공부하는 모습.",
-      "question": "Describe this library scene.",
+      "image_url": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&fit=crop",
+      "image_description": "공항 탑승 대기 구역. 여행자들이 캐리어를 끌고 다니고, 일부는 의자에 앉아 폰을 보며 비행기를 기다림.",
+      "image_description_ko": "공항에서 여행자들이 탑승 대기하는 모습",
+      "question": "Describe what is happening at this airport.",
+      "question_ko": "이 공항에서 무슨 일이 일어나고 있는지 묘사하세요.",
       "key_vocabulary": [
-        "library",
-        "studying",
-        "reading",
-        "quiet",
-        "books"
+        "airport",
+        "travelers",
+        "luggage",
+        "boarding",
+        "waiting"
       ],
-      "sample_answer": "This is a quiet library scene. Several people are sitting at tables, reading books or studying with their laptops. The atmosphere looks peaceful and focused. Tall bookshelves filled with books line the walls in the background."
+      "sample_answer": "The photo shows a busy airport terminal. Travelers are walking with their suitcases and luggage. Some passengers are sitting on chairs, checking their phones while waiting for their flights. In the background, large windows show airplanes parked at the gates. The atmosphere is busy but organized."
     }
   ],
   "statistics": {

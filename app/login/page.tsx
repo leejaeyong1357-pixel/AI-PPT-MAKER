@@ -254,6 +254,15 @@ export default function LoginPage() {
           </form>
         )}
 
+        <div className="mt-6 p-4 bg-white rounded-2xl border border-teczen-gray-200">
+          <div className="text-xs font-bold text-teczen-gray-500 mb-1">문의사항</div>
+          <div className="text-sm text-teczen-ink">
+            미래성장팀 <b>이재용 매니저</b>
+          </div>
+          <a href="tel:055-280-1741" className="text-sm text-teczen-navy font-mono">
+            ☎ 055-280-1741
+          </a>
+        </div>
       </div>
     </main>
   );

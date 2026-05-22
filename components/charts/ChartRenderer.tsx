@@ -109,7 +109,7 @@ export default function ChartRenderer({ item }: { item: ChartItem }) {
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke={TECZEN_COLORS.navy}
+                stroke={TECZEN_COLORS.blue}
                 strokeWidth={3}
                 dot={{ r: 5, fill: TECZEN_COLORS.red }}
               />
@@ -123,8 +123,8 @@ export default function ChartRenderer({ item }: { item: ChartItem }) {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="areaColor" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={TECZEN_COLORS.navy} stopOpacity={0.7} />
-                  <stop offset="100%" stopColor={TECZEN_COLORS.navy} stopOpacity={0.1} />
+                  <stop offset="0%" stopColor={TECZEN_COLORS.blue} stopOpacity={0.8} />
+                  <stop offset="100%" stopColor={TECZEN_COLORS.cyan} stopOpacity={0.2} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" />
@@ -134,7 +134,7 @@ export default function ChartRenderer({ item }: { item: ChartItem }) {
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke={TECZEN_COLORS.navy}
+                stroke={TECZEN_COLORS.blue}
                 strokeWidth={2}
                 fill="url(#areaColor)"
               />
