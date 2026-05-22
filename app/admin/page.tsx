@@ -89,7 +89,7 @@ export default function AdminPage() {
             </Link>
             <h1 className="hero-headline text-3xl text-teczen-ink mt-1">관리자 대시보드</h1>
             <p className="text-sm text-teczen-gray-600">
-              전체 학습자 현황 · {learnersData._excelPlaceholder}로 실 데이터 교체 가능
+              전체 학습자 현황 · employees.json 명단 기준
             </p>
           </div>
           <div className="text-xs text-teczen-gray-500">

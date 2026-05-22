@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { storage } from "@/lib/storage";
-import learnersData from "@/data/learners_mock.json";
+import employeesData from "@/data/employees.json";
 import Button from "@/components/ui/Button";
 
 const ADMIN_ID = "82211489";
@@ -29,31 +29,36 @@ export default function LoginPage() {
       setError("모든 항목을 입력해주세요.");
       return;
     }
+    const employee = employeesData.employees.find(
+      (e: any) =>
+        e.name === name.trim() &&
+        String(e.employeeId).trim() === employeeId.trim(),
+    );
+
+    if (!employee) {
+      setError("등록되지 않은 사번/이름입니다. 인사팀에 문의하세요.");
+      return;
+    }
+
     const stored = localStorage.getItem(`spa.pw.${employeeId.trim()}`);
-    if (stored) {
-      if (rrnFront !== stored) {
-        setError("비밀번호가 일치하지 않습니다.");
-        return;
-      }
-    } else if (!/^\d{6}$/.test(rrnFront)) {
-      setError("최초 로그인은 주민등록번호 앞 6자리(생년월일)로 합니다.");
+    const expectedPw = stored || employee.rrnFront;
+    if (rrnFront !== expectedPw) {
+      setError(
+        stored
+          ? "비밀번호가 일치하지 않습니다."
+          : "최초 로그인은 주민등록번호 앞 6자리(생년월일)로 합니다.",
+      );
       return;
     }
 
     setLoading(true);
 
-    const matchedLearner = learnersData.learners.find(
-      (l: any) =>
-        l.name === name.trim() &&
-        l.employeeId.toLowerCase() === employeeId.trim().toLowerCase(),
-    );
-
     storage.saveSession({
-      name: name.trim(),
-      employeeId: employeeId.trim(),
+      name: employee.name,
+      employeeId: String(employee.employeeId),
       rrnFront,
-      team: matchedLearner?.team || "테크젠",
-      position: matchedLearner?.position || "사원",
+      team: employee.team,
+      position: employee.position,
       loggedInAt: Date.now(),
       isAdmin: false,
     });
@@ -162,7 +167,7 @@ export default function LoginPage() {
                 type="text"
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="HMG-12345"
+                placeholder="8자리 사원번호"
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 font-mono focus:outline-none focus:border-teczen-navy transition-colors"
               />
             </div>
@@ -249,18 +254,6 @@ export default function LoginPage() {
           </form>
         )}
 
-        {mode === "user" && (
-          <div className="mt-4 text-center">
-            <details className="text-xs text-teczen-gray-500">
-              <summary className="cursor-pointer hover:text-teczen-navy">테스트 계정 예시</summary>
-              <div className="mt-2 text-left bg-teczen-gray-50 p-3 rounded-xl font-mono">
-                김지훈 / HMG-22045 / 900101
-                <br />
-                박서연 / HMG-22113 / 920315
-              </div>
-            </details>
-          </div>
-        )}
       </div>
     </main>
   );

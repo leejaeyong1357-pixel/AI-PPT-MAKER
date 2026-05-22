@@ -1,0 +1,31 @@
+{
+  "_comment": "테크젠 임직원 명단. data/spa학습자_로우데이터.xlsx 를 scripts/importExcel.js 로 변환 후 자동 갱신.",
+  "_columns": ["No", "부서", "직위", "사원번호", "성명", "직급", "주민등록번호 앞자리"],
+  "employees": [
+    { "no": 1, "team": "대표이사", "position": "대표이사", "employeeId": "82200001", "name": "이정훈", "grade": "상무A", "rrnFront": "691109" },
+    { "no": 2, "team": "재경팀", "position": "팀장", "employeeId": "82210618", "name": "성영진", "grade": "M5", "rrnFront": "731207" },
+    { "no": 3, "team": "재경팀", "position": "책임매니저", "employeeId": "82211379", "name": "예해수", "grade": "M4", "rrnFront": "861117" },
+    { "no": 4, "team": "재경팀", "position": "매니저", "employeeId": "82210709", "name": "장건우", "grade": "M4", "rrnFront": "841105" },
+    { "no": 5, "team": "재경팀", "position": "매니저", "employeeId": "82211611", "name": "전예빈", "grade": "M5", "rrnFront": "010519" },
+    { "no": 6, "team": "재경팀", "position": "매니저", "employeeId": "82211493", "name": "김민지", "grade": "M2", "rrnFront": "000811" },
+    { "no": 7, "team": "재경팀", "position": "매니저", "employeeId": "82211616", "name": "김혜원", "grade": "M5", "rrnFront": "001214" },
+    { "no": 8, "team": "사업기획팀", "position": "팀장", "employeeId": "82210350", "name": "김중완", "grade": "M5", "rrnFront": "730412" },
+    { "no": 9, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82210136", "name": "김용욱", "grade": "M4", "rrnFront": "770213" },
+    { "no": 10, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82211401", "name": "김민도", "grade": "M4", "rrnFront": "760909" },
+    { "no": 11, "team": "사업기획팀", "position": "매니저", "employeeId": "82211494", "name": "장지윤", "grade": "M2", "rrnFront": "970511" },
+    { "no": 12, "team": "사업기획팀", "position": "매니저", "employeeId": "82210917", "name": "김황수", "grade": "M5", "rrnFront": "680420" },
+    { "no": 13, "team": "사업기획팀", "position": "책임매니저", "employeeId": "82210949", "name": "이정훈", "grade": "M3", "rrnFront": "790111" },
+    { "no": 14, "team": "사업기획팀", "position": "매니저", "employeeId": "82211556", "name": "이연영", "grade": "M1", "rrnFront": "990814" },
+    { "no": 15, "team": "사업기획팀", "position": "매니저", "employeeId": "82210345", "name": "김재현", "grade": "M4", "rrnFront": "840213" },
+    { "no": 16, "team": "영업지원팀", "position": "사무", "employeeId": "82211238", "name": "최영석", "grade": "상무A", "rrnFront": "680220" },
+    { "no": 17, "team": "영업지원팀", "position": "매니저", "employeeId": "82210465", "name": "박용준", "grade": "M5", "rrnFront": "780505" },
+    { "no": 18, "team": "영업지원팀", "position": "책임매니저", "employeeId": "82210744", "name": "김흥주", "grade": "M4", "rrnFront": "811217" },
+    { "no": 19, "team": "영업지원팀", "position": "책임매니저", "employeeId": "82210525", "name": "김자휘", "grade": "M4", "rrnFront": "760206" },
+    { "no": 20, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210525", "name": "강대형", "grade": "M4", "rrnFront": "790720" },
+    { "no": 21, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210975", "name": "이도영", "grade": "M5", "rrnFront": "770212" },
+    { "no": 22, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82211045", "name": "이용훈", "grade": "M5", "rrnFront": "801220" },
+    { "no": 23, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82210988", "name": "이용출", "grade": "M3", "rrnFront": "770117" },
+    { "no": 24, "team": "미래성장팀", "position": "책임매니저", "employeeId": "82211614", "name": "이용술", "grade": "M3", "rrnFront": "850824" },
+    { "no": 25, "team": "미래성장팀", "position": "매니저", "employeeId": "82211493", "name": "이용석", "grade": "M2", "rrnFront": "870501" }
+  ]
+}
