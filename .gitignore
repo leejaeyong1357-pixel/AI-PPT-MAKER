@@ -1,0 +1,14 @@
+# 비밀 키
+.env
+
+# 개인정보(성적표/명단)는 절대 커밋하지 않음
+input/*
+!input/.gitkeep
+roster.csv
+
+# 결과물
+output/*.xlsx
+
+# 파이썬
+__pycache__/
+*.pyc
