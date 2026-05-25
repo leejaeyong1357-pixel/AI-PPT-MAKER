@@ -9,6 +9,13 @@ roster.csv
 # 결과물
 output/*.xlsx
 
+# 교육: 개인정보(명단/수료증)·결과물은 커밋 금지
+training/명단.xlsx
+training/명단.csv
+training/수료증/*
+!training/수료증/.gitkeep
+training/output/*.xlsx
+
 # 파이썬
 __pycache__/
 *.pyc
