@@ -120,14 +120,15 @@ def try_save(page, label):
 
 
 def open_chasu(page):
-    """차수추가 폼 열기: F3 우선, 안되면 버튼들."""
+    """차수추가 폼 열기: 보이는 버튼 클릭 우선, 안되면 F3."""
     if vcount(page, "CURS_CD_text") > 0:
         return True
+    page.bring_to_front()
     attempts = [
+        ("차수추가 버튼(보임)", lambda: page.locator("[id='AddSq']:visible").first.click(timeout=3000)),
+        ("버튼텍스트 차수추가", lambda: page.locator("button:has-text('차수추가')").first.click(timeout=3000)),
         ("F3", lambda: page.keyboard.press("F3")),
-        ("버튼 '차수추가'", lambda: page.get_by_role("button", name="차수추가").first.click(timeout=3000)),
-        ("text 차수추가", lambda: page.locator("button:has-text('차수추가')").first.click(timeout=3000)),
-        ("[id=AddSq]", lambda: page.locator("[id='AddSq']").first.click(timeout=3000, force=True)),
+        ("[id=AddSq] 강제", lambda: page.locator("[id='AddSq']").first.click(timeout=3000, force=True)),
     ]
     for name, act in attempts:
         try:
