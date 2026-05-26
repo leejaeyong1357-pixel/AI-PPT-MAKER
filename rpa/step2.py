@@ -15,6 +15,7 @@ except Exception:
     pass
 
 CDP = "http://127.0.0.1:9222"
+OPEN_URL = "https://erp.teczen.kr/HR/CDMCUO00100"   # 교육과정 개설등록 화면 주소
 
 # ===== 여기만 바꾸면 됨 =====
 CURS_CD = "700"        # 1단계에서 만든(또는 기존) 교육과정 코드
@@ -89,20 +90,26 @@ def main():
         except Exception as e:
             print("[!] 디버깅 크롬 연결 실패:", e); sys.exit(1)
 
+        # ERP 페이지 찾기
         target = None
-        print("=== 페이지 점검 ===")
         for ctx in browser.contexts:
             for page in ctx.pages:
-                try:
-                    has = page.evaluate("() => !!(document.querySelector('[id=\"TRGT_FG_CD\"]') || document.querySelector('[id=\"AddSq\"]'))")
-                except Exception:
-                    continue
-                print(f"  page: {page.url[:65]}  개설요소={has}")
-                if has:
+                if "erp.teczen.kr" in (page.url or ""):
                     target = page
         if not target:
-            print("[!] 개설등록 요소를 못 찾았어요. 개설 화면을 띄우고 다시 실행하세요.")
+            print("[!] ERP 페이지를 못 찾았어요. 디버깅 크롬에서 ERP에 로그인하세요.")
             return
+        target.bring_to_front()
+
+        # 개설등록 화면으로 자동 이동 (지금 다른 화면이면)
+        if "CDMCUO00100" not in (target.url or ""):
+            print(f"개설등록 화면으로 자동 이동: {OPEN_URL}")
+            try:
+                target.goto(OPEN_URL, wait_until="domcontentloaded")
+            except Exception as e:
+                print("  이동 실패:", str(e)[:80])
+            target.wait_for_timeout(3000)
+        print("현재 화면:", target.url[:60])
 
         diag = target.evaluate(JS_DIAG, KEY_IDS)
         print(f"\n=== 개설화면 요소 상태 (URL: {diag['url'][:55]}) ===")
@@ -122,9 +129,9 @@ def main():
             if vcount("CURS_CD_text") > 0:
                 return True
             attempts = [
+                ("F3 단축키", lambda: target.keyboard.press("F3")),
                 ("버튼텍스트 '차수추가' 클릭", lambda: target.get_by_role("button", name="차수추가").first.click(timeout=3000)),
                 ("text=차수추가 클릭", lambda: target.locator("button:has-text('차수추가')").first.click(timeout=3000)),
-                ("F3 단축키", lambda: target.keyboard.press("F3")),
                 ("[id=AddSq] 클릭", lambda: target.locator("[id='AddSq']").first.click(timeout=3000, force=True)),
             ]
             for name, act in attempts:
