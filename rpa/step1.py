@@ -24,6 +24,7 @@ CDP = "http://127.0.0.1:9222"  # localhost(::1, IPv6) 회피 - 반드시 127.0.0
 
 # ===== 여기(DATA)만 본인 교육정보로 바꾸면 됨 =====
 DATA = {
+    "CURS_CD": "700",                     # 코드 (지금은 직접 지정; 자동증가는 프로그램 단계에서)
     "CURS_NM": "[테스트] 어학교육",        # 교육과정명
     "START_DT": "2026-02-01",             # 시작일
     "END_DT": "2026-05-31",               # 종료일
@@ -35,15 +36,18 @@ DATA = {
     "PLCEDC_NM": "[테스트] 본사 교육장",    # 교육장소
     "EDU_TM_DY": 6,                        # 교육시간
     "EDUCOST_AMT": 1500000,                # 교육비
+    "RETURN_YN": "N",                      # 환급여부 (보통 N)
     "RFLT_FG": "교육대상자등록",            # 이수여부반영
 }
 # ===================================================
 
 KIND = {
+    "CURS_CD": "text",
     "CURS_NM": "text", "PRPOEDC_DC": "text", "EDU_DC": "text", "PLCEDC_NM": "text",
     "START_DT": "date", "END_DT": "date",
     "EDU_TM_DY": "num", "EDUCOST_AMT": "num",
-    "EUCPART_CD": "ddl", "INOUTCOM_FG_CD": "ddl", "EDUTYPE_CD": "ddl", "RFLT_FG": "ddl",
+    "EUCPART_CD": "ddl", "INOUTCOM_FG_CD": "ddl", "EDUTYPE_CD": "ddl",
+    "RETURN_YN": "ddl", "RFLT_FG": "ddl",
 }
 
 JS_FILL = r"""
