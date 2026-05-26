@@ -113,27 +113,39 @@ def main():
         def vcount(id_):
             return target.locator(f"[id='{id_}']:visible").count()
 
-        # 입력 폼이 안 떠 있으면 '차수추가'를 눌러 연다
-        if vcount("CURS_CD") == 0:
-            print("\n코드칸이 안 보여서 '차수추가'를 눌러 입력 폼을 엽니다...")
+        target.bring_to_front()
+
+        # 교육과정 코드는 CURS_CD_text(보이는 칸)에 입력한다.
+        # (CURS_CD 는 코드 저장용 hidden 칸이라 항상 display:none)
+        if vcount("CURS_CD_text") == 0:
+            print("\n입력칸이 안 보여서 '차수추가'를 눌러 폼을 엽니다...")
             try:
                 target.locator("[id='AddSq']:visible").first.click()
                 target.wait_for_timeout(1500)
             except Exception as e:
                 print("  차수추가 클릭 실패:", e)
-            print("  차수추가 후 CURS_CD 보임:", vcount("CURS_CD"))
+            print("  차수추가 후 CURS_CD_text 보임:", vcount("CURS_CD_text"))
 
-        if vcount("CURS_CD") == 0:
-            print("\n[!] 그래도 코드 입력칸이 안 보여요. 화면 상태(사진) 보여주세요.")
+        if vcount("CURS_CD_text") == 0:
+            print("\n[!] 그래도 교육과정 입력칸이 안 보여요.")
+            print("    화면에서 직접 '차수추가'(F3) 눌러 입력 폼을 띄운 뒤 다시 실행해보세요.")
             return
 
         print("\n=== 입력 진행 ===")
-        code = target.locator("[id='CURS_CD']:visible").first
-        code.click(); code.fill(""); code.fill(CURS_CD); code.press("Enter")
-        print(f"  코드 입력: {CURS_CD} (엔터)")
-        target.wait_for_timeout(2000)
-        loaded = target.evaluate(JS_VISIBLE_TEXT, "CURS_CD_text")
-        print("  불러온 과정명(CURS_CD_text):", (loaded if loaded else "(비어있음 - 코드 확인 필요)"))
+        box = target.locator("[id='CURS_CD_text']:visible").first
+        box.click()
+        box.fill("")
+        box.press_sequentially(CURS_CD, delay=100)  # 실제 타이핑처럼
+        box.press("Enter")
+        print(f"  교육과정 코드 입력: {CURS_CD} (엔터)")
+        target.wait_for_timeout(2500)
+
+        loaded_code = target.evaluate("() => { const e = document.getElementById('CURS_CD'); return e ? e.value : null; }")
+        loaded_name = target.evaluate(JS_VISIBLE_TEXT, "CURS_CD_text")
+        print(f"  코드(CURS_CD): {loaded_code}  /  표시(CURS_CD_text): {loaded_name}")
+        if not loaded_code:
+            print("  (※ 코드가 안 잡히면: 700이 실제 저장된 과정인지 확인, 또는 도움창이 떴는지 화면 확인)")
+
         print("  " + target.evaluate(JS_SET_DDL, {"id": "TRGT_FG_CD", "text": TRGT_FG}))
         print("\n화면 확인하세요. 테스트라 저장(완료)은 누르지 마세요.")
 
