@@ -130,28 +130,25 @@ def try_save(page, label):
     print(f"   [{label}] F7 저장 시도 (확인창 없음). 저장 안 되면 단축키 알려주세요)")
 
 
-def open_chasu(page):
-    """차수추가 폼 열기: 보이는 버튼 클릭 우선, 안되면 F3."""
-    if vcount(page, "CURS_CD_text") > 0:
-        return True
+def add_chasu(page):
+    """항상 새 차수를 추가한다(F3). 기존 차수 덮어쓰기 방지.
+    (이미 폼이 떠 있어도 '건너뛰지 않고' 무조건 새로 추가한다)"""
     page.bring_to_front()
-    attempts = [
-        ("차수추가 버튼(보임)", lambda: page.locator("[id='AddSq']:visible").first.click(timeout=3000)),
-        ("버튼텍스트 차수추가", lambda: page.locator("button:has-text('차수추가')").first.click(timeout=3000)),
-        ("F3", lambda: page.keyboard.press("F3")),
-        ("[id=AddSq] 강제", lambda: page.locator("[id='AddSq']").first.click(timeout=3000, force=True)),
-    ]
-    for name, act in attempts:
-        try:
-            act()
-            page.wait_for_timeout(1300)
-            if vcount(page, "CURS_CD_text") > 0:
-                print(f"   차수추가 성공: {name}")
-                return True
-            print(f"   시도했지만 폼 안열림: {name}")
-        except Exception as e:
-            print(f"   실패({name}): {str(e)[:50]}")
-    return vcount(page, "CURS_CD_text") > 0
+    try:
+        page.keyboard.press("F3")
+        page.wait_for_timeout(1500)
+        print("   차수추가: F3")
+        return True
+    except Exception as e:
+        print("   F3 실패:", str(e)[:50])
+    try:
+        page.locator("[id='AddSq']:visible").first.click(timeout=3000)
+        page.wait_for_timeout(1500)
+        print("   차수추가: 버튼")
+        return True
+    except Exception as e:
+        print("   차수추가 버튼도 실패:", str(e)[:50])
+        return False
 
 
 def main():
@@ -192,10 +189,8 @@ def main():
         # ===== 2단계: 교육과정개설등록 =====
         print("\n[2단계] 교육과정개설등록")
         goto(page, OPEN_URL, "교육과정개설등록")
-        if not open_chasu(page):
-            print("   [!] 차수추가 폼이 안 열려요. 직접 차수추가 눌렀을 때 팝업이 뜨는지 알려주세요.")
-            return
-        print("   차수추가 OK -> 코드 입력")
+        add_chasu(page)   # 무조건 새 차수 추가 (덮어쓰기 방지)
+        print("   코드 입력")
         try:
             box = page.locator("[id='CURS_CD_text']:visible").first
             box.click(timeout=4000)
