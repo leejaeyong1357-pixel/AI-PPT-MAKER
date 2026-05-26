@@ -24,7 +24,7 @@ REG_URL = BASE + "/CDMEDB00100"     # 교육과정등록(1단계)
 OPEN_URL = BASE + "/CDMCUO00100"    # 교육과정개설등록(2단계)
 
 # ===== 설정 =====
-SAVE = False            # 다 확인되면 True 로 바꾸면 실제 저장까지 함
+SAVE = True             # F8 저장 켬 (확인창도 자동 클릭). 끄려면 False
 CODE = "700"            # 교육과정 코드
 TRGT_FG = "사원별"       # 대상구분
 
@@ -113,10 +113,21 @@ def try_save(page, label):
     if not SAVE:
         print(f"   [{label}] 저장 생략 (SAVE=False)")
         return
-    # DEWS 저장: 보통 F8. 안되면 알려주면 바꿔줌.
-    page.keyboard.press("F8")
+    page.bring_to_front()
+    page.keyboard.press("F8")          # 더존 저장 단축키
     page.wait_for_timeout(1500)
-    print(f"   [{label}] F8 저장 시도 (저장 안 되면 단축키 알려주세요)")
+    # 저장 확인창(예/확인)이 뜨면 자동 클릭
+    for name in ["예", "확인", "저장"]:
+        try:
+            btn = page.get_by_role("button", name=name, exact=True)
+            if btn.count() > 0 and btn.first.is_visible():
+                btn.first.click(timeout=1500)
+                print(f"   [{label}] F8 -> 확인창 '{name}' 클릭")
+                page.wait_for_timeout(1500)
+                return
+        except Exception:
+            pass
+    print(f"   [{label}] F8 저장 시도 (확인창 없음/자동저장). 저장 안 되면 알려주세요)")
 
 
 def open_chasu(page):
