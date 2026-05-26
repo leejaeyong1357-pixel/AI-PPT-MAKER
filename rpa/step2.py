@@ -117,18 +117,32 @@ def main():
 
         # 교육과정 코드는 CURS_CD_text(보이는 칸)에 입력한다.
         # (CURS_CD 는 코드 저장용 hidden 칸이라 항상 display:none)
-        if vcount("CURS_CD_text") == 0:
-            print("\n입력칸이 안 보여서 '차수추가'를 눌러 폼을 엽니다...")
-            try:
-                target.locator("[id='AddSq']:visible").first.click()
-                target.wait_for_timeout(1500)
-            except Exception as e:
-                print("  차수추가 클릭 실패:", e)
-            print("  차수추가 후 CURS_CD_text 보임:", vcount("CURS_CD_text"))
+        # 입력 폼이 안 떠 있으면 '차수추가'를 자동으로 시도한다(여러 방법).
+        def open_form():
+            if vcount("CURS_CD_text") > 0:
+                return True
+            attempts = [
+                ("버튼텍스트 '차수추가' 클릭", lambda: target.get_by_role("button", name="차수추가").first.click(timeout=3000)),
+                ("text=차수추가 클릭", lambda: target.locator("button:has-text('차수추가')").first.click(timeout=3000)),
+                ("F3 단축키", lambda: target.keyboard.press("F3")),
+                ("[id=AddSq] 클릭", lambda: target.locator("[id='AddSq']").first.click(timeout=3000, force=True)),
+            ]
+            for name, act in attempts:
+                try:
+                    act()
+                    target.wait_for_timeout(1300)
+                    if vcount("CURS_CD_text") > 0:
+                        print(f"  차수추가 성공: {name}")
+                        return True
+                    else:
+                        print(f"  시도했지만 폼 안 열림: {name}")
+                except Exception as e:
+                    print(f"  실패({name}): {str(e)[:60]}")
+            return vcount("CURS_CD_text") > 0
 
-        if vcount("CURS_CD_text") == 0:
-            print("\n[!] 그래도 교육과정 입력칸이 안 보여요.")
-            print("    화면에서 직접 '차수추가'(F3) 눌러 입력 폼을 띄운 뒤 다시 실행해보세요.")
+        if not open_form():
+            print("\n[!] 차수추가 자동 시도 다 해봤는데 입력 폼이 안 열려요.")
+            print("    혹시 화면에서 직접 차수추가 눌렀을 때 '팝업/확인창'이 뜨나요? 그렇다면 알려주세요.")
             return
 
         print("\n=== 입력 진행 ===")
