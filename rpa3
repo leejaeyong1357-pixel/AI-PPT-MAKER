@@ -1,0 +1,338 @@
+라벨 | tag | type | id | role | RO | bind | text
+ | button |  |  |  |  |  | ì·¨ì†Œ
+ | button |  |  |  |  |  | ì™„ë£Œ
+ | span |  |  |  |  |  | 전체 권한
+ | select |  | authority-group-dropdown | dropdownlist |  |  | 
+ | input | text | menu_search |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 타임라인
+ | button |  |  |  | D |  | 
+ | button |  |  |  |  |  | 결재
+ | button |  |  |  |  |  | 워크플로우
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 인쇄 (F9)
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 
+조회기간 | input |  | cdtDate_startinput |  |  |  | 
+조회기간 | input |  | cdtDate_endinput |  |  |  | 
+조회기간 | span |  |  |  |  |  | 
+교육구분 | select |  | ddlEdu | dropdownlist |  |  | 
+조회기간 | input | text | txt_search |  |  |  | 
+ | input |  | CDMEDB00100_2000_all_hrEduCodeInfoGrid_line |  |  |  | 
+ | button | button | btn_fileUpLoad | button |  |  | 첨부파일(0)
+코드 | input | text | CURS_CD |  |  | CURS_CD | 
+코드 | input | text | CURS_NM |  |  | CURS_NM | 
+코드 | input | text | START_DT | datepicker |  | START_DT | 
+코드 | input | text | END_DT | datepicker |  | END_DT | 
+코드 | span |  |  |  |  |  | 기본교육
+코드 | select | text | EUCPART_CD | dropdownlist |  | EUCPART_CD | 
+코드 | span |  |  |  |  |  | 사내교육
+코드 | select | text | INOUTCOM_FG_CD | dropdownlist |  |  | 
+코드 | span |  |  |  |  |  | 
+코드 | select | text | EDU_RFLT_CD | dropdownlist |  |  | 
+코드 | span |  |  |  |  |  | e-Learning
+코드 | select | text | EDUTYPE_CD | dropdownlist |  |  | 
+코드 | textarea | text | PRPOEDC_DC |  |  | PRPOEDC_DC | 
+코드 | textarea | text | EDU_DC |  |  | EDU_DC | 
+코드 | input | text | ECLST_CD |  |  |  | 
+코드 | input | text | ECLST_CD_text |  |  |  | 
+코드 | button | button |  |  |  |  | 
+코드 | input | text |  | spinbutton |  |  | 
+코드 | input | text | EDU_TM_DY | numerictextbox |  | EDU_TM_DY | 
+코드 | input | text | PLCEDC_NM |  |  | PLCEDC_NM | 
+코드 | input | text |  | spinbutton |  |  | 
+코드 | input | text | CMCR_PNT_DY | numerictextbox |  | CMCR_PNT_DY | 
+코드 | span |  |  |  |  |  | 
+코드 | select | text | EMPYINSFO_YN | dropdownlist |  | EMPYINSFO_YN | 
+코드 | span |  |  |  |  |  | 
+코드 | select | text | MNDR_YN | dropdownlist |  | MNDR_YN | 
+코드 | input | text |  | spinbutton |  |  | 
+코드 | input | text | EDUCOST_AMT | numerictextbox |  | EDUCOST_AMT | 
+코드 | span |  |  |  |  |  | Y
+코드 | select | text | RETURN_YN | dropdownlist |  | RETURN_YN | 
+코드 | input | text | RMK_DC |  |  | RMK_DC | 
+코드 | input | text |  | spinbutton |  |  | 
+코드 | input | text | RETURN_AMT | numerictextbox |  | RETURN_AMT | 
+코드 | span |  |  |  |  |  | 교육대상자등록
+코드 | select | text | RFLT_FG | dropdownlist |  | RFLT_FG | 
+코드 | input | text | MNG_LCLAS_CD |  | Y | MNG_LCLAS_CD | 
+코드 | input | text | MNG_MLSFC_CD |  | Y | MNG_MLSFC_CD | 
+코드 | input | text | MNG_SCSF_CD |  | Y | MNG_SCSF_CD | 
+ | input |  | CDMEDB00100_2000_all_hrEduTextListGrid_line |  |  |  | 
+기준년도 | input | text | cdtYear | datepicker |  |  | 
+기준년도 | input | text |  |  | Y |  | 
+기준년도 | button | button |  |  |  |  | 
+기준년도 | button | button |  |  |  |  | 
+기준년도 | select | text | CURS_CD_SEARCH |  |  |  | 
+기준년도 | span |  |  |  |  |  | 
+기준년도 | select | text | GENRE_CD_SEARCH | dropdownlist |  |  | 
+교육형태 | span |  |  |  |  |  | 
+교육형태 | select | text | EDUTYPE_CD_SEARCH | dropdownlist |  |  | 
+교육형태 | span |  |  |  |  |  | 
+교육형태 | select | text | INOUTCOM_FG_CD_SEARCH | dropdownlist |  |  | 
+교육형태 | span |  |  |  |  |  | 
+교육형태 | select |  | eduPart_SEARCH | dropdownlist |  |  | 
+교육형태 | input | text |  |  | Y |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | select | text | ECLST_CD_SEARCH |  |  |  | 
+교육형태 | span |  |  |  |  |  | 
+교육형태 | select | text | EDU_RFLT_CD_SEARCH | dropdownlist |  |  | 
+교육형태 | input | text |  |  | Y |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | select | text | bizareaCp |  |  |  | 
+교육형태 | input | text |  |  | Y |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | select | text | deptCp |  |  |  | 
+교육형태 | input | text |  |  | Y |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | select | text | empCp |  |  |  | 
+교육형태 | input | text |  |  | Y |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | button | button |  |  |  |  | 
+교육형태 | select | text | empCp_custom |  |  |  | 
+ | button | button |  |  |  |  | 
+ | input |  | CDMCUO00100_2000_all_hrEduOpenInfoGrid_line |  |  |  | 
+ | button | button | AddSq | button |  |  | 차수추가
+ | button | button | eduCopy | button |  |  | 교육과정복사
+ | button | button | btn_fileUpLoad | button |  |  | 첨부파일(0)
+ | button | button | SendMail | button |  |  | 메일발송
+ | button | button | OpenAll | button |  |  | 모두펼치기
+ | button | button | CollapseAll | button |  |  | 모두접기
+교육과정 | input | text | CURS_CD |  |  |  | 
+교육과정 | button | button |  |  |  |  | 
+교육과정 | input | text | CURS_CD_text |  |  |  | 
+교육과정 | input |  | DT_DATE_startinput |  |  |  | 
+교육과정 | input |  | DT_DATE_endinput |  |  |  | 
+교육과정 | span |  |  |  |  |  | 기본교육
+교육과정 | select | text | GENRE_CD | dropdownlist |  | EDU_TP | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | SDYTRN_FG | dropdownlist | Y | SDYTRN_FG | 
+교육과정 | span |  |  |  |  |  | e-Learning
+교육과정 | select | text | EDUTYPE_CD | dropdownlist |  | EDUTYPE_CD | 
+교육과정 | span |  |  |  |  |  | 사내교육
+교육과정 | select | text | INOUTCOM_FG_CD | dropdownlist |  |  | 
+교육과정 | textarea | text | PRPOEDC_DC |  |  | PRPOEDC_DC | 
+교육과정 | textarea | text | EDU_DC |  |  | EDU_DC | 
+교육과정 | input | text | ECLST_CD |  |  |  | 
+교육과정 | input | text | ECLST_CD_text |  |  |  | 
+교육과정 | button | button |  |  |  |  | 
+교육과정 | input | text | PLCEDC_NM |  |  | PLCEDC_NM | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | EDU_TM_DY | numerictextbox |  | EDU_TM_DY | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | CMCR_PNT_DY | numerictextbox |  | CMCR_PNT_DY | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | EDU_RFLT_CD | dropdownlist |  | EDU_RFLT_CD | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | TRGT_FG_CD | dropdownlist |  | TRGT_FG_CD | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | TRGT_NOPL_CNT | numerictextbox |  | TRGT_NOPL_CNT | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | EDUCOST_AMT | numerictextbox |  | EDUCOST_AMT | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | EUCPART_CD | dropdownlist |  |  | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | DMAND_INVS_YN | dropdownlist |  |  | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | MNDR_YN | dropdownlist |  |  | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | EMPYINSFO_YN | dropdownlist |  |  | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | RETURN_AMT | numerictextbox |  | RETURN_AMT | 
+교육과정 | input |  | DT_APP_DATE_startinput |  |  |  | 
+교육과정 | input |  | DT_APP_DATE_endinput |  |  |  | 
+교육과정 | input |  | DT_REP_DATE_startinput |  |  |  | 
+교육과정 | input |  | DT_REP_DATE_endinput |  |  |  | 
+교육과정 | input |  | DT_SURVEY_DATE_startinput |  |  |  | 
+교육과정 | input |  | DT_SURVEY_DATE_endinput |  |  |  | 
+교육과정 | input | text |  | spinbutton |  |  | 
+교육과정 | input | text | APPE_ACK_RT | numerictextbox |  | APPE_ACK_RT | 
+교육과정 | input | text | RMK_DC |  |  | RMK_DC | 
+교육과정 | input | text | ASGNR_EMP_NO |  |  |  | 
+교육과정 | input | text | ASGNR_EMP_NO_text |  |  |  | 
+교육과정 | button | button |  |  |  |  | 
+교육과정 | input | text | ASGNR_DEPT_CD |  |  |  | 
+교육과정 | input | text | ASGNR_DEPT_CD_text |  |  |  | 
+교육과정 | button | button |  |  |  |  | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | RETURN_YN2 | dropdownlist |  |  | 
+교육과정 | span |  |  |  |  |  | 
+교육과정 | select | text | ATCH_FILE_YN | dropdownlist |  |  | 
+교육과정 | button | button | addBtn | button |  |  | 추가
+교육과정 | button | button | deleteBtn | button |  |  | 삭제
+교육과정 | input |  | CDMCUO00100_2000_all_hrEduTGetGrid_line |  |  |  | 
+교육과정 | input |  | CDMCUO00100_2000_all_hrEduCostListGrid_line |  |  |  | 
+교육과정 | input |  | CDMCUO00100_2000_all_hrEduLecListGrid_line |  |  |  | 
+교육과정 | input |  | CDMCUO00100_2000_all_hrEduItemInfoGrid_line |  |  |  | 
+교육과정 | input |  | CDMCUO00100_2000_all_hrGlobalGrid_line |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button |  | timeline-filter |  |  |  | 
+ | button |  | timeline-close |  |  |  | 
+ | input |  | timeline-search-keyword |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button |  |  |  |  |  | 
+ | button | button |  |  |  |  | 오늘
+ | button | button |  |  |  |  | 오늘까지
+ | button | button |  |  |  |  | 어제
+ | button | button |  |  |  |  | 주간
+ | button | button |  |  |  |  | 전주
+ | button | button |  |  |  |  | 당월
+ | button | button |  |  |  |  | 전월
+ | button | button |  |  |  |  | 올해
+ | button | button |  |  |  |  | 전년도
+ | button | button |  |  |  |  | 전전년도
+ | button | button |  |  |  |  | 1분기
+ | button | button |  |  |  |  | 2분기
+ | button | button |  |  |  |  | 3분기
+ | button | button |  |  |  |  | 4분기
+ | button | button |  |  |  |  | 상반기
+ | button | button |  |  |  |  | 하반기
+ | button | button |  |  |  |  | 1월
+ | button | button |  |  |  |  | 2월
+ | button | button |  |  |  |  | 3월
+ | button | button |  |  |  |  | 4월
+ | button | button |  |  |  |  | 5월
+ | button | button |  |  |  |  | 6월
+ | button | button |  |  |  |  | 7월
+ | button | button |  |  |  |  | 8월
+ | button | button |  |  |  |  | 9월
+ | button | button |  |  |  |  | 10월
+ | button | button |  |  |  |  | 11월
+ | button | button |  |  |  |  | 12월
+ | button | button |  |  |  |  | 적용하기
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 전체삭제
+ | button | button |  |  |  |  | 오늘
+ | button | button |  |  |  |  | 오늘까지
+ | button | button |  |  |  |  | 어제
+ | button | button |  |  |  |  | 주간
+ | button | button |  |  |  |  | 전주
+ | button | button |  |  |  |  | 당월
+ | button | button |  |  |  |  | 전월
+ | button | button |  |  |  |  | 올해
+ | button | button |  |  |  |  | 전년도
+ | button | button |  |  |  |  | 전전년도
+ | button | button |  |  |  |  | 1분기
+ | button | button |  |  |  |  | 2분기
+ | button | button |  |  |  |  | 3분기
+ | button | button |  |  |  |  | 4분기
+ | button | button |  |  |  |  | 상반기
+ | button | button |  |  |  |  | 하반기
+ | button | button |  |  |  |  | 1월
+ | button | button |  |  |  |  | 2월
+ | button | button |  |  |  |  | 3월
+ | button | button |  |  |  |  | 4월
+ | button | button |  |  |  |  | 5월
+ | button | button |  |  |  |  | 6월
+ | button | button |  |  |  |  | 7월
+ | button | button |  |  |  |  | 8월
+ | button | button |  |  |  |  | 9월
+ | button | button |  |  |  |  | 10월
+ | button | button |  |  |  |  | 11월
+ | button | button |  |  |  |  | 12월
+ | button | button |  |  |  |  | 적용하기
+ | button | button |  |  |  |  | 오늘
+ | button | button |  |  |  |  | 오늘까지
+ | button | button |  |  |  |  | 어제
+ | button | button |  |  |  |  | 주간
+ | button | button |  |  |  |  | 전주
+ | button | button |  |  |  |  | 당월
+ | button | button |  |  |  |  | 전월
+ | button | button |  |  |  |  | 올해
+ | button | button |  |  |  |  | 전년도
+ | button | button |  |  |  |  | 전전년도
+ | button | button |  |  |  |  | 1분기
+ | button | button |  |  |  |  | 2분기
+ | button | button |  |  |  |  | 3분기
+ | button | button |  |  |  |  | 4분기
+ | button | button |  |  |  |  | 상반기
+ | button | button |  |  |  |  | 하반기
+ | button | button |  |  |  |  | 1월
+ | button | button |  |  |  |  | 2월
+ | button | button |  |  |  |  | 3월
+ | button | button |  |  |  |  | 4월
+ | button | button |  |  |  |  | 5월
+ | button | button |  |  |  |  | 6월
+ | button | button |  |  |  |  | 7월
+ | button | button |  |  |  |  | 8월
+ | button | button |  |  |  |  | 9월
+ | button | button |  |  |  |  | 10월
+ | button | button |  |  |  |  | 11월
+ | button | button |  |  |  |  | 12월
+ | button | button |  |  |  |  | 적용하기
+ | button | button |  |  |  |  | 오늘
+ | button | button |  |  |  |  | 오늘까지
+ | button | button |  |  |  |  | 어제
+ | button | button |  |  |  |  | 주간
+ | button | button |  |  |  |  | 전주
+ | button | button |  |  |  |  | 당월
+ | button | button |  |  |  |  | 전월
+ | button | button |  |  |  |  | 올해
+ | button | button |  |  |  |  | 전년도
+ | button | button |  |  |  |  | 전전년도
+ | button | button |  |  |  |  | 1분기
+ | button | button |  |  |  |  | 2분기
+ | button | button |  |  |  |  | 3분기
+ | button | button |  |  |  |  | 4분기
+ | button | button |  |  |  |  | 상반기
+ | button | button |  |  |  |  | 하반기
+ | button | button |  |  |  |  | 1월
+ | button | button |  |  |  |  | 2월
+ | button | button |  |  |  |  | 3월
+ | button | button |  |  |  |  | 4월
+ | button | button |  |  |  |  | 5월
+ | button | button |  |  |  |  | 6월
+ | button | button |  |  |  |  | 7월
+ | button | button |  |  |  |  | 8월
+ | button | button |  |  |  |  | 9월
+ | button | button |  |  |  |  | 10월
+ | button | button |  |  |  |  | 11월
+ | button | button |  |  |  |  | 12월
+ | button | button |  |  |  |  | 적용하기
+ | button | button |  |  |  |  | 오늘
+ | button | button |  |  |  |  | 오늘까지
+ | button | button |  |  |  |  | 어제
+ | button | button |  |  |  |  | 주간
+ | button | button |  |  |  |  | 전주
+ | button | button |  |  |  |  | 당월
+ | button | button |  |  |  |  | 전월
+ | button | button |  |  |  |  | 올해
+ | button | button |  |  |  |  | 전년도
+ | button | button |  |  |  |  | 전전년도
+ | button | button |  |  |  |  | 1분기
+ | button | button |  |  |  |  | 2분기
+ | button | button |  |  |  |  | 3분기
+ | button | button |  |  |  |  | 4분기
+ | button | button |  |  |  |  | 상반기
+ | button | button |  |  |  |  | 하반기
+ | button | button |  |  |  |  | 1월
+ | button | button |  |  |  |  | 2월
+ | button | button |  |  |  |  | 3월
+ | button | button |  |  |  |  | 4월
+ | button | button |  |  |  |  | 5월
+ | button | button |  |  |  |  | 6월
+ | button | button |  |  |  |  | 7월
+ | button | button |  |  |  |  | 8월
+ | button | button |  |  |  |  | 9월
+ | button | button |  |  |  |  | 10월
+ | button | button |  |  |  |  | 11월
+ | button | button |  |  |  |  | 12월
+ | button | button |  |  |  |  | 적용하기
+ | input | text | CDMCUO00100_2000_all_hrEduItemInfoGrid_date | datepicker |  |  | 
+ | input | text | CDMCUO00100_2000_all_hrEduLecListGrid_time | timepicker |  |  | 
+ | input | text | CDMCUO00100_2000_all_hrEduLecListGrid_date | datepicker |  |  | 
+ | input | text | CDMCUO00100_2000_all_hrEduCostListGrid_date | datepicker |  |  | 
+ | input | text | CDMCUO00100_2000_all_hrEduTGetGrid_date | datepicker |  |  | 
+ | input | text | CDMCUO00100_2000_all_hrEduOpenInfoGrid_date | datepicker |  |  | 
+ | input | text | CDMEDB00100_2000_all_hrEduTextListGrid_time | timepicker |  |  | 
+ | input | text | CDMEDB00100_2000_all_hrEduCodeInfoGrid_date | datepicker |  |  | 
