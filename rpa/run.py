@@ -114,7 +114,7 @@ def try_save(page, label):
         print(f"   [{label}] 저장 생략 (SAVE=False)")
         return
     page.bring_to_front()
-    page.keyboard.press("F8")          # 더존 저장 단축키
+    page.keyboard.press("F7")          # 더존 저장 단축키 (메모: 최종저장 F7)
     page.wait_for_timeout(1500)
     # 저장 확인창(예/확인)이 뜨면 자동 클릭
     for name in ["예", "확인", "저장"]:
@@ -122,12 +122,12 @@ def try_save(page, label):
             btn = page.get_by_role("button", name=name, exact=True)
             if btn.count() > 0 and btn.first.is_visible():
                 btn.first.click(timeout=1500)
-                print(f"   [{label}] F8 -> 확인창 '{name}' 클릭")
+                print(f"   [{label}] F7 -> 확인창 '{name}' 클릭")
                 page.wait_for_timeout(1500)
                 return
         except Exception:
             pass
-    print(f"   [{label}] F8 저장 시도 (확인창 없음/자동저장). 저장 안 되면 알려주세요)")
+    print(f"   [{label}] F7 저장 시도 (확인창 없음). 저장 안 되면 단축키 알려주세요)")
 
 
 def open_chasu(page):
@@ -196,8 +196,15 @@ def main():
             print("   [!] 차수추가 폼이 안 열려요. 직접 차수추가 눌렀을 때 팝업이 뜨는지 알려주세요.")
             return
         print("   차수추가 OK -> 코드 입력")
-        box = page.locator("[id='CURS_CD_text']:visible").first
-        box.click(); box.fill(""); box.press_sequentially(CODE, delay=100); box.press("Enter")
+        try:
+            box = page.locator("[id='CURS_CD_text']:visible").first
+            box.click(timeout=4000)
+            page.keyboard.press("Control+a")
+            page.keyboard.press("Delete")
+            page.keyboard.type(CODE, delay=120)
+            page.keyboard.press("Enter")
+        except Exception as e:
+            print("   코드 입력 실패:", str(e)[:90])
         page.wait_for_timeout(2500)
         loaded = page.evaluate("() => { const e=document.getElementById('CURS_CD'); return e? e.value : null; }")
         print(f"   코드(CURS_CD): {loaded}")
