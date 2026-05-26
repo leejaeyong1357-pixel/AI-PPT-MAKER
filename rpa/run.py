@@ -22,7 +22,6 @@ CDP = "http://127.0.0.1:9222"
 BASE = "https://erp.teczen.kr/HR"
 REG_URL = BASE + "/CDMEDB00100"     # 교육과정등록(1단계)
 OPEN_URL = BASE + "/CDMCUO00100"    # 교육과정개설등록(2단계)
-RESULT_URL = ""                     # 교육결과관리(3단계) 주소. 그 화면 열고 주소창의 .../HR/CDMxxxxx 알려주면 채움
 
 # ===== 설정 =====
 SAVE = True             # F8 저장 켬 (확인창도 자동 클릭). 끄려면 False
@@ -209,15 +208,7 @@ def main():
         print("   " + page.evaluate(JS_SET_DDL, {"id": "TRGT_FG_CD", "text": TRGT_FG}))
         try_save(page, "2단계")
 
-        # ===== 3단계: 교육결과관리로 이동 =====
-        if RESULT_URL:
-            print("\n[3단계] 교육결과관리로 이동")
-            goto(page, RESULT_URL, "교육결과관리")
-        else:
-            print("\n[3단계] 교육결과관리 화면 주소를 아직 몰라요.")
-            print("        그 화면 열고 주소창의 .../HR/CDM????? 를 알려주면 자동 이동까지 붙일게요.")
-
-        print(f"\n완료. (SAVE={SAVE})")
+        print(f"\n완료 (1~2단계). (SAVE={SAVE})")
 
 
 if __name__ == "__main__":
