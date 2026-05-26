@@ -2,21 +2,21 @@
 """
 교육 자동화 ① 준비·검증.
 
-명단 엑셀 + 수료증 폴더를 읽어서:
-  - 누구에게 이수=Y 를 주고, 어떤 수료증 파일을 붙일지 '작업목록'을 만들고
-  - 수료증 누락 / 사번 누락 / 중복 / 이수여부 이상을 미리 잡아준다.
-ERP 는 건드리지 않는다(안전). 이 작업목록을 ②RPA 단계가 그대로 사용한다.
+make_template.py 로 만든 '교육_입력양식.xlsx'(교육정보+대상자 시트)를 읽어서:
+  - 교육정보의 필수 항목이 다 채워졌는지 확인하고
+  - 대상자별로 이수=Y / 수료증 파일 매칭을 점검해 '작업목록'을 만들고
+  - 수료증 누락 / 사번 누락 / 중복 / 미이수를 미리 잡아준다.
+ERP 는 건드리지 않는다(안전). 이 결과를 ②RPA 단계가 그대로 사용한다.
 
 사용법:
-  python prepare.py --roster 명단.xlsx
-  python prepare.py --selftest          (API/파일 없이 동작 확인)
+  python prepare.py                              (output/교육_입력양식.xlsx 자동 사용)
+  python prepare.py --input 내가채운양식.xlsx
+  python prepare.py --selftest                   (파일 없이 동작 확인)
 
-명단 엑셀 헤더(있는 것만 사용): 사번, 성명, 이수여부, 수료증
 수료증 폴더: training/수료증/  (파일명을 '사번.pdf' 형태로)
 """
 
 import argparse
-import csv
 from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
@@ -27,31 +27,43 @@ import config
 ROOT = Path(__file__).resolve().parent
 CERT_DIR = ROOT / config.CERT_DIR
 OUTPUT_DIR = ROOT / "output"
+DEFAULT_INPUT = OUTPUT_DIR / "교육_입력양식.xlsx"
 
 HEADER_ALIASES = {
     "사번": "사번", "사원번호": "사번", "사원": "사번",
     "성명": "성명", "이름": "성명",
     "이수여부": "이수여부", "이수": "이수여부", "수료여부": "이수여부",
-    "수료증": "수료증", "수료증파일": "수료증", "파일": "수료증",
+    "수료증파일": "수료증", "수료증": "수료증", "파일": "수료증",
 }
 
 
-def read_roster(path: Path) -> list:
-    """명단(.xlsx/.csv)을 읽어 [{사번,성명,이수여부,수료증}] 리스트로 반환."""
-    if path.suffix.lower() == ".csv":
-        with path.open(encoding="utf-8-sig", newline="") as f:
-            raw_rows = list(csv.DictReader(f))
-            return [_normalize_keys(r) for r in raw_rows]
-
+def read_template(path: Path):
+    """입력양식(.xlsx)에서 (교육정보 dict, 대상자 list) 를 읽는다."""
     wb = load_workbook(path, read_only=True, data_only=True)
-    ws = wb.active
-    rows_iter = ws.iter_rows(values_only=True)
-    headers = [str(h).strip() if h is not None else "" for h in next(rows_iter)]
+    if "교육정보" not in wb.sheetnames or "대상자" not in wb.sheetnames:
+        raise ValueError("'교육정보'/'대상자' 시트가 없습니다. make_template.py 로 만든 양식인지 확인하세요.")
+    course = _first_data_row(wb["교육정보"])
+    attendees = [_normalize_keys(r) for r in _all_data_rows(wb["대상자"])]
+    return course, attendees
+
+
+def _first_data_row(ws) -> dict:
+    rows = ws.iter_rows(values_only=True)
+    headers = [str(h).strip() if h is not None else "" for h in next(rows)]
+    for values in rows:
+        if values and any(v not in (None, "") for v in values):
+            return {h: ("" if v is None else str(v).strip()) for h, v in zip(headers, values)}
+    return {}
+
+
+def _all_data_rows(ws) -> list:
+    rows = ws.iter_rows(values_only=True)
+    headers = [str(h).strip() if h is not None else "" for h in next(rows)]
     out = []
-    for values in rows_iter:
-        if values is None or all(v is None for v in values):
+    for values in rows:
+        if not values or all(v in (None, "") for v in values):
             continue
-        out.append(_normalize_keys(dict(zip(headers, values))))
+        out.append(dict(zip(headers, values)))
     return out
 
 
@@ -96,6 +108,10 @@ def is_done(value: str) -> bool:
     return value.strip().lower() in config.DONE_VALUES
 
 
+def check_course(course: dict) -> list:
+    return [field for field in config.COURSE_REQUIRED if not str(course.get(field, "")).strip()]
+
+
 def build_worklist(rows: list, certs: dict) -> list:
     out, seen = [], set()
     for row in rows:
@@ -125,7 +141,7 @@ def build_worklist(rows: list, certs: dict) -> list:
             "이수여부": "Y" if done else "N",
             "수료증파일": cert.name if cert else "",
             "상태": "; ".join(notes) if notes else "처리대상",
-            "_문제": bool(notes) and done,  # 이수대상인데 문제 있으면 강조
+            "_문제": bool(notes) and done,
         })
     return out
 
@@ -165,23 +181,34 @@ def write_xlsx(rows: list, out_path: Path) -> None:
 def summarize(rows: list) -> None:
     targets = [r for r in rows if r["이수여부"] == "Y"]
     problems = [r for r in rows if r["_문제"]]
-    print(f"  총 {len(rows)}명 / 이수대상 {len(targets)}명 / 검토필요 {len(problems)}명")
+    print(f"  대상자 총 {len(rows)}명 / 이수대상 {len(targets)}명 / 검토필요 {len(problems)}명")
     for r in problems:
         print(f"    ! {r['사번']} {r['성명']}: {r['상태']}")
 
 
-def run(roster_path: Path, out_path: Path) -> None:
-    if not roster_path.exists():
-        print(f"[안내] 명단 파일이 없습니다: {roster_path}")
-        print("       python prepare.py --roster 명단.xlsx  처럼 경로를 지정하세요.")
+def run(input_path: Path, out_path: Path) -> None:
+    if not input_path.exists():
+        print(f"[안내] 입력양식이 없습니다: {input_path}")
+        print("       먼저  python make_template.py  로 양식을 만들고 채운 뒤 실행하세요.")
         return
-    rows = build_worklist(read_roster(roster_path), scan_certs(CERT_DIR))
-    if not rows:
-        print("[안내] 명단에서 읽은 데이터가 없습니다.")
+
+    course, attendees = read_template(input_path)
+    print(f"[교육정보] {course.get('과정명') or '(과정명 비어있음)'}")
+    missing = check_course(course)
+    if missing:
+        print("  ! 필수 항목 비어있음:", ", ".join(missing))
+    else:
+        print("  필수 항목 모두 입력됨 ✔")
+
+    if not attendees:
+        print("[대상자] '대상자' 시트에 사람이 없습니다.")
         return
+
+    rows = build_worklist(attendees, scan_certs(CERT_DIR))
     write_xlsx(rows, out_path)
-    print(f"생성 완료: {out_path}")
+    print(f"[대상자] 작업목록 생성: {out_path}")
     summarize(rows)
+    print("\n검토 후 문제(주황색)가 없으면 다음 단계(ERP 자동입력)로 넘어갑니다.")
 
 
 def selftest(out_path: Path) -> None:
@@ -193,7 +220,7 @@ def selftest(out_path: Path) -> None:
         {"사번": "", "성명": "무사번", "이수여부": "Y", "수료증": ""},          # 사번 없음
         {"사번": "10005678", "성명": "이불참", "이수여부": "N", "수료증": ""},  # 미이수 제외
     ]
-    fake_certs = {"82211493": Path("수료증/82211493.pdf")}  # 김동은만 수료증 있음
+    fake_certs = {"82211493": Path("수료증/82211493.pdf")}
     worklist = build_worklist(rows, fake_certs)
     write_xlsx(worklist, out_path)
     print(f"[selftest] 샘플 5명으로 생성 완료: {out_path}")
@@ -201,8 +228,8 @@ def selftest(out_path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="교육 이수 작업목록 준비·검증")
-    parser.add_argument("--roster", default=str(ROOT / "명단.xlsx"), help="명단 엑셀/CSV 경로")
+    parser = argparse.ArgumentParser(description="교육 입력양식 검증 → 작업목록")
+    parser.add_argument("--input", default=str(DEFAULT_INPUT), help="입력양식 엑셀 경로")
     parser.add_argument("--output", default=str(OUTPUT_DIR / "작업목록.xlsx"), help="결과 경로")
     parser.add_argument("--selftest", action="store_true", help="파일 없이 동작 확인")
     args = parser.parse_args()
@@ -211,7 +238,7 @@ def main() -> None:
     if args.selftest:
         selftest(out_path)
     else:
-        run(Path(args.roster), out_path)
+        run(Path(args.input), out_path)
 
 
 if __name__ == "__main__":

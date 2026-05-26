@@ -24,8 +24,8 @@
 
 ```
 cd training
-python make_template.py                 # 입력 양식(교육_입력양식.xlsx) 생성
-python prepare.py --roster 명단.xlsx     # 명단+수료증 검증 → output/작업목록.xlsx
+python make_template.py    # 입력 양식(output/교육_입력양식.xlsx) 생성
+python prepare.py          # 채운 입력양식 검증 → output/작업목록.xlsx
 ```
 
 - 입력 양식의 '교육정보' 시트에 교육 1건, '대상자' 시트에 들은 사람들 입력
