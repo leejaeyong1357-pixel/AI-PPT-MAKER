@@ -59,6 +59,12 @@ JS_FILL = r"""
   function setDDL(id,t){const e=el(id);if(!e)return L(id,'칸없음');const w=$&&$(e).data('kendoDropDownList');if(w){const ds=w.dataSource.data();const tf=w.options.dataTextField;let ok=false;for(let i=0;i<ds.length;i++){const x=tf?ds[i][tf]:(ds[i].text!==undefined?ds[i].text:ds[i]);if((''+x).trim()===t){w.select(i);ok=true;break;}}if(!ok&&e.options){for(const o of e.options){if(o.text.trim()===t){w.value(o.value);ok=true;break;}}}w.trigger('change');return L(id,ok?'OK드롭 -> '+t:'옵션없음: '+t);}if(e.options){for(const o of e.options){if(o.text.trim()===t){e.value=o.value;e.dispatchEvent(new Event('change',{bubbles:true}));return L(id,'OKselect -> '+t);}}}L(id,'옵션없음: '+t);}
   const fn={text:setText,date:setDate,num:setNum,ddl:setDDL};
   for(const id in data){ (fn[kind[id]]||setText)(id, data[id]); }
+  // ---- 진단(특수 칸 원인 파악용) ----
+  L('진단_환경', '$='+(!!$)+', kendo='+(!!window.kendo)+', jQuery='+(!!window.jQuery));
+  const sd=el('START_DT');
+  if(sd){const wrap=sd.closest('.k-datepicker,.k-widget,.dews-ui-datepicker');L('진단_START_DT','readonly='+sd.hasAttribute('readonly')+', kendoDatePicker='+(!!($&&$(sd).data('kendoDatePicker')))+', wrap='+(wrap?wrap.className.slice(0,60):'?'));}
+  const eu=el('EUCPART_CD');
+  if(eu){const wrap=eu.closest('.k-dropdown,.k-dropdownlist,.k-widget,.dews-ui-dropdownlist');L('진단_EUCPART_CD','tag='+eu.tagName+', kendoDropDownList='+(!!($&&$(eu).data('kendoDropDownList')))+', wrap='+(wrap?wrap.className.slice(0,60):'?'));}
   return log;
 }
 """
