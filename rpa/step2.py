@@ -110,11 +110,21 @@ def main():
             print(f"  {it['id']:<20} 존재 {it['total']} / 보임 {it['visible']}   {it['sample']}")
         print("\n  [보이는 버튼들]:", ", ".join(diag["buttons"]))
 
-        code_visible = any(it["id"] == "CURS_CD" and it["visible"] > 0 for it in diag["items"])
-        if not code_visible:
-            print("\n[!] 입력 폼(코드/대상구분)이 아직 화면에 안 떴어요.")
-            print("    위 '보이는 버튼들' 중 '차수추가'/'추가' 같은 걸 눌러 입력 폼을 연 뒤 다시 실행해보세요.")
-            print("    (어떤 버튼이 입력 폼을 여는지 알려주시면 자동으로 누르게 만들게요.)")
+        def vcount(id_):
+            return target.locator(f"[id='{id_}']:visible").count()
+
+        # 입력 폼이 안 떠 있으면 '차수추가'를 눌러 연다
+        if vcount("CURS_CD") == 0:
+            print("\n코드칸이 안 보여서 '차수추가'를 눌러 입력 폼을 엽니다...")
+            try:
+                target.locator("[id='AddSq']:visible").first.click()
+                target.wait_for_timeout(1500)
+            except Exception as e:
+                print("  차수추가 클릭 실패:", e)
+            print("  차수추가 후 CURS_CD 보임:", vcount("CURS_CD"))
+
+        if vcount("CURS_CD") == 0:
+            print("\n[!] 그래도 코드 입력칸이 안 보여요. 화면 상태(사진) 보여주세요.")
             return
 
         print("\n=== 입력 진행 ===")
