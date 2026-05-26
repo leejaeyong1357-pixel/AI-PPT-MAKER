@@ -20,7 +20,7 @@ try:
 except Exception:
     pass
 
-CDP = "http://localhost:9222"
+CDP = "http://127.0.0.1:9222"  # localhost(::1, IPv6) 회피 - 반드시 127.0.0.1
 
 # ===== 여기(DATA)만 본인 교육정보로 바꾸면 됨 =====
 DATA = {

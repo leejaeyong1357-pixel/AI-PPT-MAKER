@@ -16,7 +16,7 @@
 """
 import sys
 
-CDP_URL = "http://localhost:9222"
+CDP_URL = "http://127.0.0.1:9222"  # localhost(::1, IPv6) 회피 - 반드시 127.0.0.1
 
 # 이 ID 중 하나라도 들어있는 프레임을 'ERP 폼 프레임'으로 본다 (1·2·3단계 공통 마커)
 MARKERS = [
