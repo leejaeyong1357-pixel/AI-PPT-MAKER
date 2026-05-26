@@ -174,8 +174,16 @@ def main():
         # ===== 1단계: 교육과정등록 =====
         print("\n[1단계] 교육과정등록")
         goto(page, REG_URL, "교육과정등록")
+        # 기존 레코드에 덮어쓰지 않도록 먼저 '신규(F3)'로 새 입력 시작
+        page.bring_to_front()
+        try:
+            page.keyboard.press("F3")
+            page.wait_for_timeout(1300)
+            print("   신규 입력 시작 (F3)")
+        except Exception as e:
+            print("   신규(F3) 실패:", str(e)[:50])
         if vcount(page, "CURS_NM") == 0:
-            print("   [!] 등록 입력칸이 안 보여요. 신규 입력 상태인지 확인 필요(직접 신규 한번 눌러주세요).")
+            print("   [!] 등록 입력칸이 안 보여요. (F3 신규가 안 먹었을 수 있음)")
         result = page.evaluate(JS_FILL, {"data": DATA, "kind": KIND})
         for line in result:
             print("   " + line)
