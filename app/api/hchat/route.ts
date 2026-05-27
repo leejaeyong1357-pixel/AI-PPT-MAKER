@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "apiKey가 필요합니다" });
   }
 
-  const selectedModel = model || "claude-sonnet-4-6";
+  const selectedModel = model || "gpt-4.1";
   const endpoint = endpointForModel(selectedModel);
   const provider: "anthropic" | "openai" = selectedModel.startsWith("claude") ? "anthropic" : "openai";
 
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     const systemMsg = messages.find((m) => m.role === "system");
     const otherMsgs = messages.filter((m) => m.role !== "system");
     requestBody = {
-      model: model || "claude-sonnet-4-6",
+      model: model || "gpt-4.1",
       max_tokens: maxTokens,
       messages: otherMsgs,
       ...(systemMsg ? { system: systemMsg.content } : {}),

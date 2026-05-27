@@ -73,7 +73,7 @@ export const storage = {
       targetLevel: 6,
       hchatApiKey: "",
       hchatEndpoint: "",
-      hchatModel: "claude-sonnet-4-6",
+      hchatModel: "gpt-4.1",
       setupCompleted: false,
     });
   },
