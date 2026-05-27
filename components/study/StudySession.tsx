@@ -195,24 +195,30 @@ export default function StudySession({
             </div>
           )}
 
+          {listening && (
+            <div className="mb-3 rounded-xl border-2 border-teczen-red bg-teczen-red/5 p-4 min-h-[64px]">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-block w-2.5 h-2.5 bg-teczen-red rounded-full animate-pulse" />
+                <span className="text-xs font-bold text-teczen-red">실시간 인식 중...</span>
+              </div>
+              <p className="text-lg leading-relaxed">
+                <span className="text-teczen-ink font-semibold">{transcript}</span>
+                <span className="text-teczen-gray-400">{interimTranscript}</span>
+                {!transcript && !interimTranscript && (
+                  <span className="text-teczen-gray-400 text-base">
+                    영어로 말해주세요. 말하는 즉시 여기에 표시됩니다.
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+
           <textarea
             value={editedAnswer}
             onChange={(e) => setEditedAnswer(e.target.value)}
-            placeholder={
-              listening
-                ? "듣고 있어요... 영어로 말해주세요."
-                : "🎤 버튼을 누르고 영어로 답변하거나, 직접 입력하세요."
-            }
-            className={`w-full min-h-[160px] border-2 rounded-xl p-4 text-base leading-relaxed focus:outline-none resize-y transition-colors ${
-              listening ? "border-teczen-red bg-teczen-red/5" : "border-teczen-gray-300 focus:border-teczen-navy"
-            }`}
+            placeholder="🎤 버튼을 누르고 영어로 답변하거나, 직접 입력하세요."
+            className="w-full min-h-[140px] border-2 border-teczen-gray-300 rounded-xl p-4 text-base leading-relaxed focus:outline-none focus:border-teczen-navy resize-y transition-colors"
           />
-          {listening && interimTranscript && (
-            <div className="text-sm text-teczen-navy mt-2 italic">
-              <span className="inline-block w-2 h-2 bg-teczen-red rounded-full mr-1 animate-pulse" />
-              인식 중: {interimTranscript}
-            </div>
-          )}
           {editedAnswer && (
             <div className="text-xs text-teczen-gray-500 mt-1">
               {editedAnswer.trim().split(/\s+/).filter(Boolean).length} 단어 ·{" "}

@@ -306,3 +306,26 @@ export async function translateText(
 export function isHChatConfigured(apiKey: string): boolean {
   return !!apiKey;
 }
+
+export async function transcribeAudio(
+  blob: Blob,
+  apiKey: string,
+  model = "whisper-1",
+): Promise<{ ok: boolean; text?: string; error?: string }> {
+  if (!apiKey) return { ok: false, error: "API 키가 없습니다" };
+  try {
+    const form = new FormData();
+    form.append("audio", blob, "speech.webm");
+    form.append("model", model);
+    const res = await fetch("/api/stt", {
+      method: "POST",
+      headers: { "x-api-key": apiKey },
+      body: form,
+    });
+    const data = await res.json();
+    if (!data.ok) return { ok: false, error: data.error || "변환 실패" };
+    return { ok: true, text: data.text };
+  } catch (e: any) {
+    return { ok: false, error: e.message || "fetch 실패" };
+  }
+}
