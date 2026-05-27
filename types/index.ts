@@ -38,6 +38,14 @@ export interface StudyRecord {
   createdAt: number;
 }
 
+export interface ScoreCriteria {
+  pronunciation: number;
+  vocabulary: number;
+  grammar: number;
+  fluency: number;
+  coherence: number;
+}
+
 export interface AiFeedback {
   grammarIssues: string[];
   vocabularySuggestions: string[];
@@ -47,6 +55,7 @@ export interface AiFeedback {
   scoreEstimate: number;
   strengths: string[];
   improvements: string[];
+  criteria?: ScoreCriteria;
 }
 
 export interface VocabEntry {

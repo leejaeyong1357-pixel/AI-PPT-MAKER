@@ -57,6 +57,13 @@ User's Target Level: Lv ${req.targetLevel}
 
 IMPORTANT: All feedback text (strengths, improvements, grammarIssues, vocabularySuggestions, betterExpressions) MUST be written in KOREAN (한국어). Only the modelAnswer (sample answer) should be in English.
 
+Also score each of the 5 criteria from 0 to 100 (percentage of mastery), so the user sees exactly why they got their score:
+- pronunciation (발음): estimate from word choice/structure complexity since you only see text
+- vocabulary (어휘): variety and business-appropriateness
+- grammar (문법): correctness
+- fluency (발화량): length and sentence completeness
+- coherence (일관성): logical flow and organization
+
 Return ONLY valid JSON in this exact structure:
 {
   "grammarIssues": ["문법 오류 + 교정 (한국어로)"],
@@ -65,6 +72,7 @@ Return ONLY valid JSON in this exact structure:
   "modelAnswer": "영어로 작성된 목표 등급 수준의 모범답안",
   "estimatedLevel": <1~8 숫자>,
   "scoreEstimate": <0~96 숫자>,
+  "criteria": { "pronunciation": <0~100>, "vocabulary": <0~100>, "grammar": <0~100>, "fluency": <0~100>, "coherence": <0~100> },
   "strengths": ["잘한 점 (한국어로)"],
   "improvements": ["구체적인 개선점 (한국어로)"]
 }
@@ -138,6 +146,7 @@ export async function getFeedback(
       scoreEstimate: parsed.scoreEstimate || 30,
       strengths: parsed.strengths || [],
       improvements: parsed.improvements || [],
+      criteria: parsed.criteria || undefined,
     };
   } catch (e) {
     console.error("Parse fail:", e);
@@ -167,6 +176,20 @@ function strictMockFeedback(req: FeedbackRequest): AiFeedback {
   if (wc < 30) errors.push("답변이 너무 짧음 — 최소 5문장, 60~80단어 이상 권장");
   if (sentences < 3) errors.push("문장 수 부족 — 최소 3~5문장");
 
+  const uniqueWords = new Set(words.map((w) => w.toLowerCase())).size;
+  const lexicalDiversity = wc > 0 ? uniqueWords / wc : 0;
+  const hasConnectors = /(however|but|because|since|so|therefore|for example|first|second|finally|in my view|i think)/i.test(req.userAnswer);
+  const clamp = (n: number) => Math.max(5, Math.min(100, Math.round(n)));
+  const base = (score / 96) * 100;
+
+  const criteria = {
+    pronunciation: clamp(base + (Math.random() * 10 - 5)),
+    vocabulary: clamp(base * 0.6 + lexicalDiversity * 80),
+    grammar: clamp(base + (sentences >= 3 ? 8 : -10)),
+    fluency: clamp(Math.min(100, wc * 1.1)),
+    coherence: clamp(base * 0.7 + (hasConnectors ? 25 : 0) + (sentences >= 4 ? 10 : 0)),
+  };
+
   return {
     grammarIssues: ["(Mock - HChat API 미연결) 문법 자동 검사를 위해 API 설정 필요"],
     vocabularySuggestions: [
@@ -188,6 +211,7 @@ function strictMockFeedback(req: FeedbackRequest): AiFeedback {
       "더 구체적인 예시와 근거 추가",
       "고급 비즈니스 어휘 도입",
     ],
+    criteria,
   };
 }
 

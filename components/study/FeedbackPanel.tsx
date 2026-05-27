@@ -77,6 +77,44 @@ export default function FeedbackPanel({
         </div>
       </Card>
 
+      {feedback.criteria && (
+        <Card>
+          <h3 className="font-bold text-teczen-gray-900 mb-1">📊 평가 기준별 점수</h3>
+          <p className="text-xs text-teczen-gray-500 mb-4">
+            SPA 채점 5개 축 기준. 막대가 짧은 항목이 우선 개선 대상입니다.
+          </p>
+          <div className="space-y-3">
+            {[
+              { key: "pronunciation", label: "발음", desc: "Pronunciation" },
+              { key: "vocabulary", label: "어휘", desc: "Vocabulary" },
+              { key: "grammar", label: "문법", desc: "Grammar" },
+              { key: "fluency", label: "발화량", desc: "Fluency" },
+              { key: "coherence", label: "일관성", desc: "Coherence" },
+            ].map((c) => {
+              const v = (feedback.criteria as any)[c.key] ?? 0;
+              const color =
+                v >= 75 ? "bg-green-500" : v >= 50 ? "bg-teczen-blue" : v >= 30 ? "bg-amber-500" : "bg-teczen-red";
+              return (
+                <div key={c.key}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-semibold text-teczen-gray-800">
+                      {c.label} <span className="text-xs text-teczen-gray-400">{c.desc}</span>
+                    </span>
+                    <span className="text-sm font-bold text-teczen-gray-700 tabular-nums">{v}</span>
+                  </div>
+                  <div className="w-full bg-teczen-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <div
+                      className={`${color} h-2.5 rounded-full transition-all`}
+                      style={{ width: `${v}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
+
       <div className="grid md:grid-cols-2 gap-4">
         {feedback.strengths.length > 0 && (
           <Card>

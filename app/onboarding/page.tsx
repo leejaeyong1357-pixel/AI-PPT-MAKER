@@ -17,7 +17,7 @@ const SECTIONS = [
           승진, 해외 주재원 선발, 글로벌 직무 배치의 기준이 됩니다.
         </p>
         <div className="mt-4 p-4 bg-teczen-red/5 border border-teczen-red/20 rounded-xl">
-          <div className="font-bold text-teczen-red mb-1">⚠ 2024년부터 달라진 점</div>
+          <div className="font-bold text-teczen-red mb-1">⚠ 2026년부터 달라진 점</div>
           <div className="text-sm text-teczen-gray-800">
             <span className="line-through text-teczen-gray-500">실시간 대면 평가</span> →{" "}
             <span className="font-bold">실시간 비대면 화상 시험</span>
