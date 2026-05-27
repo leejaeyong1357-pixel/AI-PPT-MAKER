@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import dictionary from "@/data/dictionary.json";
 import { translateWord } from "@/lib/hchat";
 import { storage } from "@/lib/storage";
@@ -25,10 +25,16 @@ interface HoverState {
   loading: boolean;
 }
 
-export function HoverText({ text }: { text: string }) {
+interface Ctx {
+  setWord: (w: string) => void;
+}
+
+const HoverCtx = createContext<Ctx | null>(null);
+
+export function WordHoverProvider({ children }: { children: React.ReactNode }) {
   const [hover, setHover] = useState<HoverState | null>(null);
 
-  const handleHover = async (word: string) => {
+  const setWord = useCallback(async (word: string) => {
     if (!word) return;
     const local = lookupLocal(word);
     if (local) {
@@ -42,36 +48,19 @@ export function HoverText({ text }: { text: string }) {
       model: settings.hchatModel,
     });
     setHover({ word, meaning, loading: false });
-  };
-
-  const tokens = text.split(/(\s+|[.,!?;:"'()])/).filter((t) => t.length > 0);
+  }, []);
 
   return (
-    <>
-      <div className="text-lg font-semibold text-teczen-gray-900 leading-relaxed">
-        {tokens.map((token, i) => {
-          const isWord = /^[A-Za-z'-]+$/.test(token);
-          if (!isWord) return <span key={i}>{token}</span>;
-          return (
-            <span
-              key={i}
-              onMouseEnter={() => handleHover(token)}
-              className="cursor-help hover:bg-teczen-blue/15 rounded transition-colors"
-            >
-              {token}
-            </span>
-          );
-        })}
-      </div>
-
+    <HoverCtx.Provider value={{ setWord }}>
+      {children}
       <div className="fixed top-24 right-6 z-50 w-64 hidden xl:block">
         {hover ? (
-          <div className="bg-white border-2 border-teczen-blue rounded-2xl p-4 shadow-xl animate-fadeup">
+          <div className="bg-white border-2 border-teczen-blue rounded-2xl p-4 shadow-xl">
             <div className="text-xs font-bold text-teczen-blue mb-1">📖 사전</div>
             <div className="text-xl font-black text-teczen-navy mb-2 break-all">
               {hover.word}
             </div>
-            <div className="text-base text-teczen-gray-800 font-semibold">
+            <div className="text-base text-teczen-gray-800 font-semibold min-h-[24px]">
               {hover.loading ? (
                 <span className="inline-block w-4 h-4 border-2 border-teczen-blue border-t-transparent rounded-full animate-spin" />
               ) : (
@@ -95,6 +84,29 @@ export function HoverText({ text }: { text: string }) {
           </div>
         )}
       </div>
-    </>
+    </HoverCtx.Provider>
+  );
+}
+
+export function HoverText({ text }: { text: string }) {
+  const ctx = useContext(HoverCtx);
+  const tokens = text.split(/(\s+|[.,!?;:"'()])/).filter((t) => t.length > 0);
+
+  return (
+    <div className="text-lg font-semibold text-teczen-gray-900 leading-relaxed">
+      {tokens.map((token, i) => {
+        const isWord = /^[A-Za-z'-]+$/.test(token);
+        if (!isWord) return <span key={i}>{token}</span>;
+        return (
+          <span
+            key={i}
+            onMouseEnter={() => ctx?.setWord(token)}
+            className="cursor-help rounded px-0.5 border-b-2 border-teczen-blue/25 hover:bg-teczen-blue hover:text-white hover:border-teczen-blue transition-colors"
+          >
+            {token}
+          </span>
+        );
+      })}
+    </div>
   );
 }

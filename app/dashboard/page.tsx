@@ -27,6 +27,7 @@ export default function DashboardPage() {
   const [records, setRecords] = useState<StudyRecord[]>([]);
   const [mockResults, setMockResults] = useState<MockExamResult[]>([]);
   const [activeTab, setActiveTab] = useState<"home" | "study" | "mock" | "stats">("home");
+  const [selectedRecord, setSelectedRecord] = useState<StudyRecord | null>(null);
 
   useEffect(() => {
     if (!storage.isLoggedIn()) {
@@ -181,18 +182,27 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   {[...records]
                     .sort((a, b) => b.createdAt - a.createdAt)
-                    .slice(0, 3)
+                    .slice(0, 5)
                     .map((r) => (
-                      <div key={r.id} className="flex items-center justify-between p-3 bg-teczen-gray-50 rounded-xl">
+                      <button
+                        key={r.id}
+                        onClick={() => setSelectedRecord(r)}
+                        className="w-full flex items-center justify-between p-3 bg-teczen-gray-50 hover:bg-teczen-blue/10 rounded-xl transition-colors text-left"
+                      >
                         <div className="flex-1 min-w-0">
-                          <div className="text-xs font-bold text-teczen-red mb-0.5">유형 {r.type}</div>
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-xs font-bold text-teczen-red">유형 {r.type}</span>
+                            <span className="text-xs text-teczen-gray-400">
+                              {new Date(r.createdAt).toLocaleDateString("ko-KR")}
+                            </span>
+                          </div>
                           <p className="text-sm text-teczen-gray-700 truncate">{r.userAnswer}</p>
                         </div>
-                        <div className="ml-3 text-right">
+                        <div className="ml-3 text-right shrink-0">
                           <div className="font-black text-2xl text-teczen-blue">{r.score || "—"}</div>
-                          <div className="text-xs text-teczen-gray-500">/ 96</div>
+                          <div className="text-xs text-teczen-blue font-semibold">상세보기 →</div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                 </div>
               </div>
@@ -245,7 +255,118 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+
+      {selectedRecord && (
+        <RecordDetailModal record={selectedRecord} onClose={() => setSelectedRecord(null)} />
+      )}
     </>
+  );
+}
+
+function RecordDetailModal({
+  record,
+  onClose,
+}: {
+  record: StudyRecord;
+  onClose: () => void;
+}) {
+  const fb = record.feedback;
+  const criteriaLabels: Record<string, string> = {
+    pronunciation: "발음",
+    vocabulary: "어휘",
+    grammar: "문법",
+    fluency: "발화량",
+    coherence: "일관성",
+  };
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <div className="text-xs font-bold text-teczen-red mb-1">
+              유형 {record.type} · {new Date(record.createdAt).toLocaleString("ko-KR")}
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="font-black text-4xl text-teczen-blue">{record.score ?? "—"}</span>
+              <span className="text-teczen-gray-500">/ 96</span>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-teczen-gray-400 hover:text-teczen-ink text-2xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="mb-4">
+          <div className="text-xs font-bold text-teczen-gray-500 mb-1">내 답변</div>
+          <p className="text-sm text-teczen-gray-800 bg-teczen-gray-50 p-3 rounded-xl leading-relaxed whitespace-pre-wrap">
+            {record.userAnswer || "(답변 없음)"}
+          </p>
+        </div>
+
+        {fb?.criteria && (
+          <div className="mb-4">
+            <div className="text-xs font-bold text-teczen-gray-500 mb-2">평가 기준별 점수</div>
+            <div className="space-y-2">
+              {Object.entries(criteriaLabels).map(([key, label]) => {
+                const v = (fb.criteria as any)[key] ?? 0;
+                const color = v >= 75 ? "bg-green-500" : v >= 50 ? "bg-teczen-blue" : v >= 30 ? "bg-amber-500" : "bg-teczen-red";
+                return (
+                  <div key={key}>
+                    <div className="flex justify-between text-xs mb-0.5">
+                      <span className="font-semibold text-teczen-gray-700">{label}</span>
+                      <span className="font-bold tabular-nums">{v}</span>
+                    </div>
+                    <div className="w-full bg-teczen-gray-100 rounded-full h-2">
+                      <div className={`${color} h-2 rounded-full`} style={{ width: `${v}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {fb && fb.improvements.length > 0 && (
+          <div className="mb-4">
+            <div className="text-xs font-bold text-teczen-red mb-1">개선 포인트</div>
+            <ul className="text-sm text-teczen-gray-700 space-y-1">
+              {fb.improvements.map((s, i) => (
+                <li key={i}>• {s}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {fb && fb.grammarIssues.length > 0 && (
+          <div className="mb-4">
+            <div className="text-xs font-bold text-teczen-gray-500 mb-1">문법 교정</div>
+            <ul className="text-sm text-teczen-gray-700 space-y-1">
+              {fb.grammarIssues.map((s, i) => (
+                <li key={i}>• {s}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {fb?.modelAnswer && (
+          <div>
+            <div className="text-xs font-bold text-teczen-gray-500 mb-1">모범 답안</div>
+            <p className="text-sm text-teczen-gray-700 bg-teczen-blue/5 p-3 rounded-xl leading-relaxed">
+              {fb.modelAnswer}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

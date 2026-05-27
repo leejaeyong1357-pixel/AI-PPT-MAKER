@@ -8,7 +8,7 @@ import type { AiFeedback, QuestionType } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import FeedbackPanel from "./FeedbackPanel";
-import { HoverText } from "./WordHover";
+import { HoverText, WordHoverProvider } from "./WordHover";
 
 interface Props {
   type: QuestionType;
@@ -114,7 +114,7 @@ export default function StudySession({
   };
 
   const restart = () => {
-    setStep("intro");
+    setStep("answer");
     setEditedAnswer("");
     setFeedback(null);
     setPlayCount(0);
@@ -123,6 +123,7 @@ export default function StudySession({
   };
 
   return (
+    <WordHoverProvider>
     <div className="space-y-4">
       {visualContent && <Card>{visualContent}</Card>}
 
@@ -249,5 +250,6 @@ export default function StudySession({
         />
       )}
     </div>
+    </WordHoverProvider>
   );
 }
