@@ -73,7 +73,7 @@ export const storage = {
       targetLevel: 6,
       hchatApiKey: "",
       hchatEndpoint: "",
-      hchatModel: "gpt-4.1",
+      hchatModel: "gpt-5.4",
       setupCompleted: false,
     });
   },

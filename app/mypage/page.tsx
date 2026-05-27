@@ -20,7 +20,7 @@ export default function MyPage() {
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatApiKey, setHchatApiKey] = useState("");
-  const hchatModel = "gpt-4.1";
+  const hchatModel = "gpt-5.4";
 
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
