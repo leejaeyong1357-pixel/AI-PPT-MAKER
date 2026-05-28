@@ -7,6 +7,7 @@ import type {
   MockExamResult,
   UserSession,
 } from "@/types";
+import { tickFlame } from "./flame";
 
 const SESSION_KEY = "spa.session";
 
@@ -94,6 +95,9 @@ export const storage = {
     const records = this.getRecords();
     records.push(record);
     safeSetLocal(scopedKey("spa.records"), records);
+    const s = this.getSettings();
+    const flame = tickFlame(s.flame);
+    this.saveSettings({ ...s, flame });
   },
 
   updateRecord(id: string, updates: Partial<StudyRecord>) {

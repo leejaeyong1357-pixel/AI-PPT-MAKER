@@ -14,6 +14,13 @@ export interface UserSession {
   isAdmin?: boolean;
 }
 
+export interface FlameState {
+  level: number;
+  streak: number;
+  lastStudyDay: string;
+  color: string;
+}
+
 export interface UserSettings {
   examDate: string;
   targetLevel: Level;
@@ -24,6 +31,7 @@ export interface UserSettings {
   setupCompleted: boolean;
   onboardingSeen?: boolean;
   onboardingSkipForever?: boolean;
+  flame?: FlameState;
 }
 
 export interface StudyRecord {

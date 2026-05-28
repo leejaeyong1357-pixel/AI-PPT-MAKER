@@ -5,19 +5,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { getDaysUntil, scoreToLevel } from "@/lib/scoring";
-import { filterByTargetLevel } from "@/lib/levelFilter";
+import { decayedFlame, FLAME_COLORS, MAX_FLAME_LEVEL } from "@/lib/flame";
 import type { UserSettings, StudyRecord, MockExamResult, UserSession } from "@/types";
 import Header from "@/components/layout/Header";
+import Flame from "@/components/Flame";
 import type1 from "@/data/type1_business_casual.json";
 import type2 from "@/data/type2_opinion.json";
 import type3 from "@/data/type3_visual.json";
 import type4 from "@/data/type4_summary.json";
 
 const TYPE_INFO = [
-  { type: 1, name: "Business Casual", desc: "일상 Q&A", total: type1.questions.length, getFiltered: (lv: any) => filterByTargetLevel(type1.questions as any, lv).length },
-  { type: 2, name: "Opinion", desc: "의견 표현", total: type2.questions.length, getFiltered: (lv: any) => filterByTargetLevel(type2.questions as any, lv).length },
-  { type: 3, name: "Visual", desc: "그래프·사진 묘사", total: type3.items.length, getFiltered: (lv: any) => filterByTargetLevel(type3.items as any, lv).length },
-  { type: 4, name: "Summary", desc: "지문 요약", total: type4.passages.length, getFiltered: (lv: any) => filterByTargetLevel(type4.passages as any, lv).length },
+  { type: 1, name: "Business Casual", desc: "일상 Q&A", total: type1.questions.length },
+  { type: 2, name: "Opinion", desc: "의견 표현", total: type2.questions.length },
+  { type: 3, name: "Visual", desc: "그래프·사진 묘사", total: type3.items.length },
+  { type: 4, name: "Summary", desc: "지문 요약", total: type4.passages.length },
 ];
 
 export default function DashboardPage() {
@@ -85,6 +86,16 @@ export default function DashboardPage() {
 
         {activeTab === "home" && (
           <div className="space-y-6">
+            <FlameSection
+              settings={settings}
+              onColorChange={(c) => {
+                const flame = settings.flame ? { ...settings.flame, color: c } : { level: 0, streak: 0, lastStudyDay: "", color: c };
+                const next = { ...settings, flame };
+                storage.saveSettings(next);
+                setSettings(next);
+              }}
+            />
+
             <div className="grid md:grid-cols-3 gap-4">
               <MetricCard
                 label="시험까지"
@@ -124,8 +135,8 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
                 {TYPE_INFO.map((t) => {
                   const rs = records.filter((r) => r.type === t.type);
-                  const a = rs.length > 0 ? Math.round(rs.reduce((s, x) => s + (x.score || 0), 0) / rs.length) : 0;
-                  const myLevelCount = t.getFiltered(settings.targetLevel);
+                  const done = rs.length;
+                  const pct = Math.min(100, Math.round((done / t.total) * 100));
                   return (
                     <Link
                       key={t.type}
@@ -134,17 +145,19 @@ export default function DashboardPage() {
                     >
                       <div className="text-xs font-bold text-teczen-red mb-1">유형 {t.type}</div>
                       <div className="font-bold text-teczen-ink text-sm mb-1">{t.name}</div>
-                      <div className="text-xs text-teczen-gray-500 mb-2">{t.desc}</div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs text-teczen-gray-500">전체</span>
-                        <span className="text-xs font-bold text-teczen-ink">{t.total}문제</span>
+                      <div className="text-xs text-teczen-gray-500 mb-3">{t.desc}</div>
+                      <div className="flex items-baseline justify-between mb-1.5">
+                        <span className="text-xs text-teczen-gray-500">진도</span>
+                        <span className="text-sm">
+                          <b className="text-teczen-blue">{done}</b>
+                          <span className="text-teczen-gray-400"> / {t.total}</span>
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between mb-2 pb-2 border-b border-teczen-gray-200">
-                        <span className="text-xs text-teczen-gray-500">내 등급</span>
-                        <span className="text-xs font-bold text-teczen-blue">{myLevelCount}문제</span>
-                      </div>
-                      <div className="text-xs text-teczen-gray-700">
-                        완료 <b className="text-teczen-blue">{rs.length}</b> · 평균 <b>{a || "—"}</b>점
+                      <div className="w-full bg-teczen-gray-200 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="bg-teczen-blue h-1.5 rounded-full transition-all"
+                          style={{ width: `${pct}%` }}
+                        />
                       </div>
                     </Link>
                   );
@@ -260,6 +273,75 @@ export default function DashboardPage() {
         <RecordDetailModal record={selectedRecord} onClose={() => setSelectedRecord(null)} />
       )}
     </>
+  );
+}
+
+function FlameSection({
+  settings,
+  onColorChange,
+}: {
+  settings: UserSettings;
+  onColorChange: (c: string) => void;
+}) {
+  const flame = decayedFlame(settings.flame);
+  const isLit = flame.level > 0;
+  const color = flame.color || FLAME_COLORS[0].value;
+
+  return (
+    <div className="bg-white rounded-2xl border border-teczen-gray-200 p-6 md:p-8">
+      <div className="grid md:grid-cols-[160px_1fr_auto] gap-6 items-center">
+        <div className="flex justify-center">
+          <Flame level={flame.level} color={color} size={140} />
+        </div>
+
+        <div className="text-center md:text-left">
+          {isLit ? (
+            <>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teczen-blue/10 text-teczen-blue text-xs font-bold mb-2">
+                🔥 {flame.streak}일째 불꽃 키우는 중!
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-teczen-ink mb-1">
+                불꽃 <span className="highlight-blue">Lv {flame.level}</span> / {MAX_FLAME_LEVEL}
+              </h2>
+              <p className="text-sm text-teczen-gray-600">
+                {flame.level >= MAX_FLAME_LEVEL
+                  ? "최고 단계! 매일 한 문제씩 불꽃을 지켜주세요."
+                  : "오늘도 한 문제만 풀면 불꽃이 커져요. 하루라도 빠지면 한 단계 작아져요."}
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teczen-gray-100 text-teczen-gray-600 text-xs font-bold mb-2">
+                불꽃이 꺼져있어요
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-teczen-ink mb-1">
+                학습을 시작해서 <span className="highlight-blue">불꽃을 키워주세요!</span>
+              </h2>
+              <p className="text-sm text-teczen-gray-600">
+                하루에 한 문제씩 학습하면 불꽃이 커집니다 (최대 5단계)
+              </p>
+            </>
+          )}
+        </div>
+
+        <div className="flex md:flex-col gap-2 justify-center">
+          <span className="text-xs text-teczen-gray-500 self-center md:mb-1">색상</span>
+          <div className="flex md:flex-col gap-1.5">
+            {FLAME_COLORS.map((c) => (
+              <button
+                key={c.value}
+                onClick={() => onColorChange(c.value)}
+                title={c.name}
+                className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${
+                  color === c.value ? "ring-2 ring-offset-2 ring-teczen-ink" : ""
+                }`}
+                style={{ background: c.value }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
