@@ -12,8 +12,10 @@ import {
   getTop5,
   getTeamAverages,
   getLevelDistribution,
+  getFlameTop5,
   AdminLearnerRow,
 } from "@/lib/adminData";
+import Flame from "@/components/Flame";
 import {
   BarChart,
   Bar,
@@ -49,6 +51,19 @@ export default function AdminPage() {
 
   const stats = useMemo(() => (mounted ? getAdminStats() : null), [mounted]);
   const top5 = useMemo(() => (mounted ? getTop5() : []), [mounted]);
+  const flameTop = useMemo(() => (mounted ? getFlameTop5() : []), [mounted]);
+  const allWithFlame = useMemo(
+    () =>
+      mounted
+        ? getAllLearners()
+            .filter((l) => l.flameLevel > 0)
+            .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
+        : [],
+    [mounted],
+  );
+  const avgFlame = allWithFlame.length > 0
+    ? (allWithFlame.reduce((s, l) => s + l.flameLevel, 0) / allWithFlame.length).toFixed(1)
+    : "0";
   const teamAvgs = useMemo(() => (mounted ? getTeamAverages() : []), [mounted]);
   const levelDist = useMemo(() => (mounted ? getLevelDistribution() : []), [mounted]);
   const allLearners = useMemo(() => (mounted ? getAllLearners() : []), [mounted]);
@@ -81,11 +96,12 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-4 mb-6">
+        <div className="grid md:grid-cols-5 gap-4 mb-6">
           <StatCard label="전체 임직원" value={`${stats.total}명`} sub={`${allTeams.length}개 팀`} accent="navy" />
           <StatCard label="학습 시작" value={`${stats.started}명`} sub={`참여율 ${Math.round((stats.started / stats.total) * 100)}%`} accent="navy" />
           <StatCard label="평균 점수" value={`${stats.avgScore}점`} sub="학습 시작자 기준" accent="navy" />
           <StatCard label="목표 도달자" value={`${stats.targetReached}명`} sub={`달성률 ${stats.started > 0 ? Math.round((stats.targetReached / stats.started) * 100) : 0}%`} accent="red" />
+          <StatCard label="🔥 평균 불꽃" value={`Lv ${avgFlame}`} sub={`켜진 불꽃 ${allWithFlame.length}명`} accent="navy" />
         </div>
 
         <div className="bg-white rounded-3xl p-6 border border-teczen-gray-200 mb-6">

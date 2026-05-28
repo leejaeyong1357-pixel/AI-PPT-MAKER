@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { storage } from "@/lib/storage";
 import { LEVEL_RANGES, getDaysUntil, levelLabel } from "@/lib/scoring";
+import { testConnection } from "@/lib/hchat";
 import type { Level, UserSession, UserSettings } from "@/types";
 import Header from "@/components/layout/Header";
 import Button from "@/components/ui/Button";
@@ -28,6 +29,19 @@ export default function MyPage() {
   const [pwMsg, setPwMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const [saveMsg, setSaveMsg] = useState("");
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+
+  const runApiTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    const result = await testConnection({
+      apiKey: hchatApiKey,
+      model: hchatModel,
+    });
+    setTestResult(result);
+    setTesting(false);
+  };
 
   useEffect(() => {
     const s = storage.getSession();
@@ -162,11 +176,42 @@ export default function MyPage() {
               <input
                 type="password"
                 value={hchatApiKey}
-                onChange={(e) => setHchatApiKey(e.target.value)}
+                onChange={(e) => {
+                  setHchatApiKey(e.target.value);
+                  setTestResult(null);
+                }}
                 placeholder="afd5cdc7f6..."
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teczen-navy"
               />
+              <p className="text-xs text-teczen-gray-500 mt-1">
+                HChat Platform → 개인 API 키 조회에서 발급
+              </p>
             </div>
+
+            <Button
+              onClick={runApiTest}
+              variant="outline"
+              size="sm"
+              disabled={testing || !hchatApiKey}
+              fullWidth
+            >
+              {testing ? "테스트 중..." : "🔌 API 연결 테스트"}
+            </Button>
+
+            {testResult && (
+              <div
+                className={`p-3 rounded-xl text-sm ${
+                  testResult.ok
+                    ? "bg-green-50 text-green-800 border border-green-200"
+                    : "bg-red-50 text-red-800 border border-red-200"
+                }`}
+              >
+                <div className="font-bold mb-1">
+                  {testResult.ok ? "✓ 연결 성공" : "✗ 연결 실패"}
+                </div>
+                <div className="text-xs">{testResult.message}</div>
+              </div>
+            )}
 
             <div className="flex items-center justify-between pt-2">
               {saveMsg && <span className="text-sm text-green-600 font-semibold">{saveMsg}</span>}

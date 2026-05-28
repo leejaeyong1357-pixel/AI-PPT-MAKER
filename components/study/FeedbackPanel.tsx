@@ -79,38 +79,49 @@ export default function FeedbackPanel({
 
       {feedback.criteria && (
         <Card>
-          <h3 className="font-bold text-teczen-gray-900 mb-1">📊 평가 기준별 점수</h3>
+          <h3 className="font-bold text-teczen-gray-900 mb-1">📊 SPA 채점표 (5개 평가영역)</h3>
           <p className="text-xs text-teczen-gray-500 mb-4">
-            SPA 채점 5개 축 기준. 막대가 짧은 항목이 우선 개선 대상입니다.
+            현대차그룹 공식 SPA 채점 기준. 영역별 만점이 다릅니다.
           </p>
           <div className="space-y-3">
             {[
-              { key: "pronunciation", label: "발음", desc: "Pronunciation" },
-              { key: "vocabulary", label: "어휘", desc: "Vocabulary" },
-              { key: "grammar", label: "문법", desc: "Grammar" },
-              { key: "fluency", label: "발화량", desc: "Fluency" },
-              { key: "coherence", label: "일관성", desc: "Coherence" },
+              { key: "pronunciation", label: "발음", desc: "Pronunciation · 억양·강세·속도", max: 12 },
+              { key: "listening", label: "청취·답변", desc: "Listening & Response · 이해·요약·관련성", max: 36 },
+              { key: "vocabulary", label: "어휘", desc: "Vocabulary · 어휘 정확도·고급 표현", max: 12 },
+              { key: "grammar", label: "문법", desc: "Grammar · 시제·구문·연결사", max: 24 },
+              { key: "fluency", label: "유창성", desc: "Fluency · 논리 흐름·자유로운 표현", max: 12 },
             ].map((c) => {
-              const v = (feedback.criteria as any)[c.key] ?? 0;
+              const v = Math.max(0, Math.min(c.max, (feedback.criteria as any)[c.key] ?? 0));
+              const pct = (v / c.max) * 100;
               const color =
-                v >= 75 ? "bg-green-500" : v >= 50 ? "bg-teczen-blue" : v >= 30 ? "bg-amber-500" : "bg-teczen-red";
+                pct >= 75 ? "bg-green-500" : pct >= 50 ? "bg-teczen-blue" : pct >= 25 ? "bg-amber-500" : "bg-teczen-red";
               return (
                 <div key={c.key}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-teczen-gray-800">
-                      {c.label} <span className="text-xs text-teczen-gray-400">{c.desc}</span>
+                    <div>
+                      <span className="text-sm font-bold text-teczen-gray-900">{c.label}</span>
+                      <span className="text-xs text-teczen-gray-500 ml-2">{c.desc}</span>
+                    </div>
+                    <span className="text-sm font-bold tabular-nums">
+                      <span className="text-teczen-blue">{v}</span>
+                      <span className="text-teczen-gray-400"> / {c.max}</span>
                     </span>
-                    <span className="text-sm font-bold text-teczen-gray-700 tabular-nums">{v}</span>
                   </div>
-                  <div className="w-full bg-teczen-gray-100 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-teczen-gray-100 rounded-full h-3 overflow-hidden">
                     <div
-                      className={`${color} h-2.5 rounded-full transition-all`}
-                      style={{ width: `${v}%` }}
+                      className={`${color} h-3 rounded-full transition-all`}
+                      style={{ width: `${Math.max(2, pct)}%` }}
                     />
                   </div>
                 </div>
               );
             })}
+            <div className="border-t border-teczen-gray-200 pt-3 mt-3 flex items-center justify-between">
+              <span className="text-sm font-bold text-teczen-ink">총점</span>
+              <span className="text-lg font-black text-teczen-navy">
+                {feedback.scoreEstimate} <span className="text-sm text-teczen-gray-500">/ 96</span>
+              </span>
+            </div>
           </div>
         </Card>
       )}

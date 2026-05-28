@@ -328,12 +328,16 @@ function FlameSection({
                 🔥 {flame.streak}일째 불꽃 키우는 중!
               </div>
               <h2 className="text-2xl md:text-3xl font-black text-teczen-ink mb-1">
-                불꽃 <span className="highlight-blue">Lv {flame.level}</span> / {MAX_FLAME_LEVEL}
+                {flame.level >= MAX_FLAME_LEVEL ? (
+                  <>불꽃이 <span className="highlight-blue">최고조</span>예요!</>
+                ) : (
+                  <>불씨가 <span className="highlight-blue">점점 커져요!</span></>
+                )}
               </h2>
-              <p className="text-sm text-teczen-gray-600">
+              <p className="text-sm text-teczen-gray-600 mb-2">
                 {flame.level >= MAX_FLAME_LEVEL
-                  ? "최고 단계! 매일 한 문제씩 불꽃을 지켜주세요."
-                  : "오늘도 한 문제만 풀면 불꽃이 커져요. 하루라도 빠지면 한 단계 작아져요."}
+                  ? `Lv ${flame.level} / ${MAX_FLAME_LEVEL} · 매일 한 문제씩 풀면 불꽃이 유지돼요.`
+                  : `Lv ${flame.level} / ${MAX_FLAME_LEVEL} · 오늘 한 문제만 더 풀면 다음 단계로! 하루라도 빠지면 한 단계 작아져요.`}
               </p>
             </>
           ) : (
@@ -345,7 +349,7 @@ function FlameSection({
                 학습을 시작해서 <span className="highlight-blue">불꽃을 키워주세요!</span>
               </h2>
               <p className="text-sm text-teczen-gray-600">
-                하루에 한 문제씩 학습하면 불꽃이 커집니다 (최대 5단계)
+                하루에 한 문제씩 학습하면 불꽃이 커집니다 (최대 {MAX_FLAME_LEVEL}단계)
               </p>
             </>
           )}

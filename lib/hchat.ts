@@ -15,69 +15,89 @@ interface HchatConfig {
   model?: string;
 }
 
-const FEEDBACK_PROMPT = (req: FeedbackRequest) => `You are a STRICT English speaking exam evaluator for the Korean SPA (Speaking Proficiency Assessment) test used by Hyundai Motor Group.
+const FEEDBACK_PROMPT = (req: FeedbackRequest) => `You are a STRICT English speaking exam evaluator for the Korean SPA (Speaking Proficiency Assessment) used by Hyundai Motor Group.
 
-The SPA exam uses a 96-point scale across 8 levels:
-- Lv 1 (0-15): Cannot communicate, only fragmented words
-- Lv 2 (16-24): Basic words, very limited
-- Lv 3 (25-34): Simple sentences, frequent errors
-- Lv 4 (35-49): Can communicate basic ideas with errors
-- Lv 5 (50-64): Functional business communication
-- Lv 6 (65-74): Good business English (overseas assignment minimum)
-- Lv 7 (75-84): Fluent business English (promotion standard)
-- Lv 8 (85-96): Near-native business proficiency
+# SPA OFFICIAL SCORING RUBRIC (총 96점)
+The total score MUST be the sum of these 5 criteria. Each criterion has its OWN max:
 
-STRICT SCORING RUBRIC - Be harsh:
-- 1 short sentence (under 15 words): max Lv 2 (16-24 pts)
-- 2-3 sentences (15-40 words): max Lv 3-4 (25-49 pts)
-- 4-6 sentences (40-80 words) with logical flow: Lv 4-5 (35-64 pts)
-- 7+ sentences (80-150 words) with examples and varied vocabulary: Lv 5-6 (50-74 pts)
-- Sophisticated structures, idioms, business vocabulary, clear organization: Lv 7-8
+1. 발음 (Pronunciation) — MAX 12점
+   - Accent (intonation and stress)
+   - Pace (flow and rhythm of speech)
 
-EVALUATION CRITERIA (발음 / 어휘 / 문법 / 발화량 / 일관성):
-1. 발화량 (Length/Fluency): Word count, complete sentences
-2. 어휘 (Vocabulary): Variety, business appropriateness, accuracy
-3. 문법 (Grammar): Subject-verb agreement, tense, articles, prepositions
-4. 일관성 (Coherence): Logical flow, examples, conclusion
-5. 정확성 (Accuracy): Directly addresses the question
+2. 청취력과 답변능력 (Listening Comprehension & Response Technique) — MAX 36점
+   - Listening passage summarization
+   - Accuracy / relevance of response
 
+3. 어휘사용능력 (Content and Use of Vocabulary) — MAX 12점
+   - Accuracy of vocabulary in context
+   - Incorporation of applicable advanced terms and phrases
+
+4. 문장구성능력 (Grammar and Common Error) — MAX 24점
+   - Correct usage of parts of speech
+   - Verb tense accuracy / consistency
+   - Syntax and diction
+   - Sentence structure variety / complexity
+   - Incorporation of transition signals / phrases
+
+5. 언어구사능력 (Overall Fluency) — MAX 12점
+   - Communicative comprehension
+   - Logical flow and clarity of response
+   - Demonstration of freedom of expression
+
+# SCORING LEVELS (총점 0~96)
+- Lv 1 (0-15) / Lv 2 (16-24) / Lv 3 (25-34) / Lv 4 (35-49)
+- Lv 5 (50-64) / Lv 6 (65-74) / Lv 7 (75-84) / Lv 8 (85-96)
+
+# STRICT GUIDELINES — Be HARSH and ACCURATE
+DO NOT inflate scores. A few words ≠ passing. Empty/trivial answers MUST score under 25 total.
+- < 10 words or 1 fragment: 발음 ≤ 3, 청취 ≤ 8, 어휘 ≤ 2, 문법 ≤ 4, 유창성 ≤ 2 (총 ≤ 19)
+- 10-25 words / 1-2 short sentences: 발음 ≤ 6, 청취 ≤ 14, 어휘 ≤ 5, 문법 ≤ 10, 유창성 ≤ 5
+- 25-60 words / 3-5 sentences with basic logic: 발음 ≤ 8, 청취 ≤ 22, 어휘 ≤ 8, 문법 ≤ 16, 유창성 ≤ 8
+- 60-120 words / coherent 5-8 sentences with examples: 발음 ≤ 10, 청취 ≤ 30, 어휘 ≤ 10, 문법 ≤ 20, 유창성 ≤ 10
+- 120+ words / advanced vocabulary + connectors + complex structures: can reach max in each
+
+# AVOID THESE COMMON MISTAKES
+- Length alone is NOT fluency. Repetitive long answer ≠ high 유창성.
+- Few words MUST NOT get 40-50/96. That is incorrect scoring.
+- Off-topic answer → 청취 ≤ 10 regardless of length (response relevance)
+
+# INPUT
 Question Type ${req.type} (${
   req.type === 1
-    ? "Business Casual"
+    ? "Business Casual — daily Q&A"
     : req.type === 2
-    ? "Opinion"
+    ? "Opinion — argumentative response"
     : req.type === 3
-    ? "Visual Description"
-    : "Passage Summary"
+    ? "Visual Description — chart/photo"
+    : "Passage Summary — 60-sec summary"
 })
 Question: ${req.question}
 ${req.context ? `Context: ${req.context}\n` : ""}
 User's Answer (${req.userAnswer.split(/\s+/).filter(Boolean).length} words): ${req.userAnswer}
-User's Target Level: Lv ${req.targetLevel}
+Target Level: Lv ${req.targetLevel}
 
-IMPORTANT: All feedback text (strengths, improvements, grammarIssues, vocabularySuggestions, betterExpressions) MUST be written in KOREAN (한국어). Only the modelAnswer (sample answer) should be in English.
+# OUTPUT FORMAT — return ONLY valid JSON
+All Korean text must be in 한국어. modelAnswer must be in English.
 
-Also score each of the 5 criteria from 0 to 100 (percentage of mastery), so the user sees exactly why they got their score:
-- pronunciation (발음): estimate from word choice/structure complexity since you only see text
-- vocabulary (어휘): variety and business-appropriateness
-- grammar (문법): correctness
-- fluency (발화량): length and sentence completeness
-- coherence (일관성): logical flow and organization
-
-Return ONLY valid JSON in this exact structure:
 {
-  "grammarIssues": ["문법 오류 + 교정 (한국어로)"],
-  "vocabularySuggestions": ["더 나은 표현 제안 (한국어 설명 + 영어 단어)"],
-  "betterExpressions": ["자연스러운 표현 (한국어 설명 + 영어 예시)"],
-  "modelAnswer": "영어로 작성된 목표 등급 수준의 모범답안",
-  "estimatedLevel": <1~8 숫자>,
-  "scoreEstimate": <0~96 숫자>,
-  "criteria": { "pronunciation": <0~100>, "vocabulary": <0~100>, "grammar": <0~100>, "fluency": <0~100>, "coherence": <0~100> },
-  "strengths": ["잘한 점 (한국어로)"],
-  "improvements": ["구체적인 개선점 (한국어로)"]
+  "criteria": {
+    "pronunciation": <0~12>,
+    "listening": <0~36>,
+    "vocabulary": <0~12>,
+    "grammar": <0~24>,
+    "fluency": <0~12>
+  },
+  "scoreEstimate": <SUM of above, 0~96>,
+  "estimatedLevel": <1~8>,
+  "grammarIssues": ["문법 오류와 한국어 교정"],
+  "vocabularySuggestions": ["더 나은 어휘 제안 (한국어 설명)"],
+  "betterExpressions": ["자연스러운 표현 (한국어)"],
+  "modelAnswer": "Target-level English sample answer",
+  "strengths": ["잘한 점 (한국어)"],
+  "improvements": ["개선점 (한국어)"]
 }
 
-Be strict and honest. Score MUST match the rubric above. ALL FEEDBACK IN KOREAN except modelAnswer.`;
+scoreEstimate MUST equal pronunciation + listening + vocabulary + grammar + fluency. Be honest and strict.`;
 
 async function callProxy(
   config: HchatConfig,
@@ -137,16 +157,36 @@ export async function getFeedback(
     const jsonMatch = result.content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("응답에 JSON 없음");
     const parsed = JSON.parse(jsonMatch[0]);
+    const c = parsed.criteria || {};
+    // criteria가 비율(0~100)로 와도 SPA 만점으로 환산
+    const fix = (val: any, max: number) => {
+      const n = Number(val) || 0;
+      return n > max ? Math.round((n / 100) * max) : Math.round(n);
+    };
+    const criteria = {
+      pronunciation: fix(c.pronunciation, 12),
+      listening: fix(c.listening, 36),
+      vocabulary: fix(c.vocabulary, 12),
+      grammar: fix(c.grammar, 24),
+      fluency: fix(c.fluency, 12),
+    };
+    const sum =
+      criteria.pronunciation + criteria.listening + criteria.vocabulary +
+      criteria.grammar + criteria.fluency;
+    const finalScore = parsed.scoreEstimate
+      ? Math.min(96, Math.max(0, Number(parsed.scoreEstimate)))
+      : sum;
+
     return {
       grammarIssues: parsed.grammarIssues || [],
       vocabularySuggestions: parsed.vocabularySuggestions || [],
       betterExpressions: parsed.betterExpressions || [],
       modelAnswer: parsed.modelAnswer || "",
-      estimatedLevel: scoreToLevel(parsed.scoreEstimate || 30),
-      scoreEstimate: parsed.scoreEstimate || 30,
+      estimatedLevel: scoreToLevel(finalScore),
+      scoreEstimate: finalScore,
       strengths: parsed.strengths || [],
       improvements: parsed.improvements || [],
-      criteria: parsed.criteria || undefined,
+      criteria,
     };
   } catch (e) {
     console.error("Parse fail:", e);
@@ -158,37 +198,64 @@ function strictMockFeedback(req: FeedbackRequest): AiFeedback {
   const words = req.userAnswer.trim().split(/\s+/).filter(Boolean);
   const wc = words.length;
   const sentences = req.userAnswer.split(/[.!?]+/).filter((s) => s.trim()).length;
-
-  let score: number;
-  if (wc < 5) score = 5 + Math.floor(Math.random() * 10);
-  else if (wc < 15) score = 16 + Math.floor(Math.random() * 8);
-  else if (wc < 30) score = 25 + Math.floor(Math.random() * 10);
-  else if (wc < 50) score = 35 + Math.floor(Math.random() * 12);
-  else if (wc < 80) score = 50 + Math.floor(Math.random() * 12);
-  else if (wc < 120) score = 60 + Math.floor(Math.random() * 12);
-  else if (wc < 180) score = 70 + Math.floor(Math.random() * 12);
-  else score = 80 + Math.floor(Math.random() * 10);
-
-  if (sentences < 2) score = Math.min(score, 24);
-  if (sentences < 3 && req.type === 2) score = Math.min(score, 30);
-
-  const errors: string[] = [];
-  if (wc < 30) errors.push("답변이 너무 짧음 — 최소 5문장, 60~80단어 이상 권장");
-  if (sentences < 3) errors.push("문장 수 부족 — 최소 3~5문장");
-
   const uniqueWords = new Set(words.map((w) => w.toLowerCase())).size;
   const lexicalDiversity = wc > 0 ? uniqueWords / wc : 0;
-  const hasConnectors = /(however|but|because|since|so|therefore|for example|first|second|finally|in my view|i think)/i.test(req.userAnswer);
-  const clamp = (n: number) => Math.max(5, Math.min(100, Math.round(n)));
-  const base = (score / 96) * 100;
+  const hasConnectors = /(however|but|because|since|so|therefore|for example|first|second|finally|in my view|i think|moreover|furthermore|consequently)/i.test(req.userAnswer);
+  const advancedVocab = (req.userAnswer.match(/\b(demonstrate|consider|regarding|consequently|furthermore|implement|significant|optimize|leverage|facilitate|establish|comprehensive|effective|substantial)\b/gi) || []).length;
 
-  const criteria = {
-    pronunciation: clamp(base + (Math.random() * 10 - 5)),
-    vocabulary: clamp(base * 0.6 + lexicalDiversity * 80),
-    grammar: clamp(base + (sentences >= 3 ? 8 : -10)),
-    fluency: clamp(Math.min(100, wc * 1.1)),
-    coherence: clamp(base * 0.7 + (hasConnectors ? 25 : 0) + (sentences >= 4 ? 10 : 0)),
-  };
+  // SPA 공식 채점표 적용 (만점이 모두 다름)
+  // 1. 발음 (12) — 텍스트로는 추정만 가능. 어휘·구조 복잡도로 간접 평가
+  let pronunciation: number;
+  if (wc < 10) pronunciation = Math.max(0, Math.floor(wc * 0.3));
+  else if (wc < 25) pronunciation = 3 + Math.floor(Math.random() * 3);
+  else if (wc < 60) pronunciation = 5 + Math.floor(Math.random() * 3);
+  else if (wc < 120) pronunciation = 7 + Math.floor(Math.random() * 3);
+  else pronunciation = 9 + Math.floor(Math.random() * 4);
+
+  // 2. 청취·답변능력 (36) — 질문과 관련성, 답변량
+  let listening: number;
+  if (wc < 10) listening = Math.max(0, Math.floor(wc * 0.6));
+  else if (wc < 25) listening = 8 + Math.floor(Math.random() * 6);
+  else if (wc < 60) listening = 15 + Math.floor(Math.random() * 7);
+  else if (wc < 120) listening = 22 + Math.floor(Math.random() * 8);
+  else listening = 28 + Math.floor(Math.random() * 9);
+  if (sentences < 2) listening = Math.min(listening, 8);
+
+  // 3. 어휘 (12) — 어휘 다양성 + 고급 어휘 사용
+  let vocabulary: number;
+  if (wc < 10) vocabulary = Math.max(0, Math.floor(wc * 0.2));
+  else if (wc < 25) vocabulary = 3 + Math.floor(lexicalDiversity * 3);
+  else if (wc < 60) vocabulary = 5 + Math.min(3, advancedVocab) + Math.floor(lexicalDiversity * 2);
+  else vocabulary = 7 + Math.min(4, advancedVocab) + Math.floor(lexicalDiversity * 2);
+  vocabulary = Math.min(12, vocabulary);
+
+  // 4. 문법 (24) — 문장 수, 연결사, 길이
+  let grammar: number;
+  if (wc < 10) grammar = Math.max(0, Math.floor(wc * 0.4));
+  else if (wc < 25) grammar = 6 + Math.floor(Math.random() * 4);
+  else if (wc < 60) grammar = 12 + Math.floor(Math.random() * 4) + (sentences >= 3 ? 2 : 0);
+  else if (wc < 120) grammar = 16 + Math.floor(Math.random() * 4) + (hasConnectors ? 2 : 0);
+  else grammar = 19 + Math.floor(Math.random() * 4) + (hasConnectors ? 1 : 0);
+  grammar = Math.min(24, grammar);
+
+  // 5. 유창성 (12) — 논리 흐름, 연결어
+  let fluency: number;
+  if (wc < 10) fluency = Math.max(0, Math.floor(wc * 0.2));
+  else if (wc < 25) fluency = 3 + (hasConnectors ? 1 : 0);
+  else if (wc < 60) fluency = 5 + (hasConnectors ? 2 : 0) + (sentences >= 4 ? 1 : 0);
+  else if (wc < 120) fluency = 7 + (hasConnectors ? 2 : 0) + (sentences >= 5 ? 1 : 0);
+  else fluency = 9 + (hasConnectors ? 2 : 0) + (sentences >= 6 ? 1 : 0);
+  fluency = Math.min(12, fluency);
+
+  const score = pronunciation + listening + vocabulary + grammar + fluency;
+
+  const errors: string[] = [];
+  if (wc < 30) errors.push(`답변이 너무 짧음 (${wc}단어) — 최소 5문장, 60~80단어 이상 권장`);
+  if (sentences < 3) errors.push(`문장 수 부족 (${sentences}문장) — 최소 3~5문장`);
+  if (!hasConnectors) errors.push("논리 연결어 부재 — However / Because / For example 등 추가");
+  if (advancedVocab === 0 && wc > 30) errors.push("고급 어휘 부재 — demonstrate, consequently, regarding 등 도입");
+
+  const criteria = { pronunciation, listening, vocabulary, grammar, fluency };
 
   return {
     grammarIssues: ["(Mock - HChat API 미연결) 문법 자동 검사를 위해 API 설정 필요"],

@@ -50,12 +50,28 @@ export default function StudySession({
   const [showKorean, setShowKorean] = useState(false);
   const [translation, setTranslation] = useState<string>("");
   const [translating, setTranslating] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
 
   useEffect(() => {
     if (listening) {
       setEditedAnswer((transcript + " " + interimTranscript).trim());
     }
   }, [transcript, interimTranscript, listening]);
+
+  useEffect(() => {
+    if (!listening) return;
+    setTimeLeft(60);
+    const id = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          stopSTT();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [listening, stopSTT]);
 
   const playQuestion = () => {
     const text = type === 4 && passageText ? passageText : question;
@@ -198,16 +214,34 @@ export default function StudySession({
 
           {listening && (
             <div className="mb-3 rounded-xl border-2 border-teczen-red bg-teczen-red/5 p-4 min-h-[64px]">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-block w-2.5 h-2.5 bg-teczen-red rounded-full animate-pulse" />
-                <span className="text-xs font-bold text-teczen-red">실시간 인식 중...</span>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2.5 h-2.5 bg-teczen-red rounded-full animate-pulse" />
+                  <span className="text-xs font-bold text-teczen-red">실시간 인식 중...</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-teczen-gray-500">남은 시간</span>
+                  <span
+                    className={`text-base font-black tabular-nums ${
+                      timeLeft <= 10 ? "text-teczen-red animate-pulse" : "text-teczen-ink"
+                    }`}
+                  >
+                    {timeLeft}s
+                  </span>
+                </div>
+              </div>
+              <div className="w-full bg-teczen-red/10 rounded-full h-1 mb-3 overflow-hidden">
+                <div
+                  className="bg-teczen-red h-1 transition-all ease-linear"
+                  style={{ width: `${(timeLeft / 60) * 100}%` }}
+                />
               </div>
               <p className="text-lg leading-relaxed">
                 <span className="text-teczen-ink font-semibold">{transcript}</span>
                 <span className="text-teczen-gray-400">{interimTranscript}</span>
                 {!transcript && !interimTranscript && (
                   <span className="text-teczen-gray-400 text-base">
-                    영어로 말해주세요. 말하는 즉시 여기에 표시됩니다.
+                    영어로 말해주세요. 1분 안에 답변을 마쳐주세요.
                   </span>
                 )}
               </p>

@@ -48,11 +48,19 @@ export interface StudyRecord {
 
 export interface ScoreCriteria {
   pronunciation: number;
+  listening: number;
   vocabulary: number;
   grammar: number;
   fluency: number;
-  coherence: number;
 }
+
+export const CRITERIA_MAX = {
+  pronunciation: 12,
+  listening: 36,
+  vocabulary: 12,
+  grammar: 24,
+  fluency: 12,
+} as const;
 
 export interface AiFeedback {
   grammarIssues: string[];
