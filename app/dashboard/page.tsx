@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { getDaysUntil, scoreToLevel } from "@/lib/scoring";
 import { decayedFlame, FLAME_COLORS, MAX_FLAME_LEVEL } from "@/lib/flame";
+import { getFlameTop5, type AdminLearnerRow } from "@/lib/adminData";
 import type { UserSettings, StudyRecord, MockExamResult, UserSession } from "@/types";
 import Header from "@/components/layout/Header";
 import Flame from "@/components/Flame";
@@ -29,6 +30,7 @@ export default function DashboardPage() {
   const [mockResults, setMockResults] = useState<MockExamResult[]>([]);
   const [activeTab, setActiveTab] = useState<"home" | "study" | "mock" | "stats">("home");
   const [selectedRecord, setSelectedRecord] = useState<StudyRecord | null>(null);
+  const [showRanking, setShowRanking] = useState(false);
 
   useEffect(() => {
     if (!storage.isLoggedIn()) {
@@ -94,6 +96,7 @@ export default function DashboardPage() {
                 storage.saveSettings(next);
                 setSettings(next);
               }}
+              onShowRanking={() => setShowRanking(true)}
             />
 
             <div className="grid md:grid-cols-3 gap-4">
@@ -196,7 +199,23 @@ export default function DashboardPage() {
 
             {records.length > 0 && (
               <div className="bg-white rounded-2xl border border-teczen-gray-200 p-6">
-                <h3 className="font-bold text-teczen-ink mb-3">최근 학습</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-teczen-ink">최근 학습</h3>
+                  <button
+                    onClick={() => {
+                      if (confirm("최근 학습 기록을 모두 삭제할까요? (불꽃·통계는 유지)")) {
+                        if (typeof window !== "undefined") {
+                          const uid = session?.employeeId;
+                          if (uid) localStorage.removeItem(`spa.records.${uid}`);
+                        }
+                        setRecords([]);
+                      }
+                    }}
+                    className="text-xs text-teczen-gray-500 hover:text-teczen-red px-2 py-1 rounded border border-teczen-gray-200 hover:border-teczen-red transition-colors"
+                  >
+                    🗑 초기화
+                  </button>
+                </div>
                 <div className="space-y-2">
                   {[...records]
                     .sort((a, b) => b.createdAt - a.createdAt)
@@ -277,6 +296,7 @@ export default function DashboardPage() {
       {selectedRecord && (
         <RecordDetailModal record={selectedRecord} onClose={() => setSelectedRecord(null)} />
       )}
+      {showRanking && <FlameRankingModal onClose={() => setShowRanking(false)} />}
     </>
   );
 }
@@ -284,9 +304,11 @@ export default function DashboardPage() {
 function FlameSection({
   settings,
   onColorChange,
+  onShowRanking,
 }: {
   settings: UserSettings;
   onColorChange: (c: string) => void;
+  onShowRanking: () => void;
 }) {
   const flame = decayedFlame(settings.flame);
   const isLit = flame.level > 0;
@@ -329,22 +351,105 @@ function FlameSection({
           )}
         </div>
 
-        <div className="flex md:flex-col gap-2 justify-center">
-          <span className="text-xs text-teczen-gray-500 self-center md:mb-1">색상</span>
-          <div className="flex md:flex-col gap-1.5">
-            {FLAME_COLORS.map((c) => (
-              <button
-                key={c.value}
-                onClick={() => onColorChange(c.value)}
-                title={c.name}
-                className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${
-                  color === c.value ? "ring-2 ring-offset-2 ring-teczen-ink" : ""
+        <div className="flex md:flex-col gap-3 items-center md:items-end">
+          <div className="flex md:flex-col gap-2 items-center">
+            <span className="text-xs text-teczen-gray-500">색상</span>
+            <div className="flex md:flex-col gap-1.5">
+              {FLAME_COLORS.map((c) => (
+                <button
+                  key={c.value}
+                  onClick={() => onColorChange(c.value)}
+                  title={c.name}
+                  className={`w-6 h-6 rounded-full transition-transform hover:scale-110 ${
+                    color === c.value ? "ring-2 ring-offset-1 ring-teczen-ink" : ""
+                  }`}
+                  style={{ background: c.value }}
+                />
+              ))}
+            </div>
+          </div>
+          <button
+            onClick={onShowRanking}
+            className="px-3 py-2 bg-teczen-ink text-white text-xs font-bold rounded-lg hover:bg-teczen-navy whitespace-nowrap"
+          >
+            🏆 불꽃 랭킹 →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FlameRankingModal({ onClose }: { onClose: () => void }) {
+  const top5 = getFlameTop5();
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl max-w-md w-full max-h-[85vh] overflow-y-auto p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <div className="text-xs font-bold text-teczen-red mb-1">FLAME RANKING</div>
+            <h2 className="text-2xl font-black text-teczen-ink">🏆 불꽃 TOP 5</h2>
+            <p className="text-xs text-teczen-gray-500 mt-1">실시간 학습자 불꽃 순위</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-teczen-gray-400 hover:text-teczen-ink text-2xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        {top5.length === 0 ? (
+          <div className="text-center py-12 text-teczen-gray-500 text-sm">
+            아직 불꽃을 켠 학습자가 없어요
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {top5.map((l, i) => (
+              <div
+                key={l.employeeId}
+                className={`flex items-center gap-3 p-3 rounded-xl ${
+                  i === 0 ? "bg-gradient-to-r from-amber-50 to-transparent border border-amber-200" : "bg-teczen-gray-50"
                 }`}
-                style={{ background: c.value }}
-              />
+              >
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold ${
+                    i === 0
+                      ? "bg-amber-400 text-white"
+                      : i === 1
+                      ? "bg-teczen-gray-300 text-teczen-ink"
+                      : i === 2
+                      ? "bg-amber-200 text-amber-900"
+                      : "bg-teczen-gray-100 text-teczen-gray-600"
+                  }`}
+                >
+                  {i + 1}
+                </div>
+                <div className="flex items-center justify-center" style={{ width: 48, height: 48 }}>
+                  <Flame level={l.flameLevel} color={l.flameColor} size={48} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-teczen-ink">{l.name}</div>
+                  <div className="text-xs text-teczen-gray-500">
+                    {l.team} · {l.position}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-black text-lg" style={{ color: l.flameColor }}>
+                    Lv {l.flameLevel}
+                  </div>
+                  <div className="text-xs text-teczen-gray-500">{l.flameStreak}일째</div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

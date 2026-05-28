@@ -17,6 +17,9 @@ export interface AdminLearnerRow {
   estimatedLevel: number | null;
   mockExamCount: number;
   lastActiveAt: number | null;
+  flameLevel: number;
+  flameColor: string;
+  flameStreak: number;
 }
 
 export function getAllLearners(): AdminLearnerRow[] {
@@ -44,6 +47,9 @@ export function getAllLearners(): AdminLearnerRow[] {
         estimatedLevel: null,
         mockExamCount: 0,
         lastActiveAt: null,
+        flameLevel: 0,
+        flameColor: "#FF6B35",
+        flameStreak: 0,
       } as AdminLearnerRow;
     }
     const isActive = Date.now() - progress.lastActiveAt < 7 * 86400000;
@@ -63,8 +69,18 @@ export function getAllLearners(): AdminLearnerRow[] {
       estimatedLevel: progress.estimatedLevel,
       mockExamCount: progress.mockExamCount,
       lastActiveAt: progress.lastActiveAt,
+      flameLevel: progress.flameLevel ?? 0,
+      flameColor: progress.flameColor ?? "#FF6B35",
+      flameStreak: progress.flameStreak ?? 0,
     } as AdminLearnerRow;
   });
+}
+
+export function getFlameTop5(): AdminLearnerRow[] {
+  return getAllLearners()
+    .filter((l) => l.flameLevel > 0)
+    .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
+    .slice(0, 5);
 }
 
 export function getAdminStats() {

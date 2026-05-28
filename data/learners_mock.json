@@ -17,7 +17,10 @@
       "averageScore": 78,
       "recentScore": 82,
       "estimatedLevel": 7,
-      "mockExamCount": 6
+      "mockExamCount": 6,
+      "flameLevel": 5,
+      "flameColor": "#FF6B35",
+      "flameStreak": 5
     },
     {
       "name": "예해수",
@@ -34,7 +37,10 @@
       "averageScore": 73,
       "recentScore": 76,
       "estimatedLevel": 6,
-      "mockExamCount": 8
+      "mockExamCount": 8,
+      "flameLevel": 6,
+      "flameColor": "#E63946",
+      "flameStreak": 6
     },
     {
       "name": "장건우",
@@ -51,7 +57,10 @@
       "averageScore": 81,
       "recentScore": 85,
       "estimatedLevel": 8,
-      "mockExamCount": 5
+      "mockExamCount": 5,
+      "flameLevel": 4,
+      "flameColor": "#2E5BFF",
+      "flameStreak": 4
     },
     {
       "name": "김민지",
@@ -68,7 +77,10 @@
       "averageScore": 68,
       "recentScore": 71,
       "estimatedLevel": 6,
-      "mockExamCount": 3
+      "mockExamCount": 3,
+      "flameLevel": 3,
+      "flameColor": "#8B5CF6",
+      "flameStreak": 3
     },
     {
       "name": "김중완",
@@ -85,7 +97,10 @@
       "averageScore": 79,
       "recentScore": 83,
       "estimatedLevel": 7,
-      "mockExamCount": 9
+      "mockExamCount": 9,
+      "flameLevel": 7,
+      "flameColor": "#10B981",
+      "flameStreak": 7
     },
     {
       "name": "김용욱",
@@ -102,7 +117,10 @@
       "averageScore": 58,
       "recentScore": 62,
       "estimatedLevel": 5,
-      "mockExamCount": 2
+      "mockExamCount": 2,
+      "flameLevel": 2,
+      "flameColor": "#EC4899",
+      "flameStreak": 2
     },
     {
       "name": "장지윤",
@@ -119,7 +137,10 @@
       "averageScore": 84,
       "recentScore": 88,
       "estimatedLevel": 8,
-      "mockExamCount": 10
+      "mockExamCount": 10,
+      "flameLevel": 8,
+      "flameColor": "#FF6B35",
+      "flameStreak": 8
     },
     {
       "name": "이정훈",
@@ -136,7 +157,10 @@
       "averageScore": 64,
       "recentScore": 67,
       "estimatedLevel": 5,
-      "mockExamCount": 3
+      "mockExamCount": 3,
+      "flameLevel": 3,
+      "flameColor": "#E63946",
+      "flameStreak": 3
     },
     {
       "name": "박용준",
@@ -153,7 +177,10 @@
       "averageScore": 76,
       "recentScore": 80,
       "estimatedLevel": 7,
-      "mockExamCount": 7
+      "mockExamCount": 7,
+      "flameLevel": 7,
+      "flameColor": "#2E5BFF",
+      "flameStreak": 7
     },
     {
       "name": "김흥주",
@@ -170,7 +197,10 @@
       "averageScore": 52,
       "recentScore": 55,
       "estimatedLevel": 4,
-      "mockExamCount": 1
+      "mockExamCount": 1,
+      "flameLevel": 1,
+      "flameColor": "#8B5CF6",
+      "flameStreak": 1
     },
     {
       "name": "이도영",
@@ -187,7 +217,10 @@
       "averageScore": 72,
       "recentScore": 75,
       "estimatedLevel": 6,
-      "mockExamCount": 5
+      "mockExamCount": 5,
+      "flameLevel": 5,
+      "flameColor": "#10B981",
+      "flameStreak": 5
     },
     {
       "name": "이용훈",
@@ -204,7 +237,10 @@
       "averageScore": 77,
       "recentScore": 81,
       "estimatedLevel": 7,
-      "mockExamCount": 8
+      "mockExamCount": 8,
+      "flameLevel": 7,
+      "flameColor": "#EC4899",
+      "flameStreak": 7
     }
   ]
 }

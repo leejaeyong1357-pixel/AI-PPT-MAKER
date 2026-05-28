@@ -216,6 +216,7 @@ export default function AdminPage() {
                   <th className="text-left py-2 px-2">이름 / 사번</th>
                   <th className="text-left py-2 px-2">팀 / 직위 / 직급</th>
                   <th className="text-center py-2 px-2">상태</th>
+                  <th className="text-center py-2 px-2">🔥 불꽃</th>
                   <th className="text-center py-2 px-2">목표</th>
                   <th className="text-center py-2 px-2">현재</th>
                   <th className="text-right py-2 px-2">평균</th>
@@ -240,6 +241,21 @@ export default function AdminPage() {
                     </td>
                     <td className="py-2 px-2 text-center">
                       <StatusBadge status={l.status} />
+                    </td>
+                    <td className="py-2 px-2 text-center">
+                      {l.flameLevel > 0 ? (
+                        <div className="inline-flex items-center gap-1">
+                          <span style={{ color: l.flameColor }}>🔥</span>
+                          <span className="font-bold" style={{ color: l.flameColor }}>
+                            Lv {l.flameLevel}
+                          </span>
+                          <span className="text-xs text-teczen-gray-500">
+                            ({l.flameStreak}일)
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-teczen-gray-400">—</span>
+                      )}
                     </td>
                     <td className="py-2 px-2 text-center font-bold text-teczen-navy">
                       {l.targetLevel ? `Lv ${l.targetLevel}` : "—"}

@@ -1,6 +1,6 @@
 import type { FlameState } from "@/types";
 
-export const MAX_FLAME_LEVEL = 5;
+export const MAX_FLAME_LEVEL = 10;
 export const FLAME_COLORS: { name: string; value: string }[] = [
   { name: "주황", value: "#FF6B35" },
   { name: "빨강", value: "#E63946" },
