@@ -141,7 +141,7 @@ export default function DashboardPage() {
                     <Link
                       key={t.type}
                       href={`/study/${t.type}`}
-                      className="block p-4 rounded-xl bg-teczen-gray-50 hover:bg-teczen-blue/10 transition-colors"
+                      className="group block p-4 rounded-xl bg-white border-2 border-teczen-gray-200 hover:border-teczen-blue hover:shadow-md transition-all"
                     >
                       <div className="text-xs font-bold text-teczen-red mb-1">유형 {t.type}</div>
                       <div className="font-bold text-teczen-ink text-sm mb-1">{t.name}</div>
@@ -153,11 +153,14 @@ export default function DashboardPage() {
                           <span className="text-teczen-gray-400"> / {t.total}</span>
                         </span>
                       </div>
-                      <div className="w-full bg-teczen-gray-200 rounded-full h-1.5 overflow-hidden">
+                      <div className="w-full bg-teczen-gray-200 rounded-full h-1.5 overflow-hidden mb-3">
                         <div
                           className="bg-teczen-blue h-1.5 rounded-full transition-all"
                           style={{ width: `${pct}%` }}
                         />
+                      </div>
+                      <div className="block w-full text-center px-3 py-2 bg-teczen-blue text-white text-xs font-bold rounded-lg group-hover:bg-blue-700 transition-colors">
+                        학습하러 가기 →
                       </div>
                     </Link>
                   );
@@ -168,14 +171,16 @@ export default function DashboardPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <Link
                 href="/mock"
-                className="block bg-teczen-blue text-white rounded-2xl p-6 hover:bg-blue-700 transition-colors relative overflow-hidden"
+                className="block bg-gradient-to-br from-teczen-blue to-teczen-navy text-white rounded-2xl p-6 hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden"
               >
                 <div className="absolute -right-6 -bottom-6 text-[10rem] font-black opacity-10">M</div>
                 <div className="relative">
-                  <div className="text-xs font-bold text-blue-200 mb-1">실전 시험 환경</div>
-                  <div className="text-2xl font-black mb-2">13분, 4유형 연속</div>
-                  <p className="text-sm text-blue-100 mb-3">점수대별 50회 세트</p>
-                  <div className="text-sm font-bold">모의고사 시작 →</div>
+                  <div className="text-xs font-bold text-white/90 mb-1">실전 시험 환경</div>
+                  <div className="text-2xl font-black mb-2 text-white">13분, 4유형 연속</div>
+                  <p className="text-sm text-white/90 mb-4">점수대별 50회 세트</p>
+                  <div className="inline-flex items-center gap-1 px-3 py-1.5 bg-white text-teczen-blue text-sm font-bold rounded-lg">
+                    모의고사 시작 →
+                  </div>
                 </div>
               </Link>
               <Link

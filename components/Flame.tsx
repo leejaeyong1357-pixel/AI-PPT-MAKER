@@ -77,6 +77,22 @@ export default function Flame({ level, color, size = 140 }: Props) {
           fill="#FFFDE7"
           className="flame-flicker-core"
         />
+
+        <g className="flame-face">
+          <ellipse cx="26" cy="65" rx="2.2" ry="2.8" fill="#1a1a1a" />
+          <ellipse cx="38" cy="65" rx="2.2" ry="2.8" fill="#1a1a1a" />
+          <ellipse cx="26.6" cy="64" rx="0.8" ry="1" fill="#fff" />
+          <ellipse cx="38.6" cy="64" rx="0.8" ry="1" fill="#fff" />
+          <ellipse cx="22" cy="71" rx="2.5" ry="1.8" fill="#FF9EB5" opacity="0.7" />
+          <ellipse cx="42" cy="71" rx="2.5" ry="1.8" fill="#FF9EB5" opacity="0.7" />
+          <path
+            d="M 28 71 Q 32 75 36 71"
+            stroke="#1a1a1a"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            fill="none"
+          />
+        </g>
       </svg>
 
       <style jsx>{`
