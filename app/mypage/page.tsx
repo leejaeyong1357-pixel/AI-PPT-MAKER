@@ -21,7 +21,7 @@ export default function MyPage() {
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatApiKey, setHchatApiKey] = useState("");
-  const hchatModel = "gpt-5.4";
+  const [hchatModel, setHchatModel] = useState("gpt-5.4");
 
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
@@ -59,6 +59,7 @@ export default function MyPage() {
     setExamDate(cfg.examDate);
     setTargetLevel(cfg.targetLevel);
     setHchatApiKey(cfg.hchatApiKey);
+    if (cfg.hchatModel) setHchatModel(cfg.hchatModel);
   }, [router]);
 
   if (!session || !settings) return null;
@@ -169,6 +170,35 @@ export default function MyPage() {
                   );
                 })}
               </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">
+                모델
+              </label>
+              <select
+                value={hchatModel}
+                onChange={(e) => {
+                  setHchatModel(e.target.value);
+                  setTestResult(null);
+                }}
+                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teczen-navy"
+              >
+                <optgroup label="OpenAI / Azure">
+                  <option value="gpt-5.4">GPT-5.4 (플래그십)</option>
+                  <option value="gpt-5.2">GPT-5.2</option>
+                  <option value="gpt-5">GPT-5</option>
+                  <option value="gpt-4.1">GPT-4.1</option>
+                  <option value="gpt-4o">GPT-4o</option>
+                </optgroup>
+                <optgroup label="Anthropic">
+                  <option value="claude-sonnet-4-6">Claude Sonnet 4-6</option>
+                  <option value="claude-haiku-4-5">Claude Haiku 4-5</option>
+                </optgroup>
+              </select>
+              <p className="text-xs text-teczen-gray-500 mt-1">
+                401 에러 나면 다른 모델로 시도해보세요 (모델별 권한 다를 수 있음)
+              </p>
             </div>
 
             <div>

@@ -52,6 +52,8 @@ export async function POST(req: Request) {
     };
   } else {
     headers["Authorization"] = `Bearer ${apiKey}`;
+    headers["api-key"] = apiKey;
+    headers["x-api-key"] = apiKey;
     requestBody = {
       model: model || "gpt-5.4",
       messages,
