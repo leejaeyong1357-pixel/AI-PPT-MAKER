@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTTS, useSTT, useRecorder } from "@/lib/speech";
 import { storage } from "@/lib/storage";
 import { getFeedback, translateText } from "@/lib/hchat";
-import { saveVoiceRecord } from "@/lib/voiceStore";
+import { saveVoiceRecord, isVoiceAllowed } from "@/lib/voiceStore";
 import type { AiFeedback, QuestionType } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -50,13 +50,18 @@ export default function StudySession({
     audioBlobRef.current = null;
     recordStartRef.current = Date.now();
     startSTTRaw();
-    await recorder.start();
+    const s = storage.getSession();
+    if (s && isVoiceAllowed(s.employeeId)) {
+      await recorder.start();
+    }
   };
 
   const stopSTT = async () => {
     stopSTTRaw();
-    const blob = await recorder.stop();
-    if (blob && blob.size > 0) audioBlobRef.current = blob;
+    if (recorder.recording) {
+      const blob = await recorder.stop();
+      if (blob && blob.size > 0) audioBlobRef.current = blob;
+    }
   };
 
   const [step, setStep] = useState<"intro" | "answer" | "feedback">("intro");

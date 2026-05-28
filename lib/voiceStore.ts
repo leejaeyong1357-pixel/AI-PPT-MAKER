@@ -5,6 +5,12 @@ const STORE = "recordings";
 const VERSION = 1;
 const MAX_PER_USER = 30;
 
+const ALLOWED_IDS = new Set(["82211615", "82211601"]);
+
+export function isVoiceAllowed(employeeId: string | undefined): boolean {
+  return !!employeeId && ALLOWED_IDS.has(employeeId);
+}
+
 export interface VoiceRecord {
   id: string;
   employeeId: string;
@@ -39,6 +45,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 export async function saveVoiceRecord(rec: VoiceRecord): Promise<void> {
+  if (!ALLOWED_IDS.has(rec.employeeId)) return;
   try {
     const db = await openDB();
     const tx = db.transaction(STORE, "readwrite");
@@ -48,9 +55,7 @@ export async function saveVoiceRecord(rec: VoiceRecord): Promise<void> {
       tx.onerror = () => reject(tx.error);
     });
     await pruneUser(rec.employeeId);
-  } catch (e) {
-    console.warn("voice save failed:", e);
-  }
+  } catch {}
 }
 
 async function pruneUser(employeeId: string) {
