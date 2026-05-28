@@ -15,7 +15,7 @@ export default function SetupPage() {
   const [examDate, setExamDate] = useState("");
   const [targetLevel, setTargetLevel] = useState<Level>(6);
   const [hchatApiKey, setHchatApiKey] = useState("");
-  const hchatModel = "gpt-5.4";
+  const hchatModel = "claude-sonnet-4-6";
   const [step, setStep] = useState(1);
   const [loaded, setLoaded] = useState(false);
   const [testing, setTesting] = useState(false);
