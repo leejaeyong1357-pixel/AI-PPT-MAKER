@@ -16,6 +16,7 @@ import {
   AdminLearnerRow,
 } from "@/lib/adminData";
 import Flame from "@/components/Flame";
+import VoiceRecordsPanel from "@/components/admin/VoiceRecordsPanel";
 import {
   BarChart,
   Bar,
@@ -312,6 +313,10 @@ export default function AdminPage() {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="mt-6">
+          <VoiceRecordsPanel />
         </div>
       </main>
     </>

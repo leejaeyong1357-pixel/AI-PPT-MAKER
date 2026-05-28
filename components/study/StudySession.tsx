@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTTS, useSTT } from "@/lib/speech";
+import { useEffect, useRef, useState } from "react";
+import { useTTS, useSTT, useRecorder } from "@/lib/speech";
 import { storage } from "@/lib/storage";
 import { getFeedback, translateText } from "@/lib/hchat";
+import { saveVoiceRecord } from "@/lib/voiceStore";
 import type { AiFeedback, QuestionType } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -37,10 +38,26 @@ export default function StudySession({
     transcript,
     interimTranscript,
     error: sttError,
-    start: startSTT,
-    stop: stopSTT,
+    start: startSTTRaw,
+    stop: stopSTTRaw,
     reset: resetSTT,
   } = useSTT();
+  const recorder = useRecorder();
+  const recordStartRef = useRef<number>(0);
+  const audioBlobRef = useRef<Blob | null>(null);
+
+  const startSTT = async () => {
+    audioBlobRef.current = null;
+    recordStartRef.current = Date.now();
+    startSTTRaw();
+    await recorder.start();
+  };
+
+  const stopSTT = async () => {
+    stopSTTRaw();
+    const blob = await recorder.stop();
+    if (blob && blob.size > 0) audioBlobRef.current = blob;
+  };
 
   const [step, setStep] = useState<"intro" | "answer" | "feedback">("intro");
   const [editedAnswer, setEditedAnswer] = useState("");
@@ -64,14 +81,14 @@ export default function StudySession({
     const id = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
-          stopSTT();
+          stopSTTRaw();
           return 0;
         }
         return t - 1;
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [listening, stopSTT]);
+  }, [listening, stopSTTRaw]);
 
   const playQuestion = () => {
     const text = type === 4 && passageText ? passageText : question;
@@ -99,11 +116,12 @@ export default function StudySession({
 
   const submitAnswer = async () => {
     if (!editedAnswer.trim()) return;
-    stopSTT();
+    await stopSTT();
     setLoadingFeedback(true);
     setStep("feedback");
 
     const settings = storage.getSettings();
+    const session = storage.getSession();
     const result = await getFeedback(
       {
         type,
@@ -117,8 +135,9 @@ export default function StudySession({
     setFeedback(result);
     setLoadingFeedback(false);
 
+    const recordId = `${questionId}_${Date.now()}`;
     storage.addRecord({
-      id: `${questionId}_${Date.now()}`,
+      id: recordId,
       questionId,
       type,
       userAnswer: editedAnswer,
@@ -127,6 +146,25 @@ export default function StudySession({
       bookmarked: false,
       createdAt: Date.now(),
     });
+
+    if (audioBlobRef.current && session) {
+      const dur = Math.round((Date.now() - recordStartRef.current) / 1000);
+      await saveVoiceRecord({
+        id: recordId,
+        employeeId: session.employeeId,
+        name: session.name,
+        team: session.team || "",
+        position: session.position || "",
+        type,
+        questionId,
+        questionText: type === 4 && passageText ? passageText : question,
+        answerText: editedAnswer,
+        blob: audioBlobRef.current,
+        durationSec: dur,
+        createdAt: Date.now(),
+        score: result.scoreEstimate,
+      });
+    }
   };
 
   const restart = () => {
