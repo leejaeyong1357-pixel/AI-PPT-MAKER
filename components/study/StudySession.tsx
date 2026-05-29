@@ -262,15 +262,22 @@ export default function StudySession({
 
       {step !== "intro" && (
         <Card>
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
             <div className="text-xs font-semibold text-teczen-red">YOUR ANSWER (실시간 인식)</div>
-            <Button
-              onClick={listening ? stopSTT : startSTT}
-              variant={listening ? "danger" : "primary"}
-              size="sm"
-            >
-              {listening ? "● 녹음 중지" : "🎤 음성 답변 시작"}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={listening ? stopSTT : startSTT}
+                variant={listening ? "danger" : "primary"}
+                size="sm"
+              >
+                {listening ? "■ 정지" : "🎤 음성 답변 시작"}
+              </Button>
+              {listening && editedAnswer.trim() && (
+                <Button onClick={submitAnswer} variant="primary" size="sm">
+                  ✓ 정지 + 채점받기
+                </Button>
+              )}
+            </div>
           </div>
 
           {sttError && (
