@@ -182,7 +182,10 @@ export default function DashboardPage() {
                   <div className="text-xs font-bold text-white mb-1 tracking-wider">실전 시험 환경</div>
                   <div className="text-3xl font-black mb-2 text-white">13분, 4유형 연속</div>
                   <p className="text-sm text-white mb-4 opacity-95">점수대별 50회 세트</p>
-                  <div className="inline-flex items-center gap-1 px-4 py-2 bg-white text-teczen-blue text-sm font-black rounded-lg">
+                  <div
+                    className="inline-flex items-center gap-1 px-4 py-2 bg-white text-sm font-black rounded-lg"
+                    style={{ color: "#2E5BFF" }}
+                  >
                     모의고사 시작 →
                   </div>
                 </div>
@@ -305,7 +308,24 @@ export default function DashboardPage() {
       {selectedRecord && (
         <RecordDetailModal record={selectedRecord} onClose={() => setSelectedRecord(null)} />
       )}
-      {showRanking && <FlameRankingModal onClose={() => setShowRanking(false)} />}
+      {showRanking && (
+        <FlameRankingModal
+          onClose={() => setShowRanking(false)}
+          currentUser={
+            session && settings.flame
+              ? {
+                  employeeId: session.employeeId,
+                  name: session.name,
+                  team: session.team || "",
+                  position: session.position || "",
+                  flameLevel: decayedFlame(settings.flame).level,
+                  flameColor: settings.flame.color,
+                  flameStreak: decayedFlame(settings.flame).streak,
+                }
+              : null
+          }
+        />
+      )}
     </>
   );
 }
@@ -393,8 +413,38 @@ function FlameSection({
   );
 }
 
-function FlameRankingModal({ onClose }: { onClose: () => void }) {
-  const top5 = getFlameTop5();
+interface RankingUser {
+  employeeId: string;
+  name: string;
+  team: string;
+  position: string;
+  flameLevel: number;
+  flameColor: string;
+  flameStreak: number;
+}
+
+function FlameRankingModal({
+  onClose,
+  currentUser,
+}: {
+  onClose: () => void;
+  currentUser: RankingUser | null;
+}) {
+  const mockTop = getFlameTop5();
+  const combined: RankingUser[] = [...mockTop];
+  if (currentUser && currentUser.flameLevel > 0) {
+    const existing = combined.findIndex((l) => l.employeeId === currentUser.employeeId);
+    if (existing >= 0) combined[existing] = currentUser;
+    else combined.push(currentUser);
+  }
+  const top5 = combined
+    .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
+    .slice(0, 5);
+  const myRank = currentUser
+    ? combined
+        .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
+        .findIndex((l) => l.employeeId === currentUser.employeeId) + 1
+    : 0;
   return (
     <div
       className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
@@ -424,11 +474,17 @@ function FlameRankingModal({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <div className="space-y-3">
-            {top5.map((l, i) => (
+            {top5.map((l, i) => {
+              const isMe = currentUser && l.employeeId === currentUser.employeeId;
+              return (
               <div
                 key={l.employeeId}
                 className={`flex items-center gap-3 p-3 rounded-xl ${
-                  i === 0 ? "bg-gradient-to-r from-amber-50 to-transparent border border-amber-200" : "bg-teczen-gray-50"
+                  isMe
+                    ? "bg-teczen-blue/10 border-2 border-teczen-blue"
+                    : i === 0
+                    ? "bg-gradient-to-r from-amber-50 to-transparent border border-amber-200"
+                    : "bg-teczen-gray-50"
                 }`}
               >
                 <div
@@ -460,7 +516,33 @@ function FlameRankingModal({ onClose }: { onClose: () => void }) {
                   <div className="text-xs text-teczen-gray-500">{l.flameStreak}일째</div>
                 </div>
               </div>
-            ))}
+              );
+            })}
+            {currentUser && currentUser.flameLevel > 0 && myRank > 5 && (
+              <div className="mt-3 pt-3 border-t border-teczen-gray-200">
+                <div className="text-xs text-teczen-gray-500 mb-2">내 순위</div>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-teczen-blue/10 border-2 border-teczen-blue">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold bg-teczen-blue text-white">
+                    {myRank}
+                  </div>
+                  <div className="flex items-center justify-center" style={{ width: 48, height: 48 }}>
+                    <Flame level={currentUser.flameLevel} color={currentUser.flameColor} size={48} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-teczen-ink">{currentUser.name} (나)</div>
+                    <div className="text-xs text-teczen-gray-500">
+                      {currentUser.team} · {currentUser.position}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black text-lg" style={{ color: currentUser.flameColor }}>
+                      Lv {currentUser.flameLevel}
+                    </div>
+                    <div className="text-xs text-teczen-gray-500">{currentUser.flameStreak}일째</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
