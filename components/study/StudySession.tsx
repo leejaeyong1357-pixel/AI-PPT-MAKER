@@ -73,6 +73,12 @@ export default function StudySession({
   const [translation, setTranslation] = useState<string>("");
   const [translating, setTranslating] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const autoSubmitRef = useRef(false);
+  const editedAnswerRef = useRef("");
+
+  useEffect(() => {
+    editedAnswerRef.current = editedAnswer;
+  }, [editedAnswer]);
 
   useEffect(() => {
     if (listening) {
@@ -83,9 +89,12 @@ export default function StudySession({
   useEffect(() => {
     if (!listening) return;
     setTimeLeft(60);
+    autoSubmitRef.current = false;
     const id = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
+          clearInterval(id);
+          autoSubmitRef.current = true;
           stopSTTRaw();
           return 0;
         }
@@ -93,7 +102,8 @@ export default function StudySession({
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [listening, stopSTTRaw]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listening]);
 
   const playQuestion = () => {
     const text = type === 4 && passageText ? passageText : question;
@@ -171,6 +181,20 @@ export default function StudySession({
       });
     }
   };
+
+  useEffect(() => {
+    if (
+      !listening &&
+      autoSubmitRef.current &&
+      step === "answer" &&
+      editedAnswerRef.current.trim()
+    ) {
+      autoSubmitRef.current = false;
+      const id = setTimeout(() => submitAnswer(), 400);
+      return () => clearTimeout(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listening, step]);
 
   const restart = () => {
     setStep("answer");
