@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { storage } from "@/lib/storage";
-import employeesData from "@/data/employees.json";
 import Button from "@/components/ui/Button";
 
 // 코드 노출 시 평문 추출 방지를 위해 SHA-256 해시로 저장
@@ -31,48 +30,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleUserLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!name.trim() || !employeeId.trim() || !rrnFront.trim()) {
-      setError("모든 항목을 입력해주세요.");
-      return;
-    }
-    const employee = employeesData.employees.find(
-      (e: any) =>
-        e.name === name.trim() &&
-        String(e.employeeId).trim() === employeeId.trim(),
-    );
-
-    if (!employee) {
-      setError("등록되지 않은 사번/이름입니다. 인사팀에 문의하세요.");
-      return;
-    }
-
-    const stored = localStorage.getItem(`spa.pw.${employeeId.trim()}`);
-    const expectedPw = stored || employee.rrnFront;
-    if (rrnFront !== expectedPw) {
-      setError(
-        stored
-          ? "비밀번호가 일치하지 않습니다."
-          : "최초 로그인은 주민등록번호 앞 6자리(생년월일)로 합니다.",
-      );
-      return;
-    }
-
-    setLoading(true);
-
-    storage.saveSession({
-      name: employee.name,
-      employeeId: String(employee.employeeId),
-      rrnFront,
-      team: employee.team,
-      position: employee.position,
-      loggedInAt: Date.now(),
-      isAdmin: false,
-    });
-
+  const navigateAfterLogin = () => {
     const settings = storage.getSettings();
     if (!settings.onboardingSeen && !settings.onboardingSkipForever) {
       router.push("/onboarding");
@@ -80,6 +38,85 @@ export default function LoginPage() {
       router.push("/setup");
     } else {
       router.push("/dashboard");
+    }
+  };
+
+  const handleUserLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const trimmedId = employeeId.trim();
+    const trimmedName = name.trim();
+    if (!trimmedName || !trimmedId || !rrnFront.trim()) {
+      setError("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    setLoading(true);
+
+    // 이 PC에 이미 비번 변경 기록이 있으면 클라이언트 측 검증 (서버 호출 불필요)
+    const storedPw = localStorage.getItem(`spa.pw.${trimmedId}`);
+    const storedUserJson = localStorage.getItem(`spa.user.${trimmedId}`);
+    if (storedPw && storedUserJson) {
+      if (rrnFront !== storedPw) {
+        setError("비밀번호가 일치하지 않습니다.");
+        setLoading(false);
+        return;
+      }
+      try {
+        const u = JSON.parse(storedUserJson);
+        if (u.name !== trimmedName) {
+          setError("이름이 일치하지 않습니다.");
+          setLoading(false);
+          return;
+        }
+        storage.saveSession({
+          name: u.name,
+          employeeId: String(u.employeeId),
+          rrnFront,
+          team: u.team,
+          position: u.position,
+          loggedInAt: Date.now(),
+          isAdmin: false,
+        });
+        navigateAfterLogin();
+        return;
+      } catch {}
+    }
+
+    // 서버 측 검증 (employees.json은 서버에만 있고 클라이언트로 안 내려옴)
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: trimmedName,
+          employeeId: trimmedId,
+          password: rrnFront,
+        }),
+      });
+      const data = await res.json();
+      setLoading(false);
+      if (!data.ok) {
+        setError(data.error || "로그인 실패");
+        return;
+      }
+      const u = data.user;
+      // 같은 브라우저 재로그인 시 서버 호출 안 거치게 캐싱
+      localStorage.setItem(`spa.user.${u.employeeId}`, JSON.stringify(u));
+      storage.saveSession({
+        name: u.name,
+        employeeId: String(u.employeeId),
+        rrnFront,
+        team: u.team,
+        position: u.position,
+        loggedInAt: Date.now(),
+        isAdmin: false,
+      });
+      navigateAfterLogin();
+    } catch (err: any) {
+      setLoading(false);
+      setError("서버 오류: " + (err?.message || "unknown"));
     }
   };
 

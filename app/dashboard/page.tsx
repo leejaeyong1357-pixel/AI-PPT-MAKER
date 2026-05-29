@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { getDaysUntil, scoreToLevel } from "@/lib/scoring";
 import { decayedFlame, FLAME_COLORS, MAX_FLAME_LEVEL } from "@/lib/flame";
-import { getFlameTop5, type AdminLearnerRow } from "@/lib/adminData";
+import { getFlameTop5 } from "@/lib/flameTop5";
 import type { UserSettings, StudyRecord, MockExamResult, UserSession } from "@/types";
 import Header from "@/components/layout/Header";
 import Flame from "@/components/Flame";
