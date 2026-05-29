@@ -134,6 +134,35 @@ export default function MyPage() {
           </div>
         </section>
 
+        <section className="bg-gradient-to-br from-teczen-blue/5 to-white border border-teczen-blue/30 rounded-3xl p-6 mb-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="font-bold text-lg text-teczen-ink mb-1">📘 HChat API 연동 방법</h2>
+              <p className="text-sm text-teczen-gray-600 mb-3">
+                개인 API 키 발급 방법을 PDF로 안내드려요. AI 채점·번역을 사용하려면 발급 필요.
+              </p>
+            </div>
+            <div className="text-3xl">📄</div>
+          </div>
+          <div className="flex gap-2">
+            <a
+              href="/api-key-guide.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-teczen-blue text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors"
+            >
+              📖 PDF 보기
+            </a>
+            <a
+              href="/api-key-guide.pdf"
+              download
+              className="px-4 py-2 bg-white border-2 border-teczen-blue text-teczen-blue text-sm font-bold rounded-xl hover:bg-teczen-blue/5 transition-colors"
+            >
+              ⬇ 다운로드
+            </a>
+          </div>
+        </section>
+
         <section className="bg-white rounded-3xl border border-teczen-gray-200 p-6 mb-4">
           <h2 className="font-bold text-lg text-teczen-ink mb-4">학습 설정</h2>
           <div className="space-y-4">

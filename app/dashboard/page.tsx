@@ -174,14 +174,15 @@ export default function DashboardPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <Link
                 href="/mock"
-                className="block bg-gradient-to-br from-teczen-blue to-teczen-navy text-white rounded-2xl p-6 hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #2E5BFF 0%, #003D7A 100%)" }}
+                className="block text-white rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-0.5 transition-all relative overflow-hidden shadow-lg shadow-teczen-blue/30"
               >
                 <div className="absolute -right-6 -bottom-6 text-[10rem] font-black opacity-10">M</div>
                 <div className="relative">
-                  <div className="text-xs font-bold text-white/90 mb-1">실전 시험 환경</div>
-                  <div className="text-2xl font-black mb-2 text-white">13분, 4유형 연속</div>
-                  <p className="text-sm text-white/90 mb-4">점수대별 50회 세트</p>
-                  <div className="inline-flex items-center gap-1 px-3 py-1.5 bg-white text-teczen-blue text-sm font-bold rounded-lg">
+                  <div className="text-xs font-bold text-white mb-1 tracking-wider">실전 시험 환경</div>
+                  <div className="text-3xl font-black mb-2 text-white">13분, 4유형 연속</div>
+                  <p className="text-sm text-white mb-4 opacity-95">점수대별 50회 세트</p>
+                  <div className="inline-flex items-center gap-1 px-4 py-2 bg-white text-teczen-blue text-sm font-black rounded-lg">
                     모의고사 시작 →
                   </div>
                 </div>
@@ -203,12 +204,20 @@ export default function DashboardPage() {
                   <h3 className="font-bold text-teczen-ink">최근 학습</h3>
                   <button
                     onClick={() => {
-                      if (confirm("최근 학습 기록을 모두 삭제할까요? (불꽃·통계는 유지)")) {
+                      if (confirm("이전 학습 기록을 삭제할까요? (오늘 학습한 것과 불꽃은 유지됩니다)")) {
+                        const todayStart = new Date();
+                        todayStart.setHours(0, 0, 0, 0);
+                        const kept = records.filter((r) => r.createdAt >= todayStart.getTime());
                         if (typeof window !== "undefined") {
                           const uid = session?.employeeId;
-                          if (uid) localStorage.removeItem(`spa.records.${uid}`);
+                          if (uid) {
+                            localStorage.setItem(
+                              `spa.records.${uid}`,
+                              JSON.stringify(kept),
+                            );
+                          }
                         }
-                        setRecords([]);
+                        setRecords(kept);
                       }
                     }}
                     className="text-xs text-teczen-gray-500 hover:text-teczen-red px-2 py-1 rounded border border-teczen-gray-200 hover:border-teczen-red transition-colors"

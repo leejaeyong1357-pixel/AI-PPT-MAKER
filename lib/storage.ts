@@ -141,8 +141,10 @@ export const storage = {
   clearMyData() {
     const uid = getCurrentEmployeeId();
     if (!uid) return;
-    ["spa.settings", "spa.records", "spa.vocab", "spa.mockResults"].forEach(
+    const settings = this.getSettings();
+    ["spa.records", "spa.vocab", "spa.mockResults"].forEach(
       (k) => localStorage.removeItem(`${k}.${uid}`),
     );
+    this.saveSettings(settings);
   },
 };

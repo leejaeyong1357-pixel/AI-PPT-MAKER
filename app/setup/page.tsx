@@ -140,11 +140,27 @@ export default function SetupPage() {
           {step === 3 && (
             <div>
               <h2 className="text-lg font-bold mb-1 text-teczen-gray-900">HChat API 연결</h2>
-              <p className="text-sm text-teczen-gray-600 mb-4">
+              <p className="text-sm text-teczen-gray-600 mb-3">
                 사내 HChat Platform에서 발급받은 <b>개인 API Key</b>만 입력하세요.
                 <br />
                 서버 주소는 사내 HChat 표준으로 미리 설정되어 있습니다.
               </p>
+              <div className="bg-teczen-blue/5 border border-teczen-blue/30 rounded-xl p-3 mb-4 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">📘</span>
+                  <span className="text-sm text-teczen-gray-700">
+                    <b>API 키 발급 방법</b>이 처음이라 어렵나요?
+                  </span>
+                </div>
+                <a
+                  href="/api-key-guide.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-teczen-blue text-white text-xs font-bold rounded-lg hover:bg-blue-700 whitespace-nowrap"
+                >
+                  📖 PDF 가이드 보기
+                </a>
+              </div>
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-teczen-gray-700 mb-1">

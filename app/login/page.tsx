@@ -168,7 +168,7 @@ export default function LoginPage() {
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
                 placeholder="8자리 사원번호"
-                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 font-mono focus:outline-none focus:border-teczen-navy transition-colors"
+                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-teczen-navy transition-colors"
               />
             </div>
 
@@ -181,7 +181,7 @@ export default function LoginPage() {
                 value={rrnFront}
                 onChange={(e) => setRrnFront(e.target.value)}
                 placeholder="최초: 주민번호 앞 6자리 (생년월일)"
-                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 font-mono focus:outline-none focus:border-teczen-navy transition-colors"
+                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-teczen-navy transition-colors"
               />
               <p className="text-xs text-teczen-gray-500 mt-1">
                 ※ 최초 로그인 시 주민번호 앞 6자리. 마이페이지에서 변경 가능.

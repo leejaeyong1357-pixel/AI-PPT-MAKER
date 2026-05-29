@@ -26,12 +26,6 @@ export default function LandingPage() {
             <span className="text-teczen-gray-300">|</span>
             <span className="font-brand text-lg text-teczen-navy tracking-tight">SPEAKZEN</span>
           </div>
-          <Link
-            href="/login"
-            className="px-5 py-2 bg-teczen-navy text-white text-sm font-bold rounded-full hover:bg-teczen-navy-dark transition-colors"
-          >
-            로그인
-          </Link>
         </div>
       </header>
 
@@ -182,12 +176,17 @@ export default function LandingPage() {
       </section>
 
       <footer className="py-8 px-6 bg-teczen-gray-50 border-t border-teczen-gray-200">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-teczen-gray-500">
-          <div className="flex items-center gap-2">
-            <Image src="/teczen-logo.webp" alt="TECZEN" width={70} height={16} className="h-4 w-auto opacity-70" />
-            <span>© TECZEN · Hyundai Motor Group</span>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-teczen-gray-500">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Image src="/teczen-logo.webp" alt="TECZEN" width={70} height={16} className="h-4 w-auto opacity-70" />
+              <span>© TECZEN · Hyundai Motor Group</span>
+            </div>
+            <div className="text-[10px] text-teczen-gray-400 ml-1">
+              made by 미래성장팀 이재용 매니저
+            </div>
           </div>
-          <div>SPEAKZEN v0.2 · powered by HChat</div>
+          <div>SPEAKZEN v0.3 · powered by HChat</div>
         </div>
       </footer>
     </main>
