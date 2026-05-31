@@ -47,53 +47,27 @@ export default function LoginPage() {
 
     const trimmedId = employeeId.trim();
     const trimmedName = name.trim();
-    if (!trimmedName || !trimmedId || !rrnFront.trim()) {
-      setError("모든 항목을 입력해주세요.");
+    if (!trimmedName || !trimmedId) {
+      setError("사번과 이름을 입력해주세요.");
+      return;
+    }
+
+    // 이 PC에서 비밀번호를 설정한 적이 있으면 그 비번을 요구
+    const storedPw = localStorage.getItem(`spa.pw.${trimmedId}`);
+    if (storedPw && rrnFront !== storedPw) {
+      setError("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     setLoading(true);
 
-    // 이 PC에 이미 비번 변경 기록이 있으면 클라이언트 측 검증 (서버 호출 불필요)
-    const storedPw = localStorage.getItem(`spa.pw.${trimmedId}`);
-    const storedUserJson = localStorage.getItem(`spa.user.${trimmedId}`);
-    if (storedPw && storedUserJson) {
-      if (rrnFront !== storedPw) {
-        setError("비밀번호가 일치하지 않습니다.");
-        setLoading(false);
-        return;
-      }
-      try {
-        const u = JSON.parse(storedUserJson);
-        if (u.name !== trimmedName) {
-          setError("이름이 일치하지 않습니다.");
-          setLoading(false);
-          return;
-        }
-        storage.saveSession({
-          name: u.name,
-          employeeId: String(u.employeeId),
-          rrnFront,
-          team: u.team,
-          position: u.position,
-          loggedInAt: Date.now(),
-          isAdmin: false,
-        });
-        navigateAfterLogin();
-        return;
-      } catch {}
-    }
-
-    // 서버 측 검증 (employees.json은 서버에만 있고 클라이언트로 안 내려옴)
+    // 서버 측 검증 — employees.json은 서버에만 있고 클라이언트로 안 내려옴.
+    // 주민번호는 시스템에 없으며, 사번+이름만 검증됩니다.
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: trimmedName,
-          employeeId: trimmedId,
-          password: rrnFront,
-        }),
+        body: JSON.stringify({ name: trimmedName, employeeId: trimmedId }),
       });
       const data = await res.json();
       setLoading(false);
@@ -102,12 +76,10 @@ export default function LoginPage() {
         return;
       }
       const u = data.user;
-      // 같은 브라우저 재로그인 시 서버 호출 안 거치게 캐싱
-      localStorage.setItem(`spa.user.${u.employeeId}`, JSON.stringify(u));
       storage.saveSession({
         name: u.name,
         employeeId: String(u.employeeId),
-        rrnFront,
+        rrnFront: storedPw || "",
         team: u.team,
         position: u.position,
         loggedInAt: Date.now(),
@@ -225,17 +197,17 @@ export default function LoginPage() {
 
             <div>
               <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">
-                비밀번호
+                비밀번호 <span className="text-teczen-gray-400 font-normal">(선택)</span>
               </label>
               <input
                 type="password"
                 value={rrnFront}
                 onChange={(e) => setRrnFront(e.target.value)}
-                placeholder="최초: 주민번호 앞 6자리 (생년월일)"
+                placeholder="비밀번호를 설정했다면 입력"
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-teczen-navy transition-colors"
               />
               <p className="text-xs text-teczen-gray-500 mt-1">
-                ※ 최초 로그인 시 주민번호 앞 6자리. 마이페이지에서 변경 가능.
+                ※ 최초 로그인은 비워두세요. 마이페이지에서 비밀번호를 설정할 수 있습니다.
               </p>
             </div>
 

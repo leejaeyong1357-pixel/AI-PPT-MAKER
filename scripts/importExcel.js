@@ -48,9 +48,10 @@ const employees = [];
 for (let i = dataStartRow; i < rows.length; i++) {
   const row = rows[i];
   if (!row || row.length === 0) continue;
-  const [no, team, position, employeeId, name, grade, rrnFront] = row;
+  const [no, team, position, employeeId, name, grade] = row;
   if (!name || !employeeId) continue;
 
+  // 주민번호(G열)는 개인정보 보호를 위해 의도적으로 가져오지 않습니다.
   employees.push({
     no: Number(no),
     team: String(team || "").trim(),
@@ -58,13 +59,12 @@ for (let i = dataStartRow; i < rows.length; i++) {
     employeeId: String(employeeId).trim(),
     name: String(name).trim(),
     grade: String(grade || "").trim(),
-    rrnFront: String(rrnFront || "").padStart(6, "0").slice(0, 6),
   });
 }
 
 const output = {
-  _comment: "Auto-generated from " + path.basename(inputPath) + " at " + new Date().toISOString(),
-  _columns: ["No", "부서", "직위", "사원번호", "성명", "직급", "주민등록번호 앞자리"],
+  _comment: "Auto-generated from " + path.basename(inputPath) + " — 주민번호 미수집",
+  _columns: ["No", "부서", "직위", "사원번호", "성명", "직급"],
   employees,
 };
 

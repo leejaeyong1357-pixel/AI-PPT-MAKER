@@ -6,10 +6,9 @@ export async function POST(req: Request) {
     const body = await req.json();
     const name = String(body.name || "").trim();
     const employeeId = String(body.employeeId || "").trim();
-    const password = String(body.password || "");
 
-    if (!name || !employeeId || !password) {
-      return NextResponse.json({ ok: false, error: "필수 항목 누락" });
+    if (!name || !employeeId) {
+      return NextResponse.json({ ok: false, error: "사번과 이름을 입력해주세요" });
     }
 
     const emp = (data.employees as any[]).find(
@@ -24,13 +23,7 @@ export async function POST(req: Request) {
       });
     }
 
-    if (password !== emp.rrnFront) {
-      return NextResponse.json({
-        ok: false,
-        error: "비밀번호가 일치하지 않습니다",
-      });
-    }
-
+    // 본인 정보만 반환 (다른 직원 정보는 절대 클라이언트로 나가지 않음)
     return NextResponse.json({
       ok: true,
       user: {

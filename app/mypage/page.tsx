@@ -81,9 +81,9 @@ export default function MyPage() {
     setPwMsg(null);
 
     const stored = localStorage.getItem(getPasswordKey(session.employeeId));
-    const expected = stored || session.rrnFront;
 
-    if (currentPw !== expected) {
+    // 비밀번호가 아직 없으면(최초 설정) 현재 비밀번호 검증 생략
+    if (stored && currentPw !== stored) {
       setPwMsg({ ok: false, text: "현재 비밀번호가 일치하지 않습니다." });
       return;
     }
@@ -273,13 +273,15 @@ export default function MyPage() {
         </section>
 
         <section className="bg-white rounded-3xl border border-teczen-gray-200 p-6 mb-4">
-          <h2 className="font-bold text-lg text-teczen-ink mb-1">비밀번호 변경</h2>
+          <h2 className="font-bold text-lg text-teczen-ink mb-1">비밀번호 설정 / 변경</h2>
           <p className="text-xs text-teczen-gray-500 mb-4">
-            최초 비밀번호는 주민등록번호 앞 6자리입니다.
+            비밀번호를 설정하면 다음 로그인부터 사번·이름과 함께 입력해야 합니다. (선택)
           </p>
           <form onSubmit={changePassword} className="space-y-3">
             <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">현재 비밀번호</label>
+              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">
+                현재 비밀번호 <span className="text-teczen-gray-400 font-normal">(처음 설정 시 비워두세요)</span>
+              </label>
               <input
                 type="password"
                 value={currentPw}
