@@ -1,0 +1,5 @@
+cd C:\Users\TECZ\AI-PPT-MAKER
+git checkout claude/initial-setup-dcvoF
+git remote add spa https://github.com/leejaeyong1357-pixel/SPA.git
+git push spa claude/initial-setup-dcvoF:main
+git push spa claude/initial-setup-dcvoF:main --force
