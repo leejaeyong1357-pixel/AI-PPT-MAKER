@@ -24,7 +24,10 @@ export default function HomePage() {
         router.replace("/setup");
       }
     } else {
-      router.replace("/dashboard");
+      const hasPw =
+        typeof window !== "undefined" &&
+        localStorage.getItem(`spa.pw.${session.employeeId}`);
+      router.replace(hasPw ? "/dashboard" : "/set-password");
     }
   }, [router]);
 

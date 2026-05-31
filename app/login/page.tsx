@@ -37,7 +37,14 @@ export default function LoginPage() {
     } else if (!settings.setupCompleted) {
       router.push("/setup");
     } else {
-      router.push("/dashboard");
+      // 비밀번호를 아직 설정하지 않은 사용자는 강제로 설정 페이지로
+      const id = employeeId.trim();
+      const hasPw = typeof window !== "undefined" && localStorage.getItem(`spa.pw.${id}`);
+      if (!hasPw) {
+        router.push("/set-password");
+      } else {
+        router.push("/dashboard");
+      }
     }
   };
 

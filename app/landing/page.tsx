@@ -26,6 +26,12 @@ export default function LandingPage() {
             <span className="text-teczen-gray-300">|</span>
             <span className="font-brand text-lg text-teczen-navy tracking-tight">SPEAKZEN</span>
           </div>
+          <Link
+            href="/login"
+            className="px-4 py-2 bg-teczen-blue text-white text-sm font-bold rounded-full hover:bg-blue-700 transition-colors"
+          >
+            로그인하기 →
+          </Link>
         </div>
       </header>
 
