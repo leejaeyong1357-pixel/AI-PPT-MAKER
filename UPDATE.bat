@@ -8,7 +8,7 @@ echo.
 
 cd /d "%~dp0"
 
-echo [1/2] AI-PPT-MAKER에서 최신 코드 받는 중...
+echo [1/2] 원본 레포에서 최신 코드 받는 중...
 git pull origin claude/initial-setup-dcvoF
 if errorlevel 1 (
     echo.

@@ -16,7 +16,6 @@ import {
   AdminLearnerRow,
 } from "@/lib/adminData";
 import Flame from "@/components/Flame";
-import VoiceRecordsPanel from "@/components/admin/VoiceRecordsPanel";
 import {
   BarChart,
   Bar,
@@ -35,7 +34,6 @@ export default function AdminPage() {
   const [search, setSearch] = useState("");
   const [teamFilter, setTeamFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "started" | "not_started">("all");
-  const [showVoice, setShowVoice] = useState(false);
 
   useEffect(() => {
     const session = storage.getSession();
@@ -316,19 +314,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="mt-6">
-          <button
-            onClick={() => setShowVoice((v) => !v)}
-            className="text-xs text-teczen-gray-400 hover:text-teczen-gray-600 underline"
-          >
-            {showVoice ? "▲ 섹션 닫기" : "▾ 섹션"}
-          </button>
-          {showVoice && (
-            <div className="mt-3">
-              <VoiceRecordsPanel />
-            </div>
-          )}
-        </div>
       </main>
     </>
   );

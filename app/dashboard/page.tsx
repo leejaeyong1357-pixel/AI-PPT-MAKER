@@ -7,6 +7,7 @@ import { storage } from "@/lib/storage";
 import { getDaysUntil, scoreToLevel } from "@/lib/scoring";
 import { decayedFlame, FLAME_COLORS, MAX_FLAME_LEVEL } from "@/lib/flame";
 import { getFlameTop5 } from "@/lib/flameTop5";
+import { pushFlame, fetchRanking, type RankingEntry } from "@/lib/flameSync";
 import type { UserSettings, StudyRecord, MockExamResult, UserSession } from "@/types";
 import Header from "@/components/layout/Header";
 import Flame from "@/components/Flame";
@@ -45,6 +46,8 @@ export default function DashboardPage() {
     setSettings(storage.getSettings());
     setRecords(storage.getRecords());
     setMockResults(storage.getMockResults());
+    // 내 불꽃을 공용 저장소에 올려서 다른 사람 랭킹에도 반영되게
+    pushFlame();
   }, [router]);
 
   if (!session || !settings) return null;
@@ -430,20 +433,33 @@ function FlameRankingModal({
   onClose: () => void;
   currentUser: RankingUser | null;
 }) {
-  const mockTop = getFlameTop5();
-  const combined: RankingUser[] = [...mockTop];
+  const [serverEntries, setServerEntries] = useState<RankingEntry[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchRanking().then((entries) => {
+      if (alive) setServerEntries(entries);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 공용 저장소에 실제 데이터가 있으면 그걸 쓰고, 아직 없으면(초기) mock 으로 자리만 채움
+  const base: RankingUser[] =
+    serverEntries && serverEntries.length > 0 ? serverEntries : getFlameTop5();
+  const combined: RankingUser[] = [...base];
   if (currentUser && currentUser.flameLevel > 0) {
     const existing = combined.findIndex((l) => l.employeeId === currentUser.employeeId);
     if (existing >= 0) combined[existing] = currentUser;
     else combined.push(currentUser);
   }
-  const top5 = combined
-    .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
-    .slice(0, 5);
+  const sorted = [...combined].sort(
+    (a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak,
+  );
+  const top5 = sorted.slice(0, 5);
   const myRank = currentUser
-    ? combined
-        .sort((a, b) => b.flameLevel - a.flameLevel || b.flameStreak - a.flameStreak)
-        .findIndex((l) => l.employeeId === currentUser.employeeId) + 1
+    ? sorted.findIndex((l) => l.employeeId === currentUser.employeeId) + 1
     : 0;
   return (
     <div

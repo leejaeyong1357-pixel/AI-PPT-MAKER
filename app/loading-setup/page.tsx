@@ -40,12 +40,7 @@ export default function LoadingSetupPage() {
       if (pct >= 100) {
         clearInterval(id);
         setTimeout(() => {
-          const sess = storage.getSession();
-          const hasPw =
-            sess &&
-            typeof window !== "undefined" &&
-            localStorage.getItem(`spa.pw.${sess.employeeId}`);
-          router.replace(hasPw ? "/dashboard" : "/set-password");
+          router.replace("/dashboard");
         }, 400);
       }
     }, TICK_MS);

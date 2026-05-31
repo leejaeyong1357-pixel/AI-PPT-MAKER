@@ -275,7 +275,7 @@ export default function MyPage() {
         <section className="bg-white rounded-3xl border border-teczen-gray-200 p-6 mb-4">
           <h2 className="font-bold text-lg text-teczen-ink mb-1">비밀번호 설정 / 변경</h2>
           <p className="text-xs text-teczen-gray-500 mb-4">
-            비밀번호를 설정하면 다음 로그인부터 사번·이름과 함께 입력해야 합니다. (선택)
+            본인 확인용 비밀번호를 설정·변경할 수 있습니다. (선택)
           </p>
           <form onSubmit={changePassword} className="space-y-3">
             <div>

@@ -78,56 +78,6 @@ export function useTTS() {
   return { speak, stop, speaking, voices, hasEnglishVoice };
 }
 
-export function useRecorder() {
-  const [recording, setRecording] = useState(false);
-  const [error, setError] = useState("");
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  const start = async () => {
-    setError("");
-    chunksRef.current = [];
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      const mr = new MediaRecorder(stream);
-      mr.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-      mr.start();
-      mediaRecorderRef.current = mr;
-      setRecording(true);
-    } catch (e: any) {
-      setError(
-        e.name === "NotAllowedError"
-          ? "마이크 권한이 차단되었습니다. 주소창 자물쇠 → 마이크 허용"
-          : `마이크 접근 실패: ${e.message || e.name}`,
-      );
-    }
-  };
-
-  const stop = (): Promise<Blob | null> => {
-    return new Promise((resolve) => {
-      const mr = mediaRecorderRef.current;
-      if (!mr || mr.state === "inactive") {
-        setRecording(false);
-        resolve(null);
-        return;
-      }
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        streamRef.current?.getTracks().forEach((t) => t.stop());
-        setRecording(false);
-        resolve(blob);
-      };
-      mr.stop();
-    });
-  };
-
-  return { recording, error, start, stop };
-}
-
 export function useSTT() {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");

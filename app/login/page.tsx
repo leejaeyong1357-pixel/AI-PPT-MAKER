@@ -25,7 +25,6 @@ export default function LoginPage() {
   const [mode, setMode] = useState<"user" | "admin">("user");
   const [name, setName] = useState("");
   const [employeeId, setEmployeeId] = useState("");
-  const [rrnFront, setRrnFront] = useState("");
   const [adminPw, setAdminPw] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,14 +36,7 @@ export default function LoginPage() {
     } else if (!settings.setupCompleted) {
       router.push("/setup");
     } else {
-      // 비밀번호를 아직 설정하지 않은 사용자는 강제로 설정 페이지로
-      const id = employeeId.trim();
-      const hasPw = typeof window !== "undefined" && localStorage.getItem(`spa.pw.${id}`);
-      if (!hasPw) {
-        router.push("/set-password");
-      } else {
-        router.push("/dashboard");
-      }
+      router.push("/dashboard");
     }
   };
 
@@ -56,13 +48,6 @@ export default function LoginPage() {
     const trimmedName = name.trim();
     if (!trimmedName || !trimmedId) {
       setError("사번과 이름을 입력해주세요.");
-      return;
-    }
-
-    // 이 PC에서 비밀번호를 설정한 적이 있으면 그 비번을 요구
-    const storedPw = localStorage.getItem(`spa.pw.${trimmedId}`);
-    if (storedPw && rrnFront !== storedPw) {
-      setError("비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -86,7 +71,7 @@ export default function LoginPage() {
       storage.saveSession({
         name: u.name,
         employeeId: String(u.employeeId),
-        rrnFront: storedPw || "",
+        rrnFront: "",
         team: u.team,
         position: u.position,
         loggedInAt: Date.now(),
@@ -168,7 +153,6 @@ export default function LoginPage() {
               setError("");
               setName("");
               setEmployeeId("");
-              setRrnFront("");
             }}
             className={`flex-1 py-2 text-sm font-bold rounded-full transition-all ${
               mode === "admin" ? "bg-white text-teczen-navy shadow-sm" : "text-teczen-gray-500"
@@ -200,22 +184,6 @@ export default function LoginPage() {
                 placeholder="8자리 사원번호"
                 className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-teczen-navy transition-colors"
               />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-teczen-gray-700 mb-1.5">
-                비밀번호 <span className="text-teczen-gray-400 font-normal">(선택)</span>
-              </label>
-              <input
-                type="password"
-                value={rrnFront}
-                onChange={(e) => setRrnFront(e.target.value)}
-                placeholder="비밀번호를 설정했다면 입력"
-                className="w-full border-2 border-teczen-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-teczen-navy transition-colors"
-              />
-              <p className="text-xs text-teczen-gray-500 mt-1">
-                ※ 최초 로그인은 비워두세요. 마이페이지에서 비밀번호를 설정할 수 있습니다.
-              </p>
             </div>
 
             {error && (
