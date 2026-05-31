@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { HCHAT_BASE_URL } from "@/lib/constants";
 
-export const runtime = "nodejs";
-export const maxDuration = 60;
+export const runtime = "edge";
 
 export async function POST(req: Request) {
   const apiKey = req.headers.get("x-api-key");

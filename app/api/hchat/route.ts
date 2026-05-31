@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { endpointForModel } from "@/lib/constants";
 
+export const runtime = "edge";
+
 interface ProxyRequest {
   apiKey: string;
   model?: string;
