@@ -11,10 +11,12 @@ import { tickFlame } from "./flame";
 
 const SESSION_KEY = "spa.session";
 
+// 세션은 localStorage에 보관 — 명시적 로그아웃 전까지 유지
+// (브라우저 종료/탭 종료 후에도 다시 들어오면 로그인 상태 유지)
 function getCurrentEmployeeId(): string | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
+    const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
     const s = JSON.parse(raw);
     return s.employeeId || null;
@@ -47,7 +49,7 @@ export const storage = {
   getSession(): UserSession | null {
     if (typeof window === "undefined") return null;
     try {
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw = localStorage.getItem(SESSION_KEY);
       return raw ? (JSON.parse(raw) as UserSession) : null;
     } catch {
       return null;
@@ -56,12 +58,16 @@ export const storage = {
 
   saveSession(session: UserSession) {
     if (typeof window === "undefined") return;
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   },
 
   clearSession() {
     if (typeof window === "undefined") return;
-    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
+    // 구버전(sessionStorage 사용)에서 마이그레이션 — 안전하게 둘 다 정리
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+    } catch {}
   },
 
   isLoggedIn(): boolean {
