@@ -130,25 +130,38 @@ def try_save(page, label):
     print(f"   [{label}] F7 저장 시도 (확인창 없음). 저장 안 되면 단축키 알려주세요)")
 
 
+def code_text(page):
+    """현재 보이는 교육과정 코드칸(CURS_CD_text)의 값."""
+    return page.evaluate("""() => {
+        const els = document.querySelectorAll('[id="CURS_CD_text"]');
+        for (const e of els) { if (e.getClientRects().length > 0) return e.value || ''; }
+        return els[0] ? (els[0].value || '') : '';
+    }""")
+
+
 def add_chasu(page):
-    """항상 새 차수를 추가한다(F3). 기존 차수 덮어쓰기 방지.
-    (이미 폼이 떠 있어도 '건너뛰지 않고' 무조건 새로 추가한다)"""
+    """새 차수를 추가하고, '코드칸이 비었는지'로 새 빈 행 생성을 확인한다.
+    빈 행이 안 만들어지면 False (기존 차수 덮어쓰기 방지)."""
     page.bring_to_front()
-    try:
-        page.keyboard.press("F3")
-        page.wait_for_timeout(1500)
-        print("   차수추가: F3")
-        return True
-    except Exception as e:
-        print("   F3 실패:", str(e)[:50])
-    try:
-        page.locator("[id='AddSq']:visible").first.click(timeout=3000)
-        page.wait_for_timeout(1500)
-        print("   차수추가: 버튼")
-        return True
-    except Exception as e:
-        print("   차수추가 버튼도 실패:", str(e)[:50])
-        return False
+    before = code_text(page)
+    print(f"   (차수추가 전 코드칸: '{before}')")
+    attempts = [
+        ("AddSq 버튼", lambda: page.locator("[id='AddSq']:visible").first.click(timeout=4000)),
+        ("텍스트 차수추가", lambda: page.locator("button:has-text('차수추가'):visible").first.click(timeout=3000)),
+        ("F3", lambda: page.keyboard.press("F3")),
+    ]
+    for name, act in attempts:
+        try:
+            act()
+            page.wait_for_timeout(1600)
+            after = code_text(page)
+            if after.strip() == "":
+                print(f"   차수추가 성공({name}) - 새 빈 행 생성됨")
+                return True
+            print(f"   {name}: 코드칸='{after}' (아직 빈 행 아님)")
+        except Exception as e:
+            print(f"   {name} 실패: {str(e)[:50]}")
+    return code_text(page).strip() == ""
 
 
 def main():
@@ -189,7 +202,10 @@ def main():
         # ===== 2단계: 교육과정개설등록 =====
         print("\n[2단계] 교육과정개설등록")
         goto(page, OPEN_URL, "교육과정개설등록")
-        add_chasu(page)   # 무조건 새 차수 추가 (덮어쓰기 방지)
+        if not add_chasu(page):
+            print("   [!] 새 빈 차수가 안 만들어졌어요. 기존 차수 덮어쓰기 방지 위해 입력 중단.")
+            print("       직접 차수추가 눌러서 '빈 새 줄'이 어떻게 뜨는지 알려주세요(사진).")
+            return
         print("   코드 입력")
         try:
             box = page.locator("[id='CURS_CD_text']:visible").first
